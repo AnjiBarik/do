@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingAnimation from '../utils/LoadingAnimation';
 import ClearAll from '../functional/ClearAll'; 
 import { useAlertModal } from '../hooks/useAlertModal';
-import { hasAuthData, getAuthData, loginRequest } from '../functional/authFunctions'; // Импортируем ваши функции
+import { hasAuthData, getAuthData, loginRequest } from '../functional/authFunctions'; 
 
 export default function Form() {
   const { 
@@ -46,6 +46,7 @@ export default function Form() {
         const response = await loginRequest(uiMain.Urregform, login, authCode);
 
         if (response.success) {
+          clearAll.resetStates();
           const { message, promo, order, verificationCode, name } = response;
          
           setMessage(message || "");
@@ -53,9 +54,8 @@ export default function Form() {
           setOrder(order || "");
           setVerificationCode(verificationCode || "");
           setSavedLogin(name || "");
-
           setLoggedIn(true);                 
-          console.log('🎉 Auto-login successful!')
+          console.log('🎉 Auto-login successful!')         
         } else {          
           console.log('⚠️ Auto-login failed. Please login manually.')
         }
@@ -63,7 +63,8 @@ export default function Form() {
         console.error("Error during auto-login:", error);        
       }
     } else {
-      console.log("No auto-login data found.");
+      console.log("No auto-login data found.");     
+      clearAll.resetStates();
     }
   }
 
@@ -98,13 +99,15 @@ export default function Form() {
             
             if (data === 'Incorrect username or password.') {
              console.log('⚠️ Incorrect username or password.');
-            } else if (data.includes('Logout successful.')) {
+            } else if (data.includes('Logout successful.')) {              
               clearAll.resetStates();
             }
           } catch (error) {
             showAlert('⚠️Error: ' + error.message);
-          }         
-         // clearAll.resetStates();
+          }           
+         
+        } else if(loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform === selectUiState.Urregform) {          
+          clearAll.resetStates();
         }
         
         

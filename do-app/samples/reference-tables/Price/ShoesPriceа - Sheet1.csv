@@ -1,0 +1,7 @@
+id,author,price,image,imagepublic,title,shortDescription,description,tags1,tags2,section,partition,Tip,Visibility,sorted,saleprice,size,sizeblock,color,colorblock,imageblock,imageblockpublic,tags3,tags4,tags5,tags6,tags7,tags8,maxcount,art
+1,Goozi,100.45,,,women's shoes,women's shoes,,,Genuine Leather,shoes,women's shoes,"women's,promo",,new,,34,"1:34,2:36",white,,"cwomenshoesred.jpg,cwomenshoesred2.jpg","cwomenshoesred.jpg,cwomenshoeswite.jpg",,,,,,,2,
+2,Goozi,100.45,,,women's shoes,women's shoes,,,Synthetic Leather,shoes,women's shoes,"women's,promo",,new,,36,"1:34,2:36",red,,,cwomenshoesred2.jpg,,,,,,,,width
+3,Shoes,44,,,children's shoes,,,,Mesh Fabric,shoes,children's shoes,,,,,22,,blue,,https://lh3.googleusercontent.com/pw/AP1GczOndj66CgQrW-RXbSRf7VgJe2A_Sae7eCqxWlSZEBFtpUpaQZScYgpf-SwIA0vlEgs4FtP2etmyHXQOYQpsERWRlEbi7DKL8vC9AvU5NEYzFA0iIg=w2400,,,,,,,,,
+4,Shoes,20,,sneakerswhite.jpg,shoes,,,Orthopedic Shoes,Mesh Fabric,shoes,sport shoes,promo,,,,34,,white,"4:white,5;6:lightbrown",,"sneakerswhite.jpg,sneakerswhite2.jpg",,,,,,,,
+5,Shoes,33,,,shoes,,,Orthopedic Shoes,Mesh Fabric,shoes,casual,,,,,44,"5:44,6:33",lightbrown,"4:white,5;6:lightbrown",,sneakersblack.jpg,,,,,,,2,
+6,Shoes,34,,,shoes,,,Orthopedic Shoes,,shoes,casual,,,,,33,"5:44,6:33",lightbrown,"4:white,5;6:lightbrown",,sneakersblack.jpg,,,,,,,4,

@@ -75,4 +75,14 @@ body {
     max-width: 150px;
     margin: 5px;
     padding: 0 3px;
-  }
+}
+
+.link-container {
+    display: inline-block; 
+    width: 200px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+  
+  

@@ -1,0 +1,872 @@
+const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/...ID of your table regform.../edit?gid=0#gid=0");
+const sheet = sheets.getSheetByName("Page1");
+const emailQuotaThreshold = 3; // Set a threshold limit for remaining quota
+
+function doPost(e) {
+  try {
+    let data = e.parameter;
+
+    // Проверяем наличие и создание таблицы EmarcLog
+    let logSheet = getOrCreateLogSheet("EmarcLog");
+
+     const validationError = validateInputForDoPost(data);
+    if (validationError) {
+      logEvent(logSheet, "Validation Error", e.parameter, e);
+      return ContentService.createTextOutput(validationError);
+    }
+
+    let isVerification = parseInt(data.isVerification);
+    let userName = data.Name ? `${data.Name}` : null;
+    let userPassword = data.Password ? `${data.Password}` : null;
+    let email = data.Email ? `${data.Email}` : null;
+    let enteredCode = data.VerificationCode ? `${data.VerificationCode}` : null;
+    let order = data.Order ? `${data.Order}` : null;
+    let priceNumber = data.PriceNumber ? `${data.PriceNumber}` : null;
+    let favorder = data.Favorder ? `${data.Favorder}` : null;
+    let googleClientId = data.googleClientId ? `${data.googleClientId}` : null;
+    let registrationCode = data.registrationCode ? `${data.registrationCode}` : null;   
+
+    let userIp = getUserIp(e);
+ 
+    switch (isVerification) {
+      case 1: // Registration without two-factor authentication
+        let resulthandleSimpleRegistration = handleSimpleRegistration(userName, userPassword);
+        logEvent(logSheet, "case 1", { userName, resulthandleSimpleRegistration }, userIp);
+        return resulthandleSimpleRegistration;
+      case 2: // Login without two-factor authentication
+        let resulthandleSimpleLogin = handleSimpleLogin(userName, userPassword, registrationCode);        
+        logEvent(logSheet, "case 2", { userName,registrationCode, resulthandleSimpleLogin }, userIp);
+        return resulthandleSimpleLogin;
+      case 3: // Order update        
+        let resultupdateOrder = updateOrder(userName, userPassword, favorder,registrationCode);
+        logEvent(logSheet, "case 3", { userName, favorder, resultupdateOrder }, userIp);
+        return resultupdateOrder;
+      case 4: // Code verification in two-factor authentication        
+        let resultVerifyCode = verifyCode(userName, enteredCode);
+        logEvent(logSheet, "case 4", { userName, enteredCode, resultVerifyCode }, userIp);
+        return resultVerifyCode;
+      case 5: // Logout from the account        
+        let resultHandleLogout = handleLogout(userName, userPassword, registrationCode);
+        logEvent(logSheet, "case 5", { userName,registrationCode, resultHandleLogout }, userIp);
+        return resultHandleLogout;
+      case 6: // Order and price update with code verification          
+          let resultUpdateOrderAndPrice = updateOrderAndPrice(userName, enteredCode, priceNumber, order);
+          logEvent(logSheet, "case 6", { userName, enteredCode, priceNumber, order, resultUpdateOrderAndPrice }, userIp);
+          return resultUpdateOrderAndPrice;      
+      case 7: // Price verification        
+        let resultPriceVerification = handlePriceVerification(userName, enteredCode, priceNumber);
+        logEvent(logSheet, "case 7", { userName, enteredCode, priceNumber, resultPriceVerification }, userIp);
+        return resultPriceVerification;
+      case 11: // Registration with two-factor authentication        
+        let resultHandleRegistration = handleRegistration(userName, userPassword, email);
+        logEvent(logSheet, "case 11", { userName, email, resultHandleRegistration }, userIp);
+        return resultHandleRegistration;
+      case 12: // Login with two-factor authentication        
+        let resultHandleLogin = handleLogin(userName, userPassword);
+        logEvent(logSheet, "case 12", { userName, resultHandleLogin }, userIp);
+        return resultHandleLogin;
+      case 13: // Login with Google token        
+        let resultHandleLoginGoogle = handleLoginGoogle(data.GoogleToken, googleClientId,registrationCode);
+        logEvent(logSheet, "case 13", { googleToken: data.GoogleToken, googleClientId,registrationCode, resultHandleLoginGoogle }, userIp);
+        return resultHandleLoginGoogle;
+      case 14: //Autologin        
+         let resultHandleAutoLogin = handleAutoLogin(userName, registrationCode);
+         logEvent(logSheet, "case 14", { userName, registrationCode, resultHandleAutoLogin }, userIp);
+         return resultHandleAutoLogin;
+      case 15:        
+        let resultInitiatePasswordReset = initiatePasswordReset(userName);
+        logEvent(logSheet, "case 15", { userName, resultInitiatePasswordReset }, userIp);
+        return resultInitiatePasswordReset;
+      case 16:        
+        let resultResetPassword = resetPassword(userName, userPassword, enteredCode);
+        logEvent(logSheet, "case 16", { userName, enteredCode, resultResetPassword }, userIp);
+        return resultResetPassword;
+      default:
+       logEvent(logSheet, "Invalid isVerification value", { isVerification }, userIp);
+       return ContentService.createTextOutput("Invalid isVerification value.");        
+    }
+  } catch (error) {
+      logEvent(logSheet, "Error", { error: error.message }, userIp);
+      return ContentService.createTextOutput("An error occurred: " );     
+  }
+}
+
+function getUserIp(e) {
+  try {
+    if (e && e.requestHeaders) {
+      return e.requestHeaders['X-Forwarded-For'] || e.requestHeaders['X-AppEngine-Remote-Addr'] || "Unknown IP";
+    } else {
+      return "Unknown IP"; 
+    }
+  } catch (error) {
+    return "Error retrieving IP: " + error.message;
+  }
+}
+
+//A new table is being created, access to Google Drive files is required
+function getOrCreateLogSheet(sheetName) {
+  try {
+    let spreadsheet;
+    
+    let allFiles = DriveApp.getFilesByName(sheetName);
+    
+    if (allFiles.hasNext()) {
+      spreadsheet = SpreadsheetApp.open(allFiles.next());
+    } else {
+      // If a table with the same name is not found, create a new one
+      spreadsheet = SpreadsheetApp.create(sheetName);
+    }
+
+    let sheet = spreadsheet.getSheetByName(sheetName);
+    if (!sheet) {
+      sheet = spreadsheet.insertSheet(sheetName);      
+      sheet.appendRow(["Timestamp", "Operation Type", "User IP", "Additional Params"]);
+    }
+
+    return sheet;
+  } catch (error) {
+    throw new Error("Error creating or accessing log sheet: " + error.message);
+  }
+}
+
+function logEvent(logSheet, operationType, additionalParams, userIp) {
+  try {
+    const currentTime = new Date();
+    const formattedTime = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+    // Function for converting objects with a name starting with 'result' and having a getContent method
+    function transformResultProperties(obj) {
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          // Checking if the property name starts with 'result' and if it is an object
+          if (key.startsWith('result') && typeof obj[key] === 'object' && obj[key] !== null) {
+            // If the object has a getContent method, use it
+            if (typeof obj[key].getContent === 'function') {
+              obj[key] = obj[key].getContent();
+            }
+          }
+        }
+      }
+    }
+
+    // Convert additional parameters, if any
+    if (additionalParams && typeof additionalParams === 'object') {
+      transformResultProperties(additionalParams);
+    }
+    
+    let paramsString = JSON.stringify(additionalParams);
+
+     // Trim the line to 256 characters if it is longer
+    if (paramsString.length > 256) {
+      paramsString = paramsString.substring(0, 256);
+    }
+
+    let rowData = [
+      formattedTime,
+      operationType,
+      userIp,
+      paramsString 
+    ];   
+    
+    logSheet.appendRow(rowData);
+  } catch (error) {
+    Logger.log("Error logging event: " + error.message);
+  }
+}
+
+
+
+// Creates a new sheet in an existing table
+// function getOrCreateLogSheet(sheetName) {
+//   try {
+//     let sheet = sheets.getSheetByName(sheetName);
+//     if (!sheet) {
+//       sheet = sheets.insertSheet(sheetName);
+//       // Добавление заголовков, если лист был создан
+//       sheet.appendRow(["Timestamp", "Email", "Operation Type", "User IP", "Additional Params"]);
+//     }
+//     return sheet;
+//   } catch (error) {
+//     throw new Error("Error creating or accessing log sheet: " + error.message);
+//   }
+// }
+
+// Login without two-factor authentication
+function handleSimpleLogin(userName, userPassword, registrationCode = null) {
+  let userRow = findUserRow(userName, userPassword);
+  if (userRow === 1) {
+    return ContentService.createTextOutput("Incorrect username or password.");
+  }
+
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+
+   let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue());
+    if (sheet.getRange(userRow, 13).getValue() == 'Login') {
+      if (isLoginExpired(lastLoginTime)) {
+        sheet.getRange(userRow, 13).setValue('Logout');
+      } else {
+        let valueFromColumn8 = sheet.getRange(userRow, 8).getValue();        
+        if (registrationCode && `${valueFromColumn8}` == `${registrationCode}`) {
+          // Update the date in columns 9 and 10 to extend activity
+          let currentTime = new Date();
+          let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+          let currentDateTime = currentTime.getTime();
+          sheet.getRange(userRow, 9).setValue(formattedDate);
+          sheet.getRange(userRow, 10).setValue(currentDateTime);
+        } else {
+          return ContentService.createTextOutput("User already logged.");
+        }
+      }
+    }  
+
+  let verificationCode = generateVerificationCode();
+  let currentTime = new Date();
+  let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentTime.getTime();
+  sheet.getRange(userRow, 8).setValue(verificationCode);
+  sheet.getRange(userRow, 9).setValue(formattedDate);
+  sheet.getRange(userRow, 10).setValue(currentDateTime);
+  sheet.getRange(userRow, 13).setValue('Login');
+
+  return generateLoginSuccessResponse(userRow);
+}
+
+//Autologin
+function handleAutoLogin(userName, registrationCode) {  
+  let userRow = findUserRowByNameAndRegistrationCode(userName, registrationCode);    
+  if (userRow === -1) {
+    return ContentService.createTextOutput("Incorrect username or password.");
+  }
+
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+
+  let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue());
+    if (sheet.getRange(userRow, 13).getValue() == 'Login') {
+      if (isLoginExpired(lastLoginTime)) {
+        sheet.getRange(userRow, 13).setValue('Logout');
+      } else {
+        let valueFromColumn8 = sheet.getRange(userRow, 8).getValue();        
+        if (registrationCode && `${valueFromColumn8}` == `${registrationCode}`) {
+          // Update the date in columns 9 and 10 to extend activity
+          let currentTime = new Date();
+          let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+          let currentDateTime = currentTime.getTime();
+          sheet.getRange(userRow, 9).setValue(formattedDate);
+          sheet.getRange(userRow, 10).setValue(currentDateTime);
+        } else {
+          return ContentService.createTextOutput("User already logged.");
+        }
+      }
+    }  
+
+  let verificationCode = generateVerificationCode();
+  let currentTime = new Date();
+  let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentTime.getTime();
+  sheet.getRange(userRow, 8).setValue(verificationCode);
+  sheet.getRange(userRow, 9).setValue(formattedDate);
+  sheet.getRange(userRow, 10).setValue(currentDateTime);
+  sheet.getRange(userRow, 13).setValue('Login');
+
+  return generateLoginSuccessResponse(userRow);
+}
+
+function initiatePasswordReset(userName) {  
+  let userRow = findUserRow(userName);
+  if (userRow === -1) {
+    return ContentService.createTextOutput("Incorrect username.");
+  }
+
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+ 
+  if (!canSendEmail()) {
+    return ContentService.createTextOutput("Email sending quota is near its limit. Please try again later.");
+  }
+ 
+  let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue());
+  if (sheet.getRange(userRow, 13).getValue() == 'Login') {
+    if (isLoginExpired(lastLoginTime)) {
+      sheet.getRange(userRow, 13).setValue('Logout');
+    } else {
+      return ContentService.createTextOutput("User already logged.");
+    }
+  }
+  
+  let email = sheet.getRange(userRow, 7).getValue();
+  if (!email || email === "") {
+    return ContentService.createTextOutput("Email address not found.");
+  }
+  
+  let resetCode = generateVerificationCode();
+  let currentTime = new Date();
+  let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentTime.getTime();
+
+  // We save the temporary code in column 15, and the generation time in 16
+  sheet.getRange(userRow, 15).setValue(resetCode);       
+  sheet.getRange(userRow, 16).setValue(currentDateTime); 
+
+  try {
+    MailApp.sendEmail(email, "Password Reset Code", `Your password reset code: ${resetCode}. This code is valid for 15 minutes.`);
+    return ContentService.createTextOutput("Password reset code has been sent to your email.");
+  } catch (error) {
+    return ContentService.createTextOutput("Failed to send password reset code. Please try again.");
+  }
+}
+
+function resetPassword(userName, newPassword, enteredCode) {  
+  let userRow = findUserRow(userName);
+  if (userRow === -1) {
+    return ContentService.createTextOutput("Incorrect username.");
+  }
+
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+  
+  let tempCode = sheet.getRange(userRow, 15).getValue();
+  let creationTime = sheet.getRange(userRow, 16).getValue();
+  
+  if (!tempCode || !creationTime) {
+    return ContentService.createTextOutput("No password reset request found.");
+  }
+ 
+  let currentTime = new Date().getTime();
+  let elapsedTimeInMinutes = (currentTime - creationTime) / (60 * 1000);
+
+  if (elapsedTimeInMinutes > 15 || enteredCode !== `${tempCode}`) {
+    return ContentService.createTextOutput("Password reset code is incorrect or expired.");
+  }
+
+  // If the code is correct, update the password (3rd column for password)
+  sheet.getRange(userRow, 3).setValue(newPassword); 
+
+  // Copy the temporary code from the 15th column to the 8th as a log label
+  sheet.getRange(userRow, 8).setValue(tempCode);
+
+  return ContentService.createTextOutput("Password has been successfully reset.");
+}
+
+
+// Login with two-factor authentication
+function handleLogin(userName, userPassword) {
+  let userRow = findUserRow(userName, userPassword);
+  if (userRow === 1) {
+    return ContentService.createTextOutput("Incorrect username or password.");
+  }
+
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+
+  if (!canSendEmail()) {
+    return ContentService.createTextOutput("Email sending quota is near its limit. Please try again later.");
+  }
+
+  let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue());
+
+  if (sheet.getRange(userRow, 13).getValue() =='Login' ) {
+     
+    if (isLoginExpired(lastLoginTime)) {      
+      sheet.getRange(userRow, 13).setValue('Logout');
+    } else {
+      return ContentService.createTextOutput("User already logged.");
+    }
+  }
+
+  let verificationCode = generateVerificationCode();
+  let currentTime = new Date();
+  let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentTime.getTime();
+  let currentEmail = sheet.getRange(userRow, 7).getDisplayValues()[0][0];
+
+  sheet.getRange(userRow, 8).setValue(verificationCode);
+  sheet.getRange(userRow, 9).setValue(formattedDate);
+  sheet.getRange(userRow, 10).setValue(currentDateTime);
+  sheet.getRange(userRow, 13).setValue('Login');
+
+  if (!currentEmail || currentEmail === "") {
+    return ContentService.createTextOutput("Invalid email address.");
+  }
+
+  try {
+    MailApp.sendEmail(currentEmail, "Confirm Your Code", `Your verification code: ${formatCode(verificationCode)} is valid for 15 minutes.`);
+    return ContentService.createTextOutput("Verification code sent to your email.");
+  } catch (error) {
+    return ContentService.createTextOutput("Failed to send verification code. Please try again.");
+  }
+}
+
+// Login with Google token
+function handleLoginGoogle(GoogleToken,googleClientId, registrationCode = null) {
+  try {
+    // Extracting Information from Google Token
+    const tokenPayload = verifyGoogleToken(GoogleToken,googleClientId);
+    const email = tokenPayload.email;
+    //const userName = tokenPayload.name;
+
+    // Checking user existence by email
+    let userRow = findUserRowByEmail(email);
+    if (userRow === 1) {
+      return ContentService.createTextOutput(`User not found. Please register first.`);
+    }
+
+    if (!isAccountActive(userRow)) {
+      return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+    }
+
+    let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue());
+    if (sheet.getRange(userRow, 13).getValue() == 'Login') {
+      if (isLoginExpired(lastLoginTime)) {
+        sheet.getRange(userRow, 13).setValue('Logout');
+      } else {
+        let valueFromColumn8 = sheet.getRange(userRow, 8).getValue();        
+        if (registrationCode && `${valueFromColumn8}` == `${registrationCode}`) {
+          // Update the date in columns 9 and 10 to extend activity
+          let currentTime = new Date();
+          let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+          let currentDateTime = currentTime.getTime();
+          sheet.getRange(userRow, 9).setValue(formattedDate);
+          sheet.getRange(userRow, 10).setValue(currentDateTime);
+        } else {
+          return ContentService.createTextOutput("User already logged.");
+        }
+      }
+    }    
+    
+    let verificationCode = generateVerificationCode();
+    let currentTime = new Date();
+    let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+    let currentDateTime = currentTime.getTime();
+
+    sheet.getRange(userRow, 8).setValue(verificationCode);
+    sheet.getRange(userRow, 9).setValue(formattedDate);
+    sheet.getRange(userRow, 10).setValue(currentDateTime);
+    sheet.getRange(userRow, 13).setValue('Login');
+
+    return generateLoginSuccessResponse(userRow);
+
+  } catch (error) {
+    return ContentService.createTextOutput(`Failed to verify Google token. Please try again. Error: ${error.message}`);
+  }
+}
+
+// Code verification in two-factor authentication
+function verifyCode(userName, enteredCode) {
+  let userRow = findUserRow(userName);
+  if (userRow === 1) {
+    return ContentService.createTextOutput("Incorrect username or password.");
+  }  
+
+  let storedCode = sheet.getRange(userRow, 8).getValue();
+  let creationTime = sheet.getRange(userRow, 10).getValue();
+
+  if (storedCode === null || creationTime === null) {
+    return ContentService.createTextOutput("Invalid isVerification value.");
+  }
+
+  let currentDate = new Date();
+  let currentTime = currentDate.getTime();
+  let elapsedTimeInMinutes = (currentTime - creationTime) / (60 * 1000);
+
+  if (elapsedTimeInMinutes > 15 || enteredCode !== `${storedCode}`) {
+    incrementFailedAttempts(userRow);
+
+    if (getFailedAttempts(userRow) > 3) {
+      lockAccount(userRow);
+      return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+    } else {
+      return ContentService.createTextOutput("Verification code is incorrect or expired.");
+    }
+  }
+
+  clearVerificationData(userRow);
+  unlockAccount(userRow);
+
+  sheet.getRange(userRow, 13).setValue('Login');
+  return generateLoginSuccessResponse(userRow);
+}
+
+// Generating a successful response after login
+function generateLoginSuccessResponse(userRow) {
+  let message = sheet.getRange(userRow, 4).getValue() || '';
+  let promo = sheet.getRange(userRow, 5).getValue() || '';
+  let order = sheet.getRange(userRow, 6).getValue() || '';
+  let verificationCode = sheet.getRange(userRow, 8).getValue() || '';
+
+  let name = sheet.getRange(userRow, 2).getValue() || '';
+  return ContentService.createTextOutput(`Successful login! Message: ${message}, Promo: ${promo}, Order: ${order}, Verification Code: ${verificationCode}, Name: ${name}`);
+}
+
+function updateOrderAndPrice(userName, enteredCode, priceNumber, order) {
+  let userRow = findUserRow(userName);
+  if (userRow === 1) {
+    return ContentService.createTextOutput("Incorrect username or password.");
+  }
+
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+
+  let storedCode = sheet.getRange(userRow, 8).getValue();
+  let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue());
+
+  if (enteredCode !== `${storedCode}` || sheet.getRange(userRow, 13).getValue() !== 'Login' || isLoginExpired(lastLoginTime)) {
+    return ContentService.createTextOutput("Verification code or price number is incorrect, or user is not logged in.");
+  }
+
+  // Fetch or generate code based on priceNumber
+  let priceCode = getPriceCode(priceNumber);
+
+  // Update user's last active time and code generation time
+  let currentTime = new Date();
+  let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentTime.getTime();
+  sheet.getRange(userRow, 9).setValue(formattedDate); // Update formatted date
+  sheet.getRange(userRow, 10).setValue(currentDateTime); // Update timestamp
+
+  return ContentService.createTextOutput(`Order and price updated successfully with code ${priceCode}!`);
+}
+
+function handlePriceVerification(userName, enteredCode, priceNumber) {
+  let userRow = findUserRow(userName);
+  if (userRow === 1) {
+    return ContentService.createTextOutput("Incorrect username or password.");
+  }
+
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+
+  let storedCode = sheet.getRange(userRow, 8).getValue();
+  let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue());
+
+  if (enteredCode !== `${storedCode}` || sheet.getRange(userRow, 13).getValue() !== 'Login' || isLoginExpired(lastLoginTime) || sheet.getRange(userRow, 14).getValue() !== `${priceNumber}` ) {
+    return ContentService.createTextOutput("Verification code or price number is incorrect, or user is not logged in.");
+  }
+
+  // Fetch or generate code based on priceNumber
+  let priceCode = getPriceCode(priceNumber);
+
+  // Update user's last active time and code generation time
+  let currentTime = new Date();
+  let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentTime.getTime();
+  sheet.getRange(userRow, 9).setValue(formattedDate); // Update formatted date
+  sheet.getRange(userRow, 10).setValue(currentDateTime); // Update timestamp
+
+  return ContentService.createTextOutput(`Price verified and recorded successfully with code ${priceCode}!`);
+}
+
+function getPriceCode(priceNumber) {
+  let page2 = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Page2");
+  let lastRow = page2.getLastRow();
+
+  // Search for the priceNumber in Page2
+  for (let i = 1; i <= lastRow; i++) {
+    let currentPriceId = page2.getRange(i, 1).getValue(); // Assuming priceNumber is in column 1
+    if (currentPriceId === `${priceNumber}`) {
+      return page2.getRange(i, 2).getValue(); // Assuming the code is in column 2
+    }
+  }
+
+  // If not found, generate a new code and add a new row
+  let newCode = generateKey();
+  page2.appendRow([priceNumber, newCode]);
+  return newCode;
+}
+
+function generateKey() {
+  try {
+    let length = 256;
+    let key = '';
+    for (let i = 0; i < length; i++) {
+      key += String.fromCharCode(Math.floor(Math.random() * (126 - 32) + 32));
+    }
+    Logger.log('Generated Key: ' + key);
+    return key;
+  } catch (error) {
+    Logger.log('Error in generateKey: ' + error.message);
+    throw new Error('Failed to generate key.');
+  }
+}
+
+
+
+// Registration without two-factor authentication
+function handleSimpleRegistration(userName, userPassword) {
+  if (isUserExists(userName)) {
+    return ContentService.createTextOutput("This username already exists. Please choose another one.");
+  }
+
+  let verificationCode = generateVerificationCode();
+  let currentDate = new Date();
+  let formattedDate = Utilities.formatDate(currentDate, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentDate.getTime();
+  sheet.appendRow([userName, userPassword, verificationCode, formattedDate, currentDateTime, '', '', '', '', '', 'Active']);
+
+  return generateLoginSuccessResponse(findUserRow(userName));
+}
+
+// Order update (supports both versions)
+function updateOrder(userName, userPassword, favorder, registrationCode = null) {
+  let userRow;
+
+  // If the registration code is transmitted
+  if (registrationCode) {
+    // We are looking for a user by both name and registration code
+    userRow = findUserRowByNameAndRegistrationCode(userName, registrationCode);
+    if (userRow === -1) {
+      return ContentService.createTextOutput("Incorrect username or registration code.");
+    }
+  } else {
+    // If the registration code is not transmitted, look for the user by name and password
+    userRow = findUserRow(userName, userPassword);
+    if (userRow === -1) {
+      return ContentService.createTextOutput("Incorrect username or password.");
+    }
+  }
+
+  // Check if the account is active
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts.");
+  }
+
+  // Update the favorite order in column 6
+  sheet.getRange(userRow, 6).setValue(favorder);
+  return ContentService.createTextOutput("Order updated successfully!");
+}
+
+// Logout from the account
+function handleLogout(userName, userPassword, registrationCode) {
+  let userRow;
+  
+  // If the registration code is transmitted
+  if (registrationCode) {
+    // We are looking for a user by both name and registration code
+    userRow = findUserRowByNameAndRegistrationCode(userName, registrationCode);
+    if (userRow === -1) {
+      return ContentService.createTextOutput("Incorrect username or registration code.");
+    }
+  } else {
+    // If the registration code is not transmitted, look for the user by name and password
+    userRow = findUserRow(userName, userPassword);
+    if (userRow === -1) {
+      return ContentService.createTextOutput("Incorrect username or password.");
+    }
+  }
+
+  // Set the 'Logout' status to column 13
+  sheet.getRange(userRow, 13).setValue('Logout');
+  return ContentService.createTextOutput("Logout successful.");
+}
+
+// Registration with two-factor authentication
+function handleRegistration(userName, userPassword, email) {
+  if (isUserExists(userName) || isEmailExists(email)) {
+    return ContentService.createTextOutput("This username already exists. Please choose another one.");
+  }
+
+  if (!canSendEmail()) {
+    return ContentService.createTextOutput("Email sending quota is near its limit. Please try again later.");
+  }
+
+  let verificationCode = generateVerificationCode();
+  let currentDate = new Date();
+  let formattedDate = Utilities.formatDate(currentDate, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentDate.getTime();
+
+  sheet.appendRow([formattedDate, userName, userPassword, '', '', '', email, verificationCode, formattedDate, currentDateTime, 0, 'blocked']);
+
+  try {
+    MailApp.sendEmail(email, "Confirm Your Code", `Your verification code: ${formatCode(verificationCode)} is valid for 15 minutes.`);
+    return ContentService.createTextOutput("Verification code sent to your email.");
+  } catch (error) {
+    return ContentService.createTextOutput("Failed to send verification code. Please try again.");
+  }
+}
+
+// Checking user existence
+function isUserExists(userName) {
+  let data = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
+  return data.flat().includes(userName);
+}
+
+// Checking user email
+function isEmailExists(email) {
+  let data = sheet.getRange(2, 7, sheet.getLastRow() - 1, 1).getValues();
+  return data.flat().includes(email);
+}
+
+// Search for user string
+function findUserRow(userName, userPassword = null) {
+  let users = sheet.getRange(2, 2, sheet.getLastRow() - 1, 3).getValues();
+  return users.findIndex(user => user[0] == `${userName}` && (userPassword === null || user[1] == `${userPassword}`)) + 2;
+}
+
+// Checking if the account is active
+function isAccountActive(userRow) {
+  return sheet.getRange(userRow, 12).getValue() == 'Active';
+}
+
+// Account blocking
+function lockAccount(userRow) {
+  sheet.getRange(userRow, 12).setValue('blocked');
+}
+
+// Unblocking your account
+function unlockAccount(userRow) {
+  sheet.getRange(userRow, 12).setValue('Active');
+}
+
+// Getting the number of failed attempts
+function getFailedAttempts(userRow) {
+  return sheet.getRange(userRow, 11).getValue() || 0;
+}
+
+// Increased number of failed attempts
+function incrementFailedAttempts(userRow) {
+  let attempts = getFailedAttempts(userRow);
+  sheet.getRange(userRow, 11).setValue(attempts + 1);
+}
+
+// Clearing verification data
+function clearVerificationData(userRow) {
+  sheet.getRange(userRow, 11).setValue(0); // Reset failed attempt counter  
+}
+
+// Verification code generation
+function generateVerificationCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Code Formatting
+function formatCode(code) {
+  return `${code.slice(0, 2)}-${code.slice(2, 4)}-${code.slice(4, 6)}`;
+}
+
+// Checking if mail can be sent (limit check)
+function canSendEmail() {
+  let remainingQuota = MailApp.getRemainingDailyQuota();
+  return remainingQuota > emailQuotaThreshold;
+}
+
+// Checking if the login has expired
+function isLoginExpired(lastLoginTime) {
+if (lastLoginTime === null) {    
+    creationTime = 0;
+  } else {    
+    creationTime = lastLoginTime
+  }
+  let currentDate = new Date();
+  let currentTime = currentDate.getTime();
+  let timeDifference = (currentTime - creationTime) / (60 * 1000);
+
+  return timeDifference > 20 //logout interval minutes
+}
+
+function verifyGoogleToken(GoogleToken,googleClientId) {
+  // URL for token validation from Google
+  var url = 'https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(GoogleToken);
+  var response = UrlFetchApp.fetch(url);
+  
+  var tokenInfo = JSON.parse(response.getContentText()); 
+    if (tokenInfo.aud  == googleClientId) {
+    
+    var userEmail = tokenInfo.email;
+    var userName = tokenInfo.name;    
+    return {
+      email: userEmail,
+      name: userName
+    };
+  } else {   
+    return ContentService.createTextOutput("Failed token!");
+  }
+}
+
+// Search for a user by email
+function findUserRowByEmail(email) {
+  let emails = sheet.getRange(2, 7, sheet.getLastRow() - 1, 1).getValues();
+  return emails.flat().findIndex(e => e === email) + 2;
+}
+
+function findUserRowByRegistrationCode(registrationCode) {
+  let data = sheet.getDataRange().getValues();
+  
+  for (let i = 1; i < data.length; i++) {  // Starting at 1, skipping headers
+    if (`${data[i][7]}` ==`${registrationCode}` ) {  // 8th column (index 7)
+      return i + 1;  // Return a string (numbered from 1, so +1)
+    }
+  }
+  return -1;  
+}
+
+function findUserRowByNameAndRegistrationCode(userName, registrationCode) {
+  let data = sheet.getDataRange().getValues();  
+  
+  for (let i = 1; i < data.length; i++) {
+    // Compare the username in the second column (index 1) and the registration code in the eighth column (index 7)
+    if (`${data[i][1]}` === `${userName}` && `${data[i][7]}` === `${registrationCode}`) {
+      return i + 1;  // 
+    }
+  }
+  return -1;  
+}
+
+function validateInputForDoPost(data) {
+  try {
+    const nameRegex = /^[^=+"'<>.,;:]{4,42}$/; 
+    const passwordHashRegex = /^[a-f0-9]{64}$/; // 64 symbols, hexadecimal digits (0-9, a-f)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    const verificationCodeRegex = /^\d{6}$/; 
+    const orderRegex = /^[1-9]\d{0,6}$/; // Integer from 1 to 7 digits
+    const priceNumberRegex = /^[a-zA-Z0-9]{1,10}$/; 
+    const favorderRegex = /^([a-zA-Z0-9]+:[0-9]+(:[0-9]+)*;?)+$/; // Checking favorder
+
+    const googleTokenRegex = /^[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+$/; // JWT pattern
+    const googleClientIdRegex = /^[0-9]+-[A-Za-z0-9\-_]+\.apps\.googleusercontent\.com$/; // Google Client ID pattern
+
+    if (data.Name && !nameRegex.test(data.Name)) {
+      return "Invalid isVerification value. Invalid Name. Must be 4-42 characters, without forbidden symbols.";
+    }
+    if (data.Password && !passwordHashRegex.test(data.Password)) {
+      return "Invalid isVerification value. Invalid Password hash. Must be a 64-character hexadecimal string.";
+    }
+    if (data.Email && !emailRegex.test(data.Email)) {
+      return "Invalid isVerification value. Invalid Email.";
+    }
+    if (data.VerificationCode && !verificationCodeRegex.test(data.VerificationCode)) {
+      return "Invalid isVerification value. Invalid VerificationCode. Must be exactly 6 digits.";
+    } 
+    if (data.registrationCode && !verificationCodeRegex.test(data.registrationCode)) {
+      return "Invalid isVerification value. Invalid VerificationCode. Must be exactly 6 digits.";
+    } 
+    if (data.Order && !orderRegex.test(data.Order)) {
+      return `Invalid isVerification value. Invalid Order. Must be a positive integer with up to 7 digits.${data.Order}`;
+    }
+    if (data.PriceNumber && !priceNumberRegex.test(data.PriceNumber)) {
+      return "Invalid isVerification value. Invalid PriceNumber. Only letters and numbers, up to 10 characters.";
+    }
+    if (data.Favorder && !favorderRegex.test(data.Favorder)) {
+      return "Invalid isVerification value. Invalid favorder format.";
+    }
+
+    if (data.GoogleToken && !googleTokenRegex.test(data.GoogleToken)) {
+      return "Invalid isVerification value. Invalid GoogleToken format.";
+    }
+    if (data.googleClientId && !googleClientIdRegex.test(data.googleClientId)) {
+      return "Invalid isVerification value. Invalid googleClientId format.";
+    }
+    
+    return null;
+  } catch (error) {
+    return "Invalid isVerification value. An error occurred during validation.";
+  }
+}
+

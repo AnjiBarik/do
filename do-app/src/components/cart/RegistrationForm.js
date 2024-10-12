@@ -189,7 +189,7 @@ export default function RegistrationForm() {
 
     // Logic for adding VerificationCode
 let verificationCodeToSend = verificationCode; //Getting verificationCode from context
-console.log(verificationCodeToSend )
+//console.log(verificationCodeToSend )
 
 if (!showVerificationCode) {
     if (verificationCode && verificationCode !== "") {
@@ -200,7 +200,7 @@ if (!showVerificationCode) {
             const sessionVerificationCode = await getAuthDataSession(uiMain.Urregform);
             if (sessionVerificationCode) {
                 verificationCodeToSend = sessionVerificationCode; 
-                console.log(sessionVerificationCode )
+                //console.log(sessionVerificationCode )
             }
         } catch (error) {
             console.error('Failed to get verificationCode from session storage:', error);
@@ -210,7 +210,7 @@ if (!showVerificationCode) {
 
 if (verificationCodeToSend) {
     formDataToSend.append('registrationCode', verificationCodeToSend);
-    console.log(verificationCodeToSend )
+    //console.log(verificationCodeToSend )
 }
 
 
@@ -436,7 +436,7 @@ if (verificationCodeToSend) {
 
   const handleRememberMe = (event) => {
     const isChecked = event.target.checked;
-    setIsRememberMe(isChecked); // Обновляем стейт "Remember Me"
+    setIsRememberMe(isChecked); 
     console.log('Remember Me:', isChecked);
   };
 
@@ -499,9 +499,9 @@ if (verificationCodeToSend) {
                     <img className="back-button select" src={logout} alt="logout" />
                   </button>
                  
-  <label>
+  <label className='sort-button'>
     <input
-      type="checkbox"
+      type="checkbox"      
       checked={isRememberMeChecked}
       onChange={handleRememberMeChange} 
     />
@@ -509,7 +509,13 @@ if (verificationCodeToSend) {
   </label>
 
 
-                  <button onClick={toggleSections} className='sort-button' tabIndex={0}>
+  <button 
+      onClick={toggleSections} 
+      className='sort-button' 
+      tabIndex={1}
+      autoFocus
+      onKeyDown={(e) => { if (e.key === 'Enter') toggleSections(); }}
+    >
                     <img src={cancel} alt='cancel' className="back-button select" />
                   </button>
                 </div>
@@ -673,7 +679,7 @@ if (verificationCodeToSend) {
     disabled={!formData.Name} 
     onClick={handleForgotPassword}
   >
-    Forgot password
+    Forgot Password?
   </button>
 ) : (
   
@@ -683,7 +689,7 @@ if (verificationCodeToSend) {
         id="rememberMe" 
         onChange={handleRememberMe} 
       />
-      <label htmlFor="rememberMe">Remember Me</label>
+      <label htmlFor="rememberMe" className='sort-button'>Remember Me</label>
     </div>
  
 )}

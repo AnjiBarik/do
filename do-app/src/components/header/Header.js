@@ -108,7 +108,7 @@ export default function Header() {
                   <div>                    
                       <img src={inst} className="back-button select" onClick={() => handleButtonClick(uiMain.inst, 1)} alt={uiMain.inst}/>                   
                     {currentButtonIndex === 1 && (
-                      <a href={`https://www.instagram.com/${currentLink}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://www.instagram.com/${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
                       </a>
                     )}
@@ -118,7 +118,7 @@ export default function Header() {
                   <div>                    
                       <img src={face} className="back-button select" onClick={() => handleButtonClick(uiMain.face, 2)} alt={uiMain.face}/>                   
                     {currentButtonIndex === 2 && (
-                      <a href={`https://www.facebook.com/${currentLink}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://www.facebook.com/${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
                       </a>
                     )}
@@ -128,7 +128,7 @@ export default function Header() {
                   <div>                   
                       <img src={telegram} className="back-button select" onClick={() => handleButtonClick(uiMain.telegram, 3)} alt={uiMain.telegram}/>                  
                     {currentButtonIndex === 3 && (
-                      <a href={`https://t.me/${currentLink}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://t.me/${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
                       </a>
                     )}
@@ -148,7 +148,7 @@ export default function Header() {
                   <div>                    
                       <img src={tik} className="back-button select" onClick={() => handleButtonClick(uiMain.tik, 5)} alt={uiMain.tik}/>                  
                     {currentButtonIndex === 5 && (
-                      <a href={`https://www.tiktok.com/${currentLink}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://www.tiktok.com/${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
                       </a>
                     )}
@@ -158,7 +158,7 @@ export default function Header() {
                   <div>                   
                       <img src={you} className="back-button select" onClick={() => handleButtonClick(uiMain.you, 6)} alt={uiMain.you}/>                  
                     {currentButtonIndex === 6 && (
-                      <a href={`https://www.youtube.com/${currentLink}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://www.youtube.com/${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
                       </a>
                     )}
@@ -173,7 +173,7 @@ export default function Header() {
                   <div>                   
                       <img src={location} className="back-button select" onClick={() => handleButtonClick(uiMain.location, 8)} alt={uiMain.location}/>                  
                     {currentButtonIndex === 8 && (
-                      <a href={`https://maps.google.com/?q=${currentLink}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://maps.google.com/?q=${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
                       </a>
                     )}

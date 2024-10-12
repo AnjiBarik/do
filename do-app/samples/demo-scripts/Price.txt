@@ -1,0 +1,35 @@
+const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/.../edit#gid=0");
+
+function doPost(e) {
+  // Read data from Sheet1 and Sheet2
+  const sheet1 = sheets.getSheetByName("Sheet1");
+  const sheet2 = sheets.getSheetByName("Sheet2"); // Replace "Sheet2" with your actual sheet name
+
+  const headers1 = sheet1.getRange(1, 1, 1, sheet1.getLastColumn()).getValues()[0];
+  const data1 = sheet1.getRange(2, 1, sheet1.getLastRow() - 1, sheet1.getLastColumn()).getValues();
+  const jsonData1 = data1.map((row) => {
+    const obj = {};
+    for (let i = 0; i < headers1.length; i++) {
+      obj[headers1[i]] = row[i];
+    }
+    return obj;
+  });
+
+  const headers2 = sheet2.getRange(1, 1, 1, sheet2.getLastColumn()).getValues()[0];
+  const data2 = sheet2.getRange(2, 1, sheet2.getLastRow() - 1, sheet2.getLastColumn()).getValues();
+  const jsonData2 = data2.map((row) => {
+    const obj = {};
+    for (let i = 0; i < headers2.length; i++) {
+      obj[headers2[i]] = row[i];
+    }
+    return obj;
+  });
+
+  // Combine data from both sheets (modify logic as needed)
+  const combinedData = [...jsonData1, ...jsonData2]; // Simple concatenation for now
+
+  // console.log(combinedData);
+   
+  // Return JSON response
+  return ContentService.createTextOutput(JSON.stringify(combinedData));
+}

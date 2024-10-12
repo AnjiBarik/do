@@ -1,0 +1,287 @@
+const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/...ID of your table FormOrder.../edit?gid=0#gid=0");
+const sheet = sheets.getSheetByName("Page1");
+const allowedUserIds = ["d123", "manager1", "manager2"]; // List of allowed user IDs
+
+function doPost(e) {
+  let data = e.parameter;
+
+  // Validate incoming data
+  const validationError = validateInput(data);
+  if (validationError) {
+    return ContentService.createTextOutput(validationError);
+  }
+
+  let userName = `${data.Name}`; 
+  let url = `${data.Url}`; // URL for validation
+  let enteredCode = `${data.VerificationCode}`; 
+  let priceNumber = `${data.Idprice}`; 
+
+  if (!data.userid) { // Handle non-admin user flow
+    let lastRow = sheet.getLastRow();
+    let lastOrderNumber = lastRow > 1 ? sheet.getRange(lastRow, 1).getValue() : 0;
+    let orderNumber = parseInt(lastOrderNumber) + 1;
+
+    // Validate the request (Order Creation)
+    let validationResponse = validateRequest({
+      isVerification: 6,
+      Name: userName,
+      VerificationCode: enteredCode,
+      PriceNumber: priceNumber,
+      Order: `${orderNumber}` 
+    }, url);
+
+    // Parse response for the validation success message and extract priceCode
+let validationMessage = String.fromCharCode(...validationResponse.getContent());
+let priceCodeMatch = validationMessage.match(/Order and price updated successfully with code ([\s\S]+)!/);
+
+if (!priceCodeMatch) {
+  return ContentService.createTextOutput(`Order validation failed. ${validationMessage}`);
+}
+
+let priceCode = priceCodeMatch[1]; // Extracted priceCode from response
+   
+    let encryptionKey = priceCode; // Use priceCode as the encryption key
+
+    // Encrypting order details before saving   
+
+    let currentDate = new Date();
+    let currentDateTime = currentDate.toISOString();  
+
+    const encryptIfNotEmpty = (value) => value ? encrypt(handleInputValue(value), encryptionKey) : "";
+
+let encryptedUserName = encryptIfNotEmpty(userName);
+let encryptedFirstName = encryptIfNotEmpty(data.FirstName);
+let encryptedMiddleName = encryptIfNotEmpty(data.MiddleName);
+let encryptedLastName = encryptIfNotEmpty(data.LastName);
+let encryptedEmail = encryptIfNotEmpty(data.Email);
+let encryptedPhone = encryptIfNotEmpty(data.Phone);
+let encryptedAddress = encryptIfNotEmpty(data.Address);
+let encryptedMessage = encryptIfNotEmpty(data.Message);
+let encryptedZakaz = encryptIfNotEmpty(data.Zakaz);
+
+    // Store the encrypted data in the sheet
+    sheet.appendRow([
+      orderNumber,
+      addApostropheIfNotEmpty(encryptedUserName),
+      addApostropheIfNotEmpty(encryptedFirstName),
+      addApostropheIfNotEmpty(encryptedMiddleName),
+      addApostropheIfNotEmpty(encryptedLastName),
+      addApostropheIfNotEmpty(encryptedEmail),
+      addApostropheIfNotEmpty(encryptedPhone),
+      addApostropheIfNotEmpty(encryptedAddress),
+      addApostropheIfNotEmpty(encryptedMessage),
+      addApostropheIfNotEmpty(data.FirstName1),
+      addApostropheIfNotEmpty(data.MiddleName1),
+      addApostropheIfNotEmpty(data.LastName1),
+      addApostropheIfNotEmpty(data.Email1),
+      addApostropheIfNotEmpty(data.Phone1),
+      addApostropheIfNotEmpty(data.Address1),      
+      addApostropheIfNotEmpty(data.Message1), 
+      addApostropheIfNotEmpty(data.FirstName2), 
+      addApostropheIfNotEmpty(data.MiddleName2), 
+      addApostropheIfNotEmpty(data.LastName2), 
+      addApostropheIfNotEmpty(data.Email2), 
+      addApostropheIfNotEmpty(data.Phone2), 
+      addApostropheIfNotEmpty(data.Address2), 
+      addApostropheIfNotEmpty(data.Message2),
+      addApostropheIfNotEmpty(encryptedZakaz), 
+      priceNumber, 
+      currentDateTime
+    ]);
+
+    let response = `Your message was successfully sent. Order Number: ${orderNumber}`;
+    return ContentService.createTextOutput(response);
+  }
+
+  if (data.userid) { // Handle admin user flow
+    if (!allowedUserIds.includes(data.userid)) {
+      return ContentService.createTextOutput("Incorrect username or password.");
+    }
+
+    // Validate the request (Price Verification)
+    let validationResponse = validateRequest({
+      isVerification: 7,
+      Name: userName, 
+      VerificationCode: enteredCode,
+      PriceNumber: priceNumber
+    }, url);
+
+    // Extract the validation message and priceCode from response
+    let validationMessage = String.fromCharCode(...validationResponse.getContent());
+    let priceCodeMatch = validationMessage.match(/Price verified and recorded successfully with code ([\s\S]+)!/);
+
+    if (!priceCodeMatch) {
+      return ContentService.createTextOutput(`Access denied. Validation failed.`);
+    }
+
+    let priceCode = priceCodeMatch[1]; // Extracted priceCode from response
+    let decryptionKey = priceCode; // Use priceCode as the decryption key
+
+    // Fetching the data from the sheet
+    const headers1 = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const data1 = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+
+    const jsonData1 = data1.map((row) => {
+    const obj = {};
+    for (let i = 0; i < headers1.length; i++) {
+    // Decrypt only if the value is not empty, null, and within specified indices
+    if (row[i] && row[i] !=="" && row[i] !==null && i >= 1 && (i <= 8 || i === 23)) {
+      obj[headers1[i]] = decrypt(row[i], decryptionKey);
+    } else {
+      obj[headers1[i]] = row[i];
+    }
+    }
+      return obj;
+    });
+
+
+    // Decrypted data is now stored in jsonData1. Apply filtering logic
+    let filteredData = jsonData1;
+
+    //Filter by idpric if provided
+    if (data.idpric && data.idpric !== "") {
+      filteredData = filteredData.filter((item) => String(item.Idprice) === String(data.idpric));
+    }
+
+    // Filter by date range if startdate and enddate are provided
+    if (data.startdate && data.enddate) {
+      try {
+        const startDate = new Date(data.startdate);
+        const endDate = new Date(data.enddate);
+        filteredData = filteredData.filter((item) => {
+          const itemDate = new Date(item.currentDateTime); // Assuming `currentDateTime` is part of the headers
+          return itemDate >= startDate && itemDate <= endDate;
+        });
+      } catch (error) {
+        return ContentService.createTextOutput(JSON.stringify("Incorrect username or password."));
+      }
+    }
+
+    // Return the decrypted and filtered data
+    return ContentService.createTextOutput(JSON.stringify(filteredData));    
+  }
+}
+
+// Helper to add apostrophes around non-empty values
+function addApostropheIfNotEmpty(value) {
+  return value ? "'" + value : "";
+}
+
+// Input validation
+function validateInput(data) {
+  try {
+    const nameRegex = /^[^=+"'<>.,;:]{4,42}$/; 
+    const userIdRegex = /^[a-zA-Z0-9]{1,10}$/;
+    const idPriceRegex = /^[a-zA-Z0-9]{1,10}$/;
+    const verificationCodeRegex = /^\d{6}$/;    
+    const urlRegex = /^https:\/\/script\.google\.com\/macros\/s\/[a-zA-Z0-9_-]+\/exec$/;
+    const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+    if (data.Name && !nameRegex.test(data.Name)) {
+      return "Access denied. Invalid Name. Must be 4-42 characters, without forbidden symbols.";
+    }
+    if (data.userid && !userIdRegex.test(data.userid)) {
+      return "Access denied. Invalid UserID. Only letters and numbers, up to 10 characters.";
+    }
+    if (data.Idprice && !idPriceRegex.test(data.Idprice)) {
+      return "Access denied. Invalid Idprice. Only letters and numbers, up to 10 characters.";
+    }
+    if (data.idpric && !idPriceRegex.test(data.idpric)) {
+      return "Access denied. Invalid Idpric. Only letters and numbers, up to 10 characters.";
+    }
+    if (data.VerificationCode && !verificationCodeRegex.test(data.VerificationCode)) {
+      return "Access denied. Invalid VerificationCode. Must be exactly 6 digits.";
+    }
+    if (data.Url && !urlRegex.test(data.Url)) {
+      return "Access denied. Invalid URL.";
+    }
+    if ((data.startdate && !dateRegex.test(data.startdate)) || (data.enddate && !dateRegex.test(data.enddate))) {
+      return "Access denied. Invalid Date format. Must be in ISO format.";
+    }
+    return null;
+  } catch (error) {
+    return "Access denied. An error occurred during validation.";
+  }
+}
+
+// Request validation (fetch call)
+function validateRequest(params, url) {
+  const options = {
+    'method': 'post',
+    'payload': params
+  };
+  return UrlFetchApp.fetch(url, options);
+}
+
+// Function to convert string to Base64
+function toBase64(input) {
+  try {
+    return Utilities.base64Encode(input);
+  } catch (error) {
+    Logger.log('Error in toBase64: ' + error.message);
+    return ''
+    //throw new Error('Failed to encode text to Base64.');
+  }
+}
+
+// Function to decode Base64 back to a string
+function fromBase64(input) {
+  try {
+    return Utilities.newBlob(Utilities.base64Decode(input)).getDataAsString();
+  } catch (error) {
+    Logger.log('Error in fromBase64: ' + error.message);
+    return ''
+    //return 'Error: ' + error.message;
+    //throw new Error('Failed to decode Base64 text.');
+  }
+}
+
+// Encryption function using XOR and Base64
+function encrypt(text, key) {
+  try {
+    if (key.length < text.length) {
+      throw new Error('Key length must be greater than or equal to text length.');
+    }
+
+    let encryptedText = '';
+    for (let i = 0; i < text.length; i++) {
+      encryptedText += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i));
+    }
+
+    return toBase64(encryptedText);
+  } catch (error) {
+    Logger.log('Error in encrypt: ' + error.message);
+    return ''
+    //throw new Error('Encryption failed.');
+  }
+}
+
+// Decryption function using XOR and Base64
+function decrypt(text, key) {
+  try {
+    const decodedText = fromBase64(text);
+
+    let decryptedText = '';
+    for (let i = 0; i < decodedText.length; i++) {
+      decryptedText += String.fromCharCode(decodedText.charCodeAt(i) ^ key.charCodeAt(i));
+    }
+
+    return decryptedText;
+  } catch (error) {
+    Logger.log('Error in decrypt: ' + error.message);
+    return ''
+    //return 'Error: ' + error.message;
+    //throw new Error('Decryption failed.');
+  }
+}
+
+function handleInputValue(value) {
+  if (typeof value === 'number') {
+    return value.toString();
+  } else if (value instanceof Date) {
+    return value.toISOString();
+  }
+  return value; 
+}
+
+
