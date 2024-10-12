@@ -1,0 +1,69 @@
+/* SpecificBookSlider.css */
+.slider-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .slider-container-specific {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    white-space: nowrap;
+  }
+  
+  .book-card-specific {
+    flex: 0 0 auto;
+    padding: 10px;
+    margin: 10px;   
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-decoration: none;
+    position: relative;
+
+    &:hover {  
+      border: 2px solid;
+      border-radius: 7px;
+      margin: 6px;
+    }
+  }
+  
+  .scroll-button-specific {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);   
+    border: none;
+    padding: 15px;
+    border-radius: 15px;
+    cursor: pointer;   
+    font-size: larger;
+    border: 2px solid;
+    z-index: 10;
+
+    &:hover{
+      font-weight: bolder;
+      box-shadow: inset 0 0 5px rgba(202, 198, 191, 0.87)
+     }
+  }
+  
+  .scroll-button-specific.left {
+    left: 0;
+  }
+  
+  .scroll-button-specific.right {
+    right: 0;
+  }
+  
+  .artmini-specific {
+    height: 70px;
+    border-radius: 10px;
+    padding: 1px;
+  }

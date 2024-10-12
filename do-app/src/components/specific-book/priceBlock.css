@@ -1,0 +1,89 @@
+.price-block{    
+    position: relative;
+    border-radius: 5px;
+}
+
+.price-block-row{   
+    align-items: center;
+}
+
+.price-block-row span, .price-block-row label{
+    font-weight: 600;
+    font-size: 15px;
+}
+.price-block-row input{
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    padding-left: 5px;
+    font-size: 18px;
+    border-radius: 5px;
+}
+.price-block-btn{
+    bottom: 5px;
+    right: 5px;
+    margin-top: 5px;   
+    font-weight: 600;
+    padding: 10px;
+    border: 1px solid rgb(104, 104, 104);
+    border-radius: 5px;
+    background-color: rgb(241, 241, 241);
+}
+
+.increment, .decrement{    
+    padding: 0px 5px;    
+    border-radius: 10px;
+    border: 0px;
+    cursor: pointer;
+}
+
+.price-block {
+   display: flex;    
+    justify-content: center;   
+    align-items: center;     
+}
+
+.ccart-icon {    
+    bottom: 15%;    
+    right: 40%;
+    width: 45px;
+    height: 45px;    
+    color: #fff; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+  }  
+  
+  .price-block-row-input{
+    display: flex;
+    flex-direction: row;
+    justify-content:center;    
+    border-radius: 5px;    
+    align-items: center; 
+  }
+
+  .cart-remove{
+    font-size: 14px;
+    margin: 3px 3px 3px 3px;
+  } 
+
+  del.Linkcart.rotate {
+    position: absolute;
+    left: 25%;
+    bottom: 50%;
+    opacity: 0.8;
+  }
+
+  output {
+    padding: 0 5px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  

@@ -1,0 +1,76 @@
+{
+	"tuning": [
+		{
+			"id": 1,
+			"author": "David Flanagan",
+			"type":"start",
+			"lang": "en",			
+			"fone": "(077)235-78-96",
+			"inst":"hfgfhfh",
+			"location":"You adress",
+			"email":"example@gmail.com",
+			"logo": "https://lh3.googleusercontent.com/pw/AP1GczPPaIlhNtuxnkh_nk-0PteuYFitkPBOnhtbI3epsd1eWNhh1r-iplXKR6LMJTgFsX1AeEFQqctU8l4dooSWDZ_Pu_kLgmJ8BtubxcLq922n_r5U5A=w2400",
+			"title": "Programming books",
+			"UrFrame": "https://AnjiBarik.github.io",
+			"Urprice": "https://script.google.com/macros/s/AKfycbwut-pqPlmAeW6vBhdVI4euE0XhfFl9Ed42oHdoX0fkPDcZLns-v0ETMXYT-cSf-HbVeg/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyGIuS4M_4sEV-aqs9ELFD35u7AOPcdz6brCgasUNJsmiuZR43towjdNdrNG5942WEiIw/exec",
+			"Urorder":"https://script.google.com/macros/s/AKfycby_DptVtZALNF6IqEtGIIDjYNnOOKebfsVzptOqY1-ynJsLKczuhWy2Q0qK6ltAc91W/exec",
+			"order":"rsa",	
+			"regform": "twofactor",		
+			"logopablic":"lang.jpg",
+			"langstart": "auto"
+		},
+		{
+			"id": 2,
+			"author": "David Flanagan",
+			"type":"start",
+			"lang": "uk",
+			"loadprice": "true",
+			"card":"09990000023232",
+			"logo": "https://lh3.googleusercontent.com/pw/AP1GczPPaIlhNtuxnkh_nk-0PteuYFitkPBOnhtbI3epsd1eWNhh1r-iplXKR6LMJTgFsX1AeEFQqctU8l4dooSWDZ_Pu_kLgmJ8BtubxcLq922n_r5U5A=w2400",
+			"title": "Programming books",
+			"UrFrame": "https://AnjiBarik.github.io",
+			"Urprice": "https://script.google.com/macros/s/AKfycby4XTZER4lvIOCblc-RkDkR6lXQc85c_r07eSr75P8XM5hIr9jIWMA4S1xapyqBJ3bZxg/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyGIuS4M_4sEV-aqs9ELFD35u7AOPcdz6brCgasUNJsmiuZR43towjdNdrNG5942WEiIw/exec",
+			"Urorder": "https://script.google.com/macros/s/AKfycby_DptVtZALNF6IqEtGIIDjYNnOOKebfsVzptOqY1-ynJsLKczuhWy2Q0qK6ltAc91W/exec",
+			"orderform":"FirstName,MiddleName,LastName,Email,Phone,Address,Message",
+			"nopriceblock": "true",
+			"shopping":"К покупкам",			
+			"langstart": "auto",
+			"regformGoogleClientID":"1088764267163-jusv1jur47aak49tpdqrf0dsntjsktse.apps.googleusercontent.com"
+		},
+		{
+			"id": 3,
+			"author": "Flanag",
+			"type":"add",
+			"lang": "en",			
+			"logo": "https://lh3.googleusercontent.com/pw/AP1GczMj4n3NL1Dwqe-5XcUqTf4h1N3gYnjT3hqwVxEZgLsUwqA6JAw-RWRhknZQzmH27oyDHoyLAf4cY-AEiJWaRlg1AH_3Z-QIrlK9Y0xZxwDoyb6Q4Q=w2400",
+			"title": "Hot pizza",
+			"UrFrame": "https://lh3.googleusercontent.com/pw/AP1GczMj4n3NL1Dwqe-5XcUqTf4h1N3gYnjT3hqwVxEZgLsUwqA6JAw-RWRhknZQzmH27oyDHoyLAf4cY-AEiJWaRlg1AH_3Z-QIrlK9Y0xZxwDoyb6Q4Q=w2400",
+			"Urprice": "https://script.google.com/macros/s/AKfycbwqcxJdH2vVO3LZui0LakQg0CbIV-Nkn5-P98dSKnEG-eXjACkrc5Blt_ERNnelFIpnrg/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyGIuS4M_4sEV-aqs9ELFD35u7AOPcdz6brCgasUNJsmiuZR43towjdNdrNG5942WEiIw/exec",
+			"Urorder":"https://script.google.com/macros/s/AKfycby_DptVtZALNF6IqEtGIIDjYNnOOKebfsVzptOqY1-ynJsLKczuhWy2Q0qK6ltAc91W/exec",
+			"logopablic":"logo2.png",
+			"regform": "test",	
+			"orderform":"Email,Phone,Message",
+			"regformGoogleClientID":"1088764267163-jusv1jur47aak49tpdqrf0dsntjsktse.apps.googleusercontent.com"
+		},		
+		{
+			"id": 4,
+			"author": "David ",
+			"type":"replacing",
+			"lang": "en",
+			"logo": "",
+			"title": "Super store",
+			"loadprice": "true",
+			"orderform":"FirstName,LastName,Phone,Address,Message",
+			"UrFrame": "https://AnjiBarik.github.io",
+			"Urprice": "https://script.google.com/macros/s/AKfycbybvuGbsK7-2Wa8PFYurOjt7R6a4wq3NnzqAcMn6tLLGBIxpa6o_KUkVLXX5SDkG7P4ng/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyGIuS4M_4sEV-aqs9ELFD35u7AOPcdz6brCgasUNJsmiuZR43towjdNdrNG5942WEiIw/exec",
+			"Urorder":"https://script.google.com/macros/s/AKfycby_DptVtZALNF6IqEtGIIDjYNnOOKebfsVzptOqY1-ynJsLKczuhWy2Q0qK6ltAc91W/exec",
+			"order":"rsa",
+			"regformGoogleClientID":"1088764267163-jusv1jur47aak49tpdqrf0dsntjsktse.apps.googleusercontent.com"
+		}
+		
+	]
+}

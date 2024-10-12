@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Cache-control" content="no-cache"/>
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
@@ -24,7 +25,17 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>eMarket</title>
+     <!-- Google OAuth SDK -->
+     <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+     <!-- Facebook SDK -->
+     <script
+       async
+       defer
+       crossorigin="anonymous"
+       src="https://connect.facebook.net/en_US/sdk.js"
+     ></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

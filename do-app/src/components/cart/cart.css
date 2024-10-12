@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    width: 100%;
+}
+
+.main-cart-book{
+    display: flex;
+    flex-direction: column;   
+    align-items: center;
+    padding: 2px 5px;
+    margin: 20px 18px 180px 18px;
+}
+
+.main img{
+    height: 300px;
+    width: 100%;
+}
+
+.main span{
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+    justify-content: center;
+}
+
+.purchase{
+    margin-left: auto;
+    margin-top: 30px;
+    height: 40px;
+    width: 120px;
+    font-weight: 600;
+    padding: 10px;
+    border: 1px solid rgb(104, 104, 104);
+    border-radius: 5px;
+    background-color: rgb(241, 241, 241);
+    cursor: pointer;
+    margin-bottom: 5px;
+}  
+
+.none{
+    display: none;
+}
+
+.cartBook{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    border: 1px solid black;
+    margin: 2px;
+    padding: 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    align-items: center;
+} 
+
+#total{
+    margin-left: auto;
+    bottom: 150px;
+    right: 50px;
+    font-weight: 600;
+}
+
+.cart-text{
+    margin: 2px;
+    padding: 2px;   
+}
+.cart-price{
+    margin: 2px;
+    padding: 2px;
+    width: 20%;
+}
+.cart-remove{
+    border-radius: 50%;   
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+    padding: 10px;
+}
+
+.cart-block{
+    position: fixed;
+}
+
+.main{
+    min-height: 90vh
+}
+
+ .book{
+    flex-wrap: wrap;
+    flex-direction: row;    
+  } 
+  .back-button{
+    height: 50px;
+    margin: 5px;
+    cursor: pointer;    
+  }
+  
+  .rotate {
+    animation: rotateRight 1s infinite alternate;
+  }
+  @keyframes rotateRight {
+    from {
+      transform: rotate(15deg);
+    }
+    to {
+      transform: rotate(-15deg);
+    }
+  }
+  

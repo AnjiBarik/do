@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import BookList from "./components/book-list/BookList";
+import Cart from "./components/cart/Cart";
+import SpecificBook from "./components/specific-book/SpecificBook";
+import Page404 from "./components/Page404";
+import { Layout } from "./components/Layout";
+import OrderForm from "./components/cart/OrderForm";
+import RegistrationForm from "./components/cart/RegistrationForm"
+import LandingPage from "./components/landingPage/LandingPage";
+import AdminPanel from "./components/admincomponent/AdminPanel";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+return (
+  <Routes>
+    <Route path="/" element={<Layout />}>
+      <Route index element={<LandingPage />} />
+      <Route path="BookList" element={<BookList />} />
+      <Route path="cart" element={<Cart />} />
+      <Route path="specificbook" element={<SpecificBook />} />     
+      <Route path="RegistrationForm" element={<RegistrationForm />} />
+      <Route path="OrderForm" element={<OrderForm />} />
+      <Route path="AdminPanel" element={<AdminPanel />} />
+      <Route path="*" element={<Page404 />} />
+    </Route>
+  </Routes>
+);
+
 }
 
 export default App;
+

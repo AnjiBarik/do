@@ -1,0 +1,124 @@
+.wrapper{
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    position: relative;
+}
+
+a {  
+    font-weight: bold;    
+    color: inherit;
+  }
+
+  .image-overlay {
+    display: none;
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background-size: cover;
+  }
+
+  .wrapper:hover .image-overlay {
+    display: block;
+    top: -300px;
+    left: 1%;
+  }
+  
+  .cartcount{
+    position: absolute;
+    bottom: 40px;
+    left: 2px;
+    border-radius: 10px;
+    border: solid grey;
+    padding: 2px 5px;
+    background-color: green;
+    color: black;
+  }
+
+  .foot{    
+    position: fixed;
+    bottom: 0px;
+    /* width: 100%; */
+    width: 100vw;
+    height: 70px;
+    display: flex;    
+    justify-content: center;
+    z-index: 99;/* !!! */
+  }
+  .footer{
+    position: fixed;
+    bottom: 0px;
+    padding: 0px 5px;    
+    display: flex;    
+    justify-content: space-between;   
+    width: 100%;    
+    max-width: 800px;    
+  }
+
+  @media screen and (min-width: 800px){
+    .footer{
+      border-radius: 10px 10px 0 0 ;
+    }
+  }
+
+  @media screen and (min-width: 1000px){
+    .footer{
+      border-radius: 10px ;
+    }
+  }
+
+  .dark .footer{
+    color: rgba(202, 198, 191, 0.87);
+    background-color: rgb(27, 29, 30);
+    opacity: 0.9;
+}
+
+.light .footer{
+    background-color: #f0f0f0;
+    color: #333;
+    opacity: 0.9;
+}
+    
+  .sel {
+    border-bottom: 2px solid;   
+  }  
+  
+  .cart{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button-label {
+    font-size: 12px;    
+    bottom: 0px;   
+    align-items: center;
+    font-weight: bold;
+    text-align: center;
+    max-width: 60px;
+    overflow: hidden;
+  }
+
+  .back-button-footer{
+    height: 40px;
+    margin: 5px 5px 0px;
+    cursor: pointer;
+   
+  }
+
+    .dark  .bay-button {
+      opacity: 0.6;
+    }
+     .bay-button {
+      background-color: #f0f0f0;      
+      border-radius: 50%;
+      border: 2px solid;
+      padding: 1px 2px;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      box-shadow: 0px 5px 10px rgb(104, 104, 104);
+      color: green;
+  }
+
+ 

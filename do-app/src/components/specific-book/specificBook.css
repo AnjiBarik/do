@@ -1,0 +1,200 @@
+body{
+    margin: 0;
+    width: 100%;
+}
+
+.price-block-btn{
+    cursor: pointer;
+}
+
+.book-page{
+    padding: 30px 30px 70px 30px;
+    display: flex;
+    flex-wrap: wrap;    
+    min-height: 90vh;
+}
+
+.book-buttons{
+  display: flex;
+  flex-wrap: wrap;  
+}
+
+figure, .about{   
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-basis: 33.33%; 
+    min-width: 320px; 
+    padding: 10px 10px 20px 10px;
+    box-sizing: border-box; 
+}
+
+figure{
+    margin: 0;
+}
+
+.size-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: center;
+}
+  
+  .size-button {
+    padding: 8px;
+    cursor: pointer;   
+    margin: 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .size-button.selected {
+    border-color: black;
+  }
+  
+  .imgblock{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 5px;
+    align-items: center;
+  }
+
+  .art-icon{
+    width: 30px;
+    height: 30px;    
+    background-color: #f0f0f0;
+    /* border-radius: 50%; */
+    position:absolute;
+    top:1px;
+    right: 1px;
+    opacity: 0.8;
+  }
+
+  .img-icon{
+    border-radius: 10px;
+    margin: 5px; 
+    cursor: pointer;  
+    align-items: center;
+    display: flex; 
+  }
+
+  .img-conteiner{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }  
+
+  .book-page 
+  .art {
+    cursor: zoom-in; 
+  }
+
+  .book-page 
+  .artwidth {
+    cursor: zoom-in; 
+  }  
+  
+  .artmini{
+    height: 70px;
+  }
+
+  .cart-text{
+    padding: 0px;
+    width: fit-content;
+  }
+
+  .image-container {
+    position: relative;
+    display: inline-block;   
+  } 
+  
+  .art {   
+    width: 300px;
+    height: 320px;
+    cursor: pointer;
+    object-fit: cover;   
+    transition: transform 0.3s ease;
+  }
+
+  .art:hover{
+    object-fit: contain;
+    transform: scale(1.2);
+  } 
+  
+  .artwidth {
+    width: 320px;
+    height: 320px;
+    cursor: pointer;
+    object-fit: fill;
+  }
+
+  .artwidth:hover{
+    object-fit: contain;
+
+    transform: scale(1.2);
+  }
+
+  .zoom-button {
+    position: absolute;
+    bottom: 10px;
+    left:  10px;
+    z-index: 1;
+    background-color: transparent;
+    border: none;
+  }
+  
+  .fullscreen-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+  }
+  
+  .close-button {
+    position: fixed;
+    top: 10px;
+    right: 40px;    
+    border: none;    
+  }
+  
+  .fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+  }
+  
+  .fullscreen-image-container {
+    position: relative;
+  }
+
+  .zoom-img{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-color: #fff;
+    padding: 2px;
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+
+  .selected-img-icon{
+    margin: 10px;
+    border-radius: 7px;
+    border: 1px solid;
+    padding: 10px;
+  } 
+  
