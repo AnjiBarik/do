@@ -495,7 +495,7 @@ if (verificationCodeToSend) {
                 <p>{message !== '#' && message !== '' && `Your message: ${message}`}</p>
                 <hr />
                 <div className='filter'>
-                  <button onClick={handleLogout} className='sort-button' tabIndex={-1}>
+                  <button onClick={handleLogout} className='sort-button' tabIndex={-1} title="Logout">
                     <img className="back-button select" src={logout} alt="logout" />
                   </button>
                  
@@ -511,7 +511,7 @@ if (verificationCodeToSend) {
 
   <button 
       onClick={toggleSections} 
-      className='sort-button' 
+      className='sort-button'       
       tabIndex={1}
       autoFocus
       onKeyDown={(e) => { if (e.key === 'Enter') toggleSections(); }}
@@ -551,7 +551,7 @@ if (verificationCodeToSend) {
                             name="Name"
                             minLength={4}
                             maxLength={42}
-                            placeholder='Nickname'
+                            placeholder='Your nickname'
                             value={formData.Name || nameFromAuth}                              
                             onChange={handleInputChange}
                             autoComplete="username"
@@ -571,7 +571,7 @@ if (verificationCodeToSend) {
                               type="email"
                               name="Email"
                               maxLength={42}
-                              placeholder='Email'                              
+                              placeholder='Your Mail'                              
                               value={ formData.Email || emailFromAuth } 
                               onChange={handleInputChange}
                               autoComplete="username"
@@ -670,9 +670,20 @@ if (verificationCodeToSend) {
                     </tbody>
                   </table>                
                   <div className='filter'>
-                    <button type='submit' className='sort-button' disabled={submitting} tabIndex={-1}>                     
-                      <img className="back-button select" src={showRegistrationFormLokal ? useradd : enter} alt={showRegistrationFormLokal ? "useradd" : "enter"} />
-                    </button> 
+                  <button 
+  type='submit' 
+  className='sort-button' 
+  disabled={submitting} 
+  tabIndex={-1}
+  title={showRegistrationFormLokal ? "Add User" : "Enter"} // Title attribute for tooltip
+>
+  <img 
+    className="back-button select" 
+    src={showRegistrationFormLokal ? useradd : enter} 
+    alt={showRegistrationFormLokal ? "useradd" : "enter"} 
+  />
+</button>
+
                     {!showRegistrationFormLokal  ? (
   <button 
     className='sort-button' 

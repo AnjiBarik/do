@@ -22,7 +22,8 @@ export default function ClearAll({ clearLogin }) {
     setSavedLogin, 
     setSavedPassword,
     setSortStates,
-    setPromoBookSlider  
+    setPromoBookSlider,
+    setRangePrice  
   } = useContext(BooksContext);
 
   const resetStates = () => {
@@ -40,6 +41,7 @@ export default function ClearAll({ clearLogin }) {
     setSelectedTags3([]);
     setSelectedTags4([]);
     setSearch("");
+    setRangePrice([]);
     setSearchOptions({
       section: true,
       partition: true,
