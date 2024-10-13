@@ -232,10 +232,10 @@ body {
     margin: 5px;
   }
 
-  .sort-button:focus {   
-    border: none;
+  .sort-button:focus {    
     outline: none;
   }
+  
   .selected-button{   
     margin: 2px 5px 2px 5px;
     padding: 3px 5px 3px 5px;
