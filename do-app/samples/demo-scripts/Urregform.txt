@@ -1,4 +1,4 @@
-const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/...ID of your table regform.../edit?gid=0#gid=0");
+const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/.../edit?gid=0#gid=0");
 const sheet = sheets.getSheetByName("Page1");
 const emailQuotaThreshold = 3; // Set a threshold limit for remaining quota
 
@@ -57,6 +57,10 @@ function doPost(e) {
         let resultPriceVerification = handlePriceVerification(userName, enteredCode, priceNumber);
         logEvent(logSheet, "case 7", { userName, enteredCode, priceNumber, resultPriceVerification }, userIp);
         return resultPriceVerification;
+      case 8: // Processing revocation verification  
+        let resultReviewVerification = handleReviewVerification(userName, enteredCode);
+        logEvent(logSheet, "case 8", { userName, enteredCode, resultReviewVerification }, userIp);
+        return resultReviewVerification;
       case 11: // Registration with two-factor authentication        
         let resultHandleRegistration = handleRegistration(userName, userPassword, email);
         logEvent(logSheet, "case 11", { userName, email, resultHandleRegistration }, userIp);
@@ -181,8 +185,7 @@ function logEvent(logSheet, operationType, additionalParams, userIp) {
 //   try {
 //     let sheet = sheets.getSheetByName(sheetName);
 //     if (!sheet) {
-//       sheet = sheets.insertSheet(sheetName);
-//       // Добавление заголовков, если лист был создан
+//       sheet = sheets.insertSheet(sheetName);//       
 //       sheet.appendRow(["Timestamp", "Email", "Operation Type", "User IP", "Additional Params"]);
 //     }
 //     return sheet;
@@ -562,6 +565,32 @@ function handlePriceVerification(userName, enteredCode, priceNumber) {
   sheet.getRange(userRow, 10).setValue(currentDateTime); // Update timestamp
 
   return ContentService.createTextOutput(`Price verified and recorded successfully with code ${priceCode}!`);
+}
+
+function handleReviewVerification(userName, enteredCode) {
+  let userRow = findUserRow(userName); 
+  if (userRow === 1) {
+    return ContentService.createTextOutput("Incorrect username or password."); 
+  }
+  
+  if (!isAccountActive(userRow)) {
+    return ContentService.createTextOutput("Account is locked due to too many failed attempts."); 
+  }
+
+  let storedCode = sheet.getRange(userRow, 8).getValue(); 
+  let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue()); 
+
+  // Проверяем введенный код, статус пользователя и время действия логина
+  if (enteredCode !== `${storedCode}` || sheet.getRange(userRow, 13).getValue() !== 'Login' || isLoginExpired(lastLoginTime)) {
+    return ContentService.createTextOutput("Verification code or price number is incorrect, or user is not logged in."); 
+  }  
+  let currentTime = new Date();
+  let formattedDate = Utilities.formatDate(currentTime, "GMT+0", "yyyy-MM-dd HH:mm:ss");
+  let currentDateTime = currentTime.getTime();
+  sheet.getRange(userRow, 9).setValue(formattedDate); 
+  sheet.getRange(userRow, 10).setValue(currentDateTime); 
+
+  return ContentService.createTextOutput(`Review handled successfully`); 
 }
 
 function getPriceCode(priceNumber) {

@@ -1,4 +1,4 @@
-const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/...ID of your table FormOrder.../edit?gid=0#gid=0");
+const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/.../edit?gid=0#gid=0");
 const sheet = sheets.getSheetByName("Page1");
 const allowedUserIds = ["d123", "manager1", "manager2"]; // List of allowed user IDs
 

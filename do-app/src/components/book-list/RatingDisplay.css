@@ -1,0 +1,49 @@
+.rating-display {
+  background-color: rgba(0, 0, 0, 0.1); /* Полупрозрачный фон */
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.rating-info {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333;  
+}
+
+/* .star-rating {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+} */
+
+.star {
+  font-size: 20px;
+  color: #ccc; /* Цвет пустых звезд */
+}
+
+.star.filled {
+  color: #ffd700; /* Золотой цвет для полных звезд */
+}
+
+.star.half-filled {
+  color: #ffd700; /* Тот же цвет, что и для полных звезд */
+}
+
+.review-count {
+  font-size: 16px;
+  margin-left: 5px;
+  color: #555;
+}
+
+.review-count::before {
+  content: "💬";
+  margin-right: 5px;
+}
+
+

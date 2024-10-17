@@ -8,9 +8,11 @@ import { useIcons } from '../../IconContext';
 import InfoModal from '../utils/InfoModal';
 import SpecificBookSlider from '../utils/SpecificBookSlider';
 import getPublicUrl from '../functional/getPublicUrl';
+import SpecificReview from './SpecificReview'; // Import the new SpecificReview component
+import RatingDisplay from '../book-list/RatingDisplay';
 
 export default function SpecificBook() {
-  const { books, specificBook, theme, fieldState } = useContext(BooksContext);
+  const { books, specificBook, theme, fieldState, ratingData } = useContext(BooksContext);
 
   const {    
     notFound,
@@ -191,6 +193,7 @@ export default function SpecificBook() {
             <div className="book-text">
               <b>{fieldState.id && fieldState.id !== "" ? fieldState.id : "id:"}</b>
               <span translate="no"><strong>{selectedBook.id}</strong></span>
+              <RatingDisplay idPrice={fieldState.idprice} idProduct={selectedBook.id} ratingData={ratingData} />            
               <div className={isFullscreen ? 'fullscreen-overlay' : 'img-conteiner'}>
                 {selectedBook.sorted === 'new' &&
                   <img src={newcart} className="art-icon" alt="New" />
@@ -337,15 +340,18 @@ export default function SpecificBook() {
             </table>
             </section>
           )}  
-        </section >        
-          {selectedBook.description !== undefined && selectedBook.description !== "" && (
-            <section className="about">
-              <p className='cart-text'>
-                <b>{fieldState.description && fieldState.description !== "" ? fieldState.description : "Description:"} </b>
-                <span>{selectedBook.description}</span>
-              </p>
-            </section>         
-          )}
+        </section > 
+
+        <section className="about">
+  {selectedBook.description !== undefined && selectedBook.description !== "" && (
+    <p className='cart-text'>
+      <b>{fieldState.description && fieldState.description !== "" ? fieldState.description : "Description:"} </b>
+      <span>{selectedBook.description}</span>
+    </p>
+  )}
+  <SpecificReview productId={selectedBook.id} />
+</section>        
+
           {selectedBook.Tip !== undefined && selectedBook.Tip !== "" && (
             
              <SpecificBookSlider />

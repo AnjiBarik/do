@@ -5,9 +5,10 @@ import PriceBlock from '../specific-book/PriceBlock';
 import getPublicUrl from '../functional/getPublicUrl';
 import { BooksContext } from '../../BooksContext';
 import { useIcons } from '../../IconContext';
+import RatingDisplay from './RatingDisplay';
 
 export default function Shelf(props) {
-  const { setSpecificBook, fieldState } = useContext(BooksContext);  
+  const { setSpecificBook, fieldState, ratingData } = useContext(BooksContext);  
   const {
     discont,
     newcart, 
@@ -48,15 +49,15 @@ export default function Shelf(props) {
          
           <div className='img-conteiner'>  
           <Link
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit'  }}
               to='/specificbook'
               onClick={() => bookInfo(el.id)}
           >
             <p className='book-id'>
-              <b>{fieldState.id && fieldState.id !== '' ? fieldState.id : 'id:'}</b>
-              {el.id}
-            </p>
-           
+              <b translate="no">{fieldState.id && fieldState.id !== '' ? fieldState.id : 'id:'}</b>
+              <span translate="no"><strong>{el.id}</strong></span>
+              <RatingDisplay idPrice={fieldState.idprice} idProduct={el.id} ratingData={ratingData} />   
+            </p> 
             {el.sorted === 'new' && <img src={newcart} className='art-icon' alt='New Cart' />}
             {el.sorted === 'sale' && <img src={discont} className='art-icon' alt='Discount Cart' />}
             {el.sorted === 'popular' && <img src={popular} className='art-icon' alt='Popular Cart' />}

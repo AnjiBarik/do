@@ -65,6 +65,7 @@ const [rangePrice, setRangePrice] = useState([]);
 //!
 const [userName, setUserName] = useState('');
 const [userImg, setUserImg] = useState('');
+const [ratingData, setRatingData] = useState([]);
 
   const contextValue = {
     message, setMessage, promo, setPromo, order, setOrder, loggedIn, setLoggedIn, savedLogin, setSavedLogin, savedPassword, setSavedPassword,
@@ -74,7 +75,7 @@ const [userImg, setUserImg] = useState('');
     selectedAuthors, setSelectedAuthors, selectedSizes, setSelectedSizes, selectedColor, setSelectedColor, glsearch, setSearch, searchOptions, setSearchOptions,
     uiState, setUiState, uiMain, setUiMain, fieldState, setFieldState, idLoudPrice, setIdLoudPrice, selectedTags3, setSelectedTags3,
     selectedTags4, setSelectedTags4, showRegistrationForm, setShowRegistrationForm, selectUiState, setSelectUiState, sortStates, setSortStates,showSections, setShowSections,
-    promoBookSlider, setPromoBookSlider,verificationCode, setVerificationCode, rangePrice, setRangePrice,userName, setUserName,userImg, setUserImg
+    promoBookSlider, setPromoBookSlider,verificationCode, setVerificationCode, rangePrice, setRangePrice,userName, setUserName,userImg, setUserImg, ratingData, setRatingData
   };
 
   return (

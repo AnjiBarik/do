@@ -1,35 +1,416 @@
-const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/.../edit#gid=0");
+const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/.../edit?gid=0#gid=0"); // Enter your table URL
+
+// Checking the presence and creation of the Rating table
+const ratingSheet = getOrCreateRatingSheet("Rating");
+
+// Checking the presence and creation of the Reviews table
+const reviewsSheet = getOrCreateReviewsSheet("Reviews");
+
+// Keys for cache
+const CACHE_KEY_COMBINED_DATA = 'combinedData';
+const CACHE_KEY_AGGREGATED_DATA_ALL = 'aggregatedDataAll';
+const CACHE_KEY_PRODUCT_REVIEWS_ALL = 'productReviewsAll';
 
 function doPost(e) {
-  // Read data from Sheet1 and Sheet2
-  const sheet1 = sheets.getSheetByName("Sheet1");
-  const sheet2 = sheets.getSheetByName("Sheet2"); // Replace "Sheet2" with your actual sheet name
-
-  const headers1 = sheet1.getRange(1, 1, 1, sheet1.getLastColumn()).getValues()[0];
-  const data1 = sheet1.getRange(2, 1, sheet1.getLastRow() - 1, sheet1.getLastColumn()).getValues();
-  const jsonData1 = data1.map((row) => {
-    const obj = {};
-    for (let i = 0; i < headers1.length; i++) {
-      obj[headers1[i]] = row[i];
-    }
-    return obj;
-  });
-
-  const headers2 = sheet2.getRange(1, 1, 1, sheet2.getLastColumn()).getValues()[0];
-  const data2 = sheet2.getRange(2, 1, sheet2.getLastRow() - 1, sheet2.getLastColumn()).getValues();
-  const jsonData2 = data2.map((row) => {
-    const obj = {};
-    for (let i = 0; i < headers2.length; i++) {
-      obj[headers2[i]] = row[i];
-    }
-    return obj;
-  });
-
-  // Combine data from both sheets (modify logic as needed)
-  const combinedData = [...jsonData1, ...jsonData2]; // Simple concatenation for now
-
-  // console.log(combinedData);
+  try {
+    let data = e.parameter;    
    
-  // Return JSON response
-  return ContentService.createTextOutput(JSON.stringify(combinedData));
+    const validationError = validateInputForDoPost(data);
+    if (validationError) {
+      return createErrorResponse(validationError);
+    }
+
+    let isReviews = data.isReviews ? parseInt(data.isReviews) : null;  
+    let userName = data.Name ? `${data.Name}` : "";
+    let url = `${data.Url}`;
+    let VerificationCode = `${data.VerificationCode}`; 
+    let idPrice = data.idPrice ? `${data.idPrice}` : "";
+    let idProduct = data.idProduct ? `${data.idProduct}` : "";
+    let rating = data.rating ? parseFloat(data.rating) : null;
+    let review = data.review ? `${data.review}` : "";
+
+    switch (isReviews) {
+      case 1:       
+        return getAggregatedData(idPrice);  
+      case 2:
+        return getProductReviews(idPrice, idProduct); 
+      case 3:
+        // Processing adding/deleting a review
+        if (userName && rating && review) {
+          const validationResponse = validateRequest({
+            isVerification: 8,        
+            Name: userName,
+            VerificationCode: VerificationCode,        
+          }, url); 
+
+          if (!validationResponse.success) {
+            return createErrorResponse(validationResponse.message || "Validation failed.");
+          }
+
+          return handleReview({
+            idPrice: idPrice,
+            idProduct: idProduct,
+            Name: userName,            
+            rating: rating,
+            review: review,
+            status: data.status,
+            id: data.id || null
+          });
+        } else {
+          return createErrorResponse("Error: Missing required review parameters.");
+        }
+      case 10:
+        return getCombinedData(); 
+      default:
+        return createErrorResponse("Invalid action specified.");
+    }
+  } catch (error) {
+    return createErrorResponse("An error occurred: " + error.message);
+  }
+}
+
+// Return price
+function getCombinedData() {
+  try {
+    const cache = CacheService.getScriptCache();
+    let cachedData = cache.get(CACHE_KEY_COMBINED_DATA);
+    
+    if (cachedData) {
+       Logger.log("Cache found, returning cached data...");
+       console.log("Cache found, returning cached data...");
+      return createSuccessResponse(JSON.parse(cachedData));
+    }
+
+    const sheet1 = sheets.getSheetByName("Sheet1");
+    const sheet2 = sheets.getSheetByName("Sheet2");
+
+    const jsonData1 = getSheetDataWithEmptyCells(sheet1);
+    const jsonData2 = getSheetDataWithEmptyCells(sheet2);
+
+    const combinedData = {
+      sheet1Data: jsonData1,
+      sheet2Data: jsonData2
+    };
+
+    cacheData(CACHE_KEY_COMBINED_DATA, combinedData);
+    return createSuccessResponse(combinedData);
+    
+  } catch (error) {
+    return createErrorResponse("An error occurred: " + error.message);
+  }
+}
+
+// Retrieving data from a worksheet and replacing empty cells
+function getSheetDataWithEmptyCells(sheet) {
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const data = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+
+  return data.map((row) => {
+    const obj = {};
+    for (let i = 0; i < headers.length; i++) {
+      obj[headers[i]] = row[i] !== null && row[i] !== undefined ? row[i] : "";
+    }
+    return obj;
+  });
+}
+
+// data from the Rating table
+function getAggregatedData(idPrice) {
+  const cache = CacheService.getScriptCache();
+  let cachedData = cache.get(CACHE_KEY_AGGREGATED_DATA_ALL);
+ 
+  if (cachedData) {
+    const jsonData = JSON.parse(cachedData);
+    const filteredData = jsonData.filter((item) => item["ID_Price"] === idPrice);
+    return createSuccessResponse(filteredData);
+  }
+ 
+  const headers = ratingSheet.getRange(1, 1, 1, ratingSheet.getLastColumn()).getValues()[0];
+  const lastRow = ratingSheet.getLastRow();
+
+  if (lastRow <= 1) {
+    return createSuccessResponse([]);
+  }
+
+  const data = ratingSheet.getRange(2, 1, lastRow - 1, ratingSheet.getLastColumn()).getValues();
+  const jsonData = data.map((row) => {
+    const obj = {};
+    for (let i = 0; i < headers.length; i++) {
+      obj[headers[i]] = row[i] !== null ? row[i] : "";
+    }
+    return obj;
+  });
+
+  // Cache all data from the Rating table
+  cacheData(CACHE_KEY_AGGREGATED_DATA_ALL, jsonData);
+  
+  const filteredData = jsonData.filter((item) => item["ID_Price"] === idPrice);
+  return createSuccessResponse(filteredData);
+}
+
+// data from the Reviews table
+function getProductReviews(idPrice, idProduct) {
+  const cache = CacheService.getScriptCache();
+  let cachedData = cache.get(CACHE_KEY_PRODUCT_REVIEWS_ALL);
+ 
+  if (cachedData) {
+    const jsonData = JSON.parse(cachedData);
+    const filteredReviews = jsonData.filter((item) => 
+      item["ID_Price"] === idPrice && 
+      item["ID_Product"] === idProduct && 
+      item["Status"] === "Active"
+    );
+    return createSuccessResponse(filteredReviews);
+  }
+ 
+  const headers = reviewsSheet.getRange(1, 1, 1, reviewsSheet.getLastColumn()).getValues()[0];
+  const lastRow = reviewsSheet.getLastRow();
+
+  if (lastRow <= 1) {
+    return createSuccessResponse([]);
+  }
+
+  const data = reviewsSheet.getRange(2, 1, lastRow - 1, reviewsSheet.getLastColumn()).getValues();
+  const jsonData = data.map((row) => {
+    const obj = {};
+    for (let i = 0; i < headers.length; i++) {
+      obj[headers[i]] = row[i] !== null ? row[i] : "";
+    }
+    return obj;
+  });
+  
+  cacheData(CACHE_KEY_PRODUCT_REVIEWS_ALL, jsonData);
+  
+  const filteredReviews = jsonData.filter((item) => 
+    item["ID_Price"] === idPrice && 
+    item["ID_Product"] === idProduct && 
+    item["Status"] === "Active"
+  );
+
+  return createSuccessResponse(filteredReviews);
+}
+
+// Data caching function with data size checking
+function cacheData(key, data) {
+  const cache = CacheService.getScriptCache();
+  const jsonData = JSON.stringify(data);
+
+  // Checking the data size so as not to exceed the cache limit
+  if (jsonData.length > 100000) {
+    Logger.log("Cache overflow. Data too large to cache.");
+    console.log("Cache overflow. Data too large to cache.");
+  } else {
+    cache.put(key, jsonData, 1200); // Cash for 6 hours 21600
+  }
+}
+
+// We use a trigger to reset the cache for any change in the tables
+function onEdit(e) {
+  const sheet = e.source.getActiveSheet();
+  const sheetName = sheet.getName();
+
+  const cache = CacheService.getScriptCache();
+
+  Logger.log("onEdit triggered on sheet: " + sheetName);
+  console.log("onEdit triggered on sheet: " + sheetName);
+  
+  if (sheetName === "Rating") {
+    cache.remove(CACHE_KEY_AGGREGATED_DATA_ALL);
+  }
+  
+  if (sheetName === "Reviews") {
+    cache.remove(CACHE_KEY_PRODUCT_REVIEWS_ALL);
+  }
+  
+  if (sheetName === "Sheet1" || sheetName === "Sheet2") {
+    cache.remove(CACHE_KEY_COMBINED_DATA);
+      Logger.log("Cache cleared for: " + CACHE_KEY_COMBINED_DATA);
+      console.log("Cache cleared for: " + CACHE_KEY_COMBINED_DATA); 
+  }
+}
+
+function handleReview({ idPrice, idProduct, Name: userName, rating, review, status = "Active", id }) {
+  rating = rating ? parseFloat(rating) : null;
+  review = review ? `${review}` : "";
+  var dateTime = new Date().toISOString();
+
+  if (!idPrice || !idProduct || !userName || rating === null || !review) {
+    return createErrorResponse("Error: Missing required parameters.");
+  }
+
+  if (status === "Deleted" && id) {
+    // Deleting a record by ID (setting the status to "Deleted")
+    var data = reviewsSheet.getDataRange().getValues();
+    
+    for (var i = 1; i < data.length; i++) { // Skip the header (first line)
+      if (data[i][0] == id) { // ID is in first column
+        reviewsSheet.getRange(i + 1, 6).setValue("Deleted"); // Set the status to "Deleted" (6th column)
+        updateStatistics(idPrice, idProduct); // Update statistics after deletion
+        return createSuccessResponse({ result: "Review deleted successfully" });
+      }
+    }
+    
+    return createErrorResponse("Error: Review with the specified ID not found.");
+  }
+
+  // Adding a new review
+  var lastRow = reviewsSheet.getLastRow();
+  var nextRecordId = lastRow > 1 ? reviewsSheet.getRange(lastRow, 1).getValue() + 1 : 1; 
+
+  reviewsSheet.appendRow([
+    nextRecordId,                              // Record serial number
+    addApostropheIfNotEmpty(idPrice),          // ID_Price
+    addApostropheIfNotEmpty(idProduct),        // ID_Product
+    dateTime,                                  // Date and time
+    addApostropheIfNotEmpty(userName),         // Username
+    addApostropheIfNotEmpty(status),           // Status ("Active" or "Deleted")
+    rating,                                    // Rating
+    addApostropheIfNotEmpty(review)            // Review
+  ]);
+
+  // Update statistics
+  updateStatistics(idPrice, idProduct);
+
+  return createSuccessResponse({ result: "Review handled successfully" });
+}
+
+function updateStatistics(idPrice, idProduct) {
+  var reviewsData = reviewsSheet.getDataRange().getValues();
+  var totalRating = 0;
+  var reviewCount = 0;
+
+  // Pass only through reviews that relate to a given idPrice and idProduct
+  for (var i = 1; i < reviewsData.length; i++) {
+    if (reviewsData[i][1] == idPrice && reviewsData[i][2] == idProduct && reviewsData[i][5] == "Active") {
+      totalRating += parseFloat(reviewsData[i][6]); 
+      reviewCount++;
+    }
+  }
+
+  var averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
+
+  // We update statistics only for the current product
+  var statsData = ratingSheet.getDataRange().getValues();
+  var updated = false;
+  
+  for (var i = 1; i < statsData.length; i++) {
+    if (statsData[i][0] == idPrice && statsData[i][1] == idProduct) {
+      ratingSheet.getRange(i + 1, 3).setValue(averageRating); // Average rating
+      ratingSheet.getRange(i + 1, 4).setValue(reviewCount);   // Number of reviews
+      updated = true;
+      break;
+    }
+  }
+
+  // If the data does not exist, add a new row
+  if (!updated) {
+    ratingSheet.appendRow([idPrice, idProduct, averageRating, reviewCount]);
+  }
+  // Resetting the cache after updating data
+  const cache = CacheService.getScriptCache();
+  cache.remove(CACHE_KEY_AGGREGATED_DATA_ALL);
+  cache.remove(CACHE_KEY_PRODUCT_REVIEWS_ALL);
+}
+
+// Function to add an apostrophe if the string is not empty
+function addApostropheIfNotEmpty(value) {
+  return value ? "'" + value : ""; 
+}
+
+function createErrorResponse(message) {
+  return ContentService.createTextOutput(JSON.stringify({ success: false, message: message }))
+                       .setMimeType(ContentService.MimeType.JSON);
+}
+
+function createSuccessResponse(data) {
+  return ContentService.createTextOutput(JSON.stringify({ success: true, data: data }))
+                       .setMimeType(ContentService.MimeType.JSON);
+}
+
+function validateInputForDoPost(data) {
+  try {
+     const nameRegex = /^[^=+"'<>.,;:]{4,42}$/;
+    const idPriceRegex = /^[a-zA-Z0-9]{1,10}$/;
+    const verificationCodeRegex = /^\d{6}$/;
+    const urlRegex = /^https:\/\/script\.google\.com\/macros\/s\/[a-zA-Z0-9_-]+\/exec$/;
+    const ratingRegex = /^(?:[1-5](?:\.\d{1,2})?)$/;  // Rating: from 1.0 to 5.0 accurate to two decimal places
+    const reviewRegex = /^[^=+"'<>]{2,256}$/;  // Review: 2-256 characters, no prohibited characters
+    
+    if (data.rating && !ratingRegex.test(data.rating)) {
+      return "Invalid rating. Must be a number between 1 and 5, with up to 2 decimal places.";
+    }
+    
+    if (data.review && !reviewRegex.test(data.review)) {
+      return "Invalid review. Must be 2-256 characters, without forbidden symbols.";
+    }
+
+    if (data.Name && !nameRegex.test(data.Name)) {
+      return "Access denied. Invalid Name. Must be 4-42 characters, without forbidden symbols.";
+    }
+    if (data.idPrice && !idPriceRegex.test(data.idPrice)) {
+      return "Invalid ID_Price. Must be 1-10 alphanumeric characters.";
+    }
+    if (data.VerificationCode && !verificationCodeRegex.test(data.VerificationCode)) {
+      return "Invalid Verification Code. Must be exactly 6 digits.";
+    }
+    if (data.Url && !urlRegex.test(data.Url)) {
+      return "Invalid URL format.";
+    }    
+
+    return null; 
+  } catch (error) {
+    return "Error during input validation: " + error.message;
+  }
+}
+
+
+function getOrCreateRatingSheet(sheetName) {
+  var sheet = sheets.getSheetByName(sheetName);
+  if (!sheet) {
+    sheet = sheets.insertSheet(sheetName);
+    sheet.appendRow(["ID_Price", "ID_Product", "Average_Rating", "Review_Count"]); // Headings
+  }
+  return sheet;
+}
+
+function getOrCreateReviewsSheet(sheetName) {
+  var sheet = sheets.getSheetByName(sheetName);
+  if (!sheet) {
+    sheet = sheets.insertSheet(sheetName);
+    sheet.appendRow(["ID", "ID_Price", "ID_Product", "DateTime", "Name", "Status", "Rating", "Review"]); // Headings
+  }
+  return sheet;
+}
+
+function validateRequest(params, url) {
+  const options = {
+    'method': 'post',
+    'payload': params
+  };
+
+  try {
+    const response = UrlFetchApp.fetch(url, options);
+    const message = response.getContentText();
+
+    // Проверяем, содержит ли сообщение об успехе
+    if (message.includes("Review handled successfully")) {
+      return { success: true };
+    } else {
+      return { success: false, message };
+    }
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+}
+
+// Function for manual cache reset
+function clearCacheManually() {
+  const cache = CacheService.getScriptCache();
+  
+  // Resetting the cache by keys
+  cache.remove(CACHE_KEY_COMBINED_DATA);
+  cache.remove(CACHE_KEY_AGGREGATED_DATA_ALL);
+  cache.remove(CACHE_KEY_PRODUCT_REVIEWS_ALL);
+  
+  Logger.log("Cache manually cleared for combined data, aggregated data, and product reviews.");
 }
