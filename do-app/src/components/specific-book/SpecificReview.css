@@ -1,7 +1,7 @@
 .reviews-section {
   padding: 10px;  
   border-radius: 10px; 
-  margin: 0 auto;
+  margin: 20px auto;
   position: relative;
   border: 1px solid;
   }
@@ -76,6 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px 5px;
   }
 
   .my-review {

@@ -1,5 +1,5 @@
 const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/.../edit?gid=0#gid=0"); // Enter your table URL
-
+// Important! It may be necessary to add a trigger on onEdit to the main deployment from the table when editing
 // Checking the presence and creation of the Rating table
 const ratingSheet = getOrCreateRatingSheet("Rating");
 
@@ -205,6 +205,7 @@ function cacheData(key, data) {
 }
 
 // We use a trigger to reset the cache for any change in the tables
+// Important! It may be necessary to add a trigger on onEdit to the main deployment from the table when editing
 function onEdit(e) {
   const sheet = e.source.getActiveSheet();
   const sheetName = sheet.getName();
@@ -391,8 +392,7 @@ function validateRequest(params, url) {
   try {
     const response = UrlFetchApp.fetch(url, options);
     const message = response.getContentText();
-
-    // Проверяем, содержит ли сообщение об успехе
+    
     if (message.includes("Review handled successfully")) {
       return { success: true };
     } else {

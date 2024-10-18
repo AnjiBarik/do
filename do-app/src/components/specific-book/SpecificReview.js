@@ -1,13 +1,16 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useCallback, useMemo } from 'react';
 import { useGoogleScriptAPI } from '../hooks/useGoogleScriptAPI';
+import { useAlertModal } from '../hooks/useAlertModal'; 
+import { useConfirmModal } from '../hooks/useConfirmModal'; 
 import { BooksContext } from '../../BooksContext';
-//import LoadingAnimation from '../utils/LoadingAnimation';
 import './SpecificReview.css'; 
 import RatingDisplay from '../book-list/RatingDisplay';
 
 export default function SpecificReview({ productId }) {
   const { getProductReviews, handleReview, getAggregatedData, loading: apiLoading } = useGoogleScriptAPI();
   const { savedLogin, fieldState, setRatingData, ratingData, verificationCode, loggedIn, uiMain, setShowRegistrationForm } = useContext(BooksContext);
+  const { showAlert, AlertModalComponent } = useAlertModal(); 
+  const { showConfirm, ConfirmModalComponent } = useConfirmModal(); 
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState('');
   const [loading, setLoading] = useState(true);
@@ -16,10 +19,13 @@ export default function SpecificReview({ productId }) {
   const [hoverRating, setHoverRating] = useState(0);
   const [showOnlyMyReviews, setShowOnlyMyReviews] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
+  const [activeSort, setActiveSort] = useState('first'); // Track active button for sorting
   const idPrice = fieldState.idprice;
   const URLAPI = uiMain.Urprice;
 
-  // Мемоизируем функцию для обновления данных
+  // Validation pattern for textarea input
+  const validationPatterns = useMemo(() => /^[^=+"'<>]{2,256}$/, []); 
+  
   const updateData = useCallback(async () => {
     const fetchedReviews = await getProductReviews(URLAPI, idPrice, productId);
     if (fetchedReviews.length > 0) {
@@ -28,7 +34,7 @@ export default function SpecificReview({ productId }) {
       setReviews([]);
     }
     setLoading(false);
-  }, [idPrice, productId, getProductReviews,URLAPI]);
+  }, [idPrice, productId, getProductReviews, URLAPI]);
 
   const updateAggregatedData = useCallback(async () => {
     const aggregated = await getAggregatedData(URLAPI, idPrice);
@@ -47,8 +53,13 @@ export default function SpecificReview({ productId }) {
   }, [productId, ratingData, updateData]);
 
   const handleAddReview = async () => {
+    if (!newReview.trim() || !validationPatterns.test(newReview)) {
+      showAlert("⚠️ Please ensure your review is between 2-256 characters and does not contain forbidden symbols.");
+      return;
+    }
+
     if (newReview.trim()) {
-      setSubmitDisabled(true); // Disable submit button after click
+      setSubmitDisabled(true); 
       const reviewData = {
         idPrice,
         idProduct: productId,
@@ -65,29 +76,45 @@ export default function SpecificReview({ productId }) {
       setAddingReview(false);
       await updateData();
       await updateAggregatedData();
-      setSubmitDisabled(false); // Re-enable submit button
+      setSubmitDisabled(false); 
     }
   };
 
   const handleRemoveReview = async (reviewId) => {
-    const reviewToRemove = reviews.find((review) => review.ID === reviewId);
-    if (reviewToRemove) {
-      const reviewData = {
-        idPrice,
-        idProduct: productId,
-        userName: savedLogin,
-        rating: reviewToRemove.Rating,
-        review: reviewToRemove.Review,
-        id: reviewId,
-        status: 'Deleted',
-        verificationCode: verificationCode,
-        Url: uiMain.Urregform
-      };
-      await handleReview(URLAPI, reviewData);
-      await updateData();
-      await updateAggregatedData();
+    // Show confirmation modal
+    const confirmed = await showConfirm("Are you sure you want to delete this review?");
+    if (confirmed) {
+      const reviewToRemove = reviews.find((review) => review.ID === reviewId);
+      if (reviewToRemove) {
+        const reviewData = {
+          idPrice,
+          idProduct: productId,
+          userName: savedLogin,
+          rating: reviewToRemove.Rating,
+          review: reviewToRemove.Review,
+          id: reviewId,
+          status: 'Deleted',
+          verificationCode: verificationCode,
+          Url: uiMain.Urregform
+        };
+
+        const success = await handleReview(URLAPI, reviewData);
+        if (success) {
+          showAlert("✅ Review deleted successfully!");
+          await updateData();
+          await updateAggregatedData();
+        } else {
+          showAlert("❌ Failed to delete the review. Please try again.");
+        }
+      }
     }
   };
+
+  const handleCancelReview = () => {
+    setAddingReview(false);  
+    setNewReview('');        
+  };
+  
 
   const renderStars = (currentRating, onHover, onClick) => (
     <div className="star-rating">
@@ -110,6 +137,7 @@ export default function SpecificReview({ productId }) {
       order === 'first' ? new Date(a.DateTime) - new Date(b.DateTime) : new Date(b.DateTime) - new Date(a.DateTime)
     );
     setReviews(sortedReviews);
+    setActiveSort(order); 
   };
 
   const myReviews = reviews.filter((review) => review.Name === savedLogin);
@@ -120,27 +148,33 @@ export default function SpecificReview({ productId }) {
         <b>Product Reviews</b>
         <RatingDisplay idPrice={fieldState.idprice} idProduct={productId} ratingData={ratingData} />
       </span>      
-        <div className="review-text">
-          {reviews.length > 0 && (
-            <>
-              <button className="selected-button active-border" onClick={() => handleSortByDate('first')}>
-                First
-              </button>
-              <button className="selected-button active-border" onClick={() => handleSortByDate('last')}>
-                Last
-              </button>
-            </>
-          )}
-          {myReviews.length > 0 && (
-            <button 
-              className={`selected-button ${showOnlyMyReviews ? 'active-border' : ''}`} 
-              onClick={() => setShowOnlyMyReviews(!showOnlyMyReviews)}
+      <div className="review-text">
+        {reviews.length > 0 && (
+          <>
+            <button
+              className={`selected-button ${activeSort === 'first' ? 'active-border' : ''}`}
+              onClick={() => handleSortByDate('first')}
             >
-              {showOnlyMyReviews ? 'All Reviews' : 'My Reviews'}
+              First/top
             </button>
-          )}
-        </div>
-        <div className="reviews-list-container">
+            <button
+              className={`selected-button ${activeSort === 'last' ? 'active-border' : ''}`}
+              onClick={() => handleSortByDate('last')}
+            >
+              Last/top
+            </button>
+          </>
+        )}
+        {myReviews.length > 0 && (
+          <button 
+            className={`selected-button ${showOnlyMyReviews ? 'active-border' : ''}`} 
+            onClick={() => setShowOnlyMyReviews(!showOnlyMyReviews)}
+          >
+            {showOnlyMyReviews ? 'Show all' : 'Only mine'}
+          </button>
+        )}
+      </div>
+      <div className="reviews-list-container">
         <div>
           {reviews.length > 0 ? (
             (showOnlyMyReviews ? myReviews : reviews).map((review) => (
@@ -150,7 +184,7 @@ export default function SpecificReview({ productId }) {
                   <div className="review-text">{review.Name}</div>
                   <div>{renderStars(review.Rating, () => {}, () => {})}</div>
                   {loggedIn && review.Name === savedLogin && (
-                    <button className="selected-button active-border" onClick={() => handleRemoveReview(review.ID)}>🗑</button>
+                    <button className="form-input active-border" onClick={() => handleRemoveReview(review.ID)}>🗑</button>
                   )}
                 </div>
                 <div className="review-content">
@@ -190,12 +224,12 @@ export default function SpecificReview({ productId }) {
         </div>
       </div>
       {!loggedIn && (
-        <button className="selected-button active-border" onClick={() => setShowRegistrationForm(true)}>
+        <button className="form-input active-border" onClick={() => setShowRegistrationForm(true)}>
           Please login to add a review
         </button>
       )}
       {!addingReview && loggedIn && (
-        <button className="selected-button active-border" onClick={() => setAddingReview(true)}>
+        <button className="form-input active-border" onClick={() => setAddingReview(true)}>
           +Add Review
         </button>
       )}
@@ -203,7 +237,7 @@ export default function SpecificReview({ productId }) {
         <div className="add-review">
           <h4>Add a Review</h4>
           {renderStars(rating, setHoverRating, setRating)}
-          <textarea
+          <textarea className='form-input'
             value={newReview}
             onChange={(e) => setNewReview(e.target.value)}
             placeholder="Add a review...Must be 2-256 characters, without forbidden symbols."
@@ -212,19 +246,24 @@ export default function SpecificReview({ productId }) {
           />
           <div className="button-group">
             <button
-              className="selected-button active-border"
+              className={`form-input ${submitDisabled ? '' : 'active-border'}`} 
               onClick={handleAddReview}
               disabled={submitDisabled} // Disable button during submission
             >
-              Submit
+              {submitDisabled ? 'Submitting...' : 'Submit'}
             </button>
-            <button className="selected-button active-border" onClick={() => setAddingReview(false)}>
+            <button
+              className={`form-input ${submitDisabled ? '' : 'active-border'}`} 
+              onClick={handleCancelReview}
+              disabled={submitDisabled}
+            >
               Cancel
             </button>
           </div>
         </div>
       )}
+      <AlertModalComponent /> 
+      <ConfirmModalComponent /> 
     </section>
   );
-}  
-
+}

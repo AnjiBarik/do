@@ -139,6 +139,7 @@ export default function RegistrationForm() {
     if (uiMain.regform === "test") {
       // This is typically used for testing purposes without two-factor authentication
       newIsVerification = showRegistrationFormLokal ? 1 : 2;
+      newShowEmail = false
     } else if (uiMain.regform === "twofactor") {
       // This is used for both registration and login with two-factor authentication
       newIsVerification = showRegistrationFormLokal ? 11 : 12;
@@ -205,6 +206,9 @@ if (!showVerificationCode) {
         } catch (error) {
             console.error('Failed to get verificationCode from session storage:', error);
         }
+        if (verificationCode === "" && (isVerification === 1 || isVerification === 2)) {
+          verificationCodeToSend = null;
+      }
     }
 }
 
@@ -305,7 +309,7 @@ if (verificationCodeToSend) {
     setLoggedIn(true);
     saveLoginData(name);
 
-    if (verificationCode) {
+    if (verificationCode && verificationCode!=="" && /^\d{6}$/.test(verificationCode)) {
       try {
           await saveAuthDataSession(uiMain.Urregform, verificationCode); 
       } catch (error) {
@@ -316,7 +320,7 @@ if (verificationCodeToSend) {
     if (isRememberMe) {
       const confirmed = await showConfirm("Are you sure you want to add autologin data to the browser?");
       if (confirmed) {        
-        if (uiMain.Urregform && name && verificationCode) {
+        if (uiMain.Urregform && name && verificationCode && /^\d{6}$/.test(verificationCode)) {
           try {
             await saveAuthData(uiMain.Urregform, name, verificationCode); 
             showAlert('Data added successfully!'); 
@@ -437,7 +441,7 @@ if (verificationCodeToSend) {
   const handleRememberMe = (event) => {
     const isChecked = event.target.checked;
     setIsRememberMe(isChecked); 
-    console.log('Remember Me:', isChecked);
+    //console.log('Remember Me:', isChecked);
   };
 
   // Checking whether autologin data is in the storage when rendering the component

@@ -13,12 +13,13 @@
 			"title": "Programming books",
 			"UrFrame": "https://AnjiBarik.github.io",
 			"Urprice": "https://script.google.com/macros/s/AKfycbxFZwSOjMbKYn6J81HYdcK0Y8MM2YH4tYjBjRha_sLgPrmpjEOpjUYccq5zAJQVt1RD/exec",
-			"Urregform": "https://script.google.com/macros/s/AKfycbx_26fDiwYx5yL8fHexmsRndHdWwzXXnOkc9YiOkayfJpXX6Bl0m4Se44otH5wjeuTmSA/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyZttItQ_MNUj6AtOcNeaD-zACUxXErH2fz-Y5NuiOWfldbJuzQq33f-omhSZhOCxltsg/exec",
 			"Urorder":"https://script.google.com/macros/s/AKfycbyi0x800oGGC2Cb7kFXOBRy7VnuzuHSGCnm-GP7M4G25ZVENqA1SlllIfhbOLxtKsnT/exec",
 			"order":"rsa",	
 			"regform": "twofactor",		
 			"logopablic":"lang.jpg",
-			"langstart": "auto"
+			"langstart": "auto",
+			"Review": "true"
 		},
 		{
 			"id": 2,
@@ -32,7 +33,7 @@
 			"title": "Programming books",
 			"UrFrame": "https://AnjiBarik.github.io",
 			"Urprice": "https://script.google.com/macros/s/AKfycbzogx7bJFR1A4cyjRh82saSOG39_Q_BkrpkQXqoKITm3yNptsz8yJyXk90vn4IEpL3dPQ/exec",
-			"Urregform": "https://script.google.com/macros/s/AKfycbx_26fDiwYx5yL8fHexmsRndHdWwzXXnOkc9YiOkayfJpXX6Bl0m4Se44otH5wjeuTmSA/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyZttItQ_MNUj6AtOcNeaD-zACUxXErH2fz-Y5NuiOWfldbJuzQq33f-omhSZhOCxltsg/exec",
 			"Urorder": "https://script.google.com/macros/s/AKfycbyi0x800oGGC2Cb7kFXOBRy7VnuzuHSGCnm-GP7M4G25ZVENqA1SlllIfhbOLxtKsnT/exec",
 			"orderform":"FirstName,MiddleName,LastName,Email,Phone,Address,Message",
 			"nopriceblock": "true",
@@ -56,12 +57,12 @@
 			"title": "Hot pizza",
 			"UrFrame": "https://lh3.googleusercontent.com/pw/AP1GczMj4n3NL1Dwqe-5XcUqTf4h1N3gYnjT3hqwVxEZgLsUwqA6JAw-RWRhknZQzmH27oyDHoyLAf4cY-AEiJWaRlg1AH_3Z-QIrlK9Y0xZxwDoyb6Q4Q=w2400",
 			"Urprice": "https://script.google.com/macros/s/AKfycbwVXp6_F_VthBjLh0BW22W4Dvw_lfl90lWTQKjt6ltkqxPvlfUjW8QBru-nTLjF97Se/exec",
-			"Urregform": "https://script.google.com/macros/s/AKfycbx_26fDiwYx5yL8fHexmsRndHdWwzXXnOkc9YiOkayfJpXX6Bl0m4Se44otH5wjeuTmSA/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyZttItQ_MNUj6AtOcNeaD-zACUxXErH2fz-Y5NuiOWfldbJuzQq33f-omhSZhOCxltsg/exec",
 			"Urorder":"https://script.google.com/macros/s/AKfycbyi0x800oGGC2Cb7kFXOBRy7VnuzuHSGCnm-GP7M4G25ZVENqA1SlllIfhbOLxtKsnT/exec",
 			"logopablic":"logo2.png",
 			"regform": "test",	
 			"orderform":"Email,Phone,Message",
-			"regformGoogleClientID":"1088764267163-jusv1jur47aak49tpdqrf0dsntjsktse.apps.googleusercontent.com"
+			"Review": "true"									
 		},		
 		{
 			"id": 4,
@@ -77,10 +78,11 @@
 			"orderform":"FirstName,LastName,Phone,Address,Message",
 			"UrFrame": "https://AnjiBarik.github.io",
 			"Urprice": "https://script.google.com/macros/s/AKfycbxGXnRt_9VFqY9K8-j3Jdx7uMOfbYxAg6ug5mt7Uim5i_wuDUg4I1J0iLpblKB9xp0zIQ/exec",
-			"Urregform": "https://script.google.com/macros/s/AKfycbx_26fDiwYx5yL8fHexmsRndHdWwzXXnOkc9YiOkayfJpXX6Bl0m4Se44otH5wjeuTmSA/exec",
+			"Urregform": "https://script.google.com/macros/s/AKfycbyZttItQ_MNUj6AtOcNeaD-zACUxXErH2fz-Y5NuiOWfldbJuzQq33f-omhSZhOCxltsg/exec",
 			"Urorder":"https://script.google.com/macros/s/AKfycbyi0x800oGGC2Cb7kFXOBRy7VnuzuHSGCnm-GP7M4G25ZVENqA1SlllIfhbOLxtKsnT/exec",
 			"order":"rsa",
-			"regformGoogleClientID":"1088764267163-jusv1jur47aak49tpdqrf0dsntjsktse.apps.googleusercontent.com"
+			"regformGoogleClientID":"1088764267163-jusv1jur47aak49tpdqrf0dsntjsktse.apps.googleusercontent.com",
+			"Review": "true"
 		}
 		
 	]

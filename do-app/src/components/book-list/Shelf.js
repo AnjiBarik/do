@@ -8,7 +8,7 @@ import { useIcons } from '../../IconContext';
 import RatingDisplay from './RatingDisplay';
 
 export default function Shelf(props) {
-  const { setSpecificBook, fieldState, ratingData } = useContext(BooksContext);  
+  const { setSpecificBook, fieldState, ratingData, uiMain } = useContext(BooksContext);  
   const {
     discont,
     newcart, 
@@ -56,7 +56,7 @@ export default function Shelf(props) {
             <p className='book-id'>
               <b translate="no">{fieldState.id && fieldState.id !== '' ? fieldState.id : 'id:'}</b>
               <span translate="no"><strong>{el.id}</strong></span>
-              <RatingDisplay idPrice={fieldState.idprice} idProduct={el.id} ratingData={ratingData} />   
+              {uiMain.Review && ( <RatingDisplay idPrice={fieldState.idprice} idProduct={el.id} ratingData={ratingData} /> )}  
             </p> 
             {el.sorted === 'new' && <img src={newcart} className='art-icon' alt='New Cart' />}
             {el.sorted === 'sale' && <img src={discont} className='art-icon' alt='Discount Cart' />}

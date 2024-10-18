@@ -580,7 +580,7 @@ function handleReviewVerification(userName, enteredCode) {
   let storedCode = sheet.getRange(userRow, 8).getValue(); 
   let lastLoginTime = new Date(sheet.getRange(userRow, 10).getValue()); 
 
-  // Проверяем введенный код, статус пользователя и время действия логина
+  // Check the entered code, user status and login validity period
   if (enteredCode !== `${storedCode}` || sheet.getRange(userRow, 13).getValue() !== 'Login' || isLoginExpired(lastLoginTime)) {
     return ContentService.createTextOutput("Verification code or price number is incorrect, or user is not logged in."); 
   }  
@@ -638,8 +638,7 @@ function handleSimpleRegistration(userName, userPassword) {
   let currentDate = new Date();
   let formattedDate = Utilities.formatDate(currentDate, "GMT+0", "yyyy-MM-dd HH:mm:ss");
   let currentDateTime = currentDate.getTime();
-  sheet.appendRow([userName, userPassword, verificationCode, formattedDate, currentDateTime, '', '', '', '', '', 'Active']);
-
+  sheet.appendRow([formattedDate,userName, userPassword,'', '', '', '', verificationCode, formattedDate, currentDateTime, 0, 'Active','Login']);
   return generateLoginSuccessResponse(findUserRow(userName));
 }
 

@@ -22,9 +22,10 @@
         "shopping": "To shopping", // alternative button title to enter shopping for the current price if available
         "logopablic": "lang.png", // author's company logo from a public folder (preferred over logo if available)
         "langstart": "auto", // if present, automatically selects language based on browser default
-        "orderform": "FirstName,MiddleName,LastName,Email,Phone,Address,Message" // if present, list of displayed customer contact fields; all except Message are mandatory, all are displayed if absent
-        // "regform": "test" /used for testing purposes without two-factor authentication or "twofactor" used for both registration and login with two-factor authentication / none by default typically used for registration with two-factor authentication and login without it 
-        "regformGoogleClientID":"..Google client ID.apps.googleusercontent.com" //if present, adds a button to log in via Google
+        "orderform": "FirstName,MiddleName,LastName,Email,Phone,Address,Message", // if present, list of displayed customer contact fields; all except Message are mandatory, all are displayed if absent
+        // "regform": "test", //used for testing purposes without two-factor authentication or "twofactor" used for both registration and login with two-factor authentication / none by default typically used for registration with two-factor authentication and login without it 
+        "regformGoogleClientID":"..Google client ID.apps.googleusercontent.com", //if present, adds a button to log in via Google
+        "Review": "true" // if present, displays and processes product reviews
       }		
 	]
 }
