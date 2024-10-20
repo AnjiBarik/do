@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Slider from './Slider';
 import './LandingPage.css';
 import Submit from './LoadForm';
@@ -7,13 +8,9 @@ import LangComponent from './LangComponent';
 import getPublicUrl from '../functional/getPublicUrl';
 import tuning from '../assets/data/tuning.json';
 
-function LandingPage() {
+function LandingPage() {    
     const { theme, uiMain, fieldState, setUiState, setUiMain } = React.useContext(BooksContext);
-
-    const currentUrl = window.location.pathname; // Get current URL
-    const id = Number(currentUrl.split('/').pop()); // Extract last segment and convert to number
-    //console.log('ID from URL:', id);
-
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const tuningUrl = getPublicUrl({ folder: 'data', filename: 'tuning.json' });
     const handleLoad = () => {
@@ -23,6 +20,16 @@ function LandingPage() {
     // Get Browser language
     const [language, setLanguage] = useState('');
     const [autoSubmit, setAutoSubmit] = useState(false); // New state for auto-submit
+
+    const fullUrl = window.location.href;
+    const hasHash = window.location.hash;
+    const segments = hasHash ? window.location.hash.replace('#/', '').split('/') : window.location.pathname.split('/');
+    const id = segments[segments.length - 1];
+    
+console.log(fullUrl)
+console.log(hasHash)
+console.log(segments)
+console.log("id",id)
 
     useEffect(() => {
         const browserLanguage = navigator.language || navigator.languages[0];
@@ -36,14 +43,35 @@ function LandingPage() {
             let startItem = null;
 
             // Find item by ID if it exists
-            if (!isNaN(id)) {
-                const foundItem = data.tuning.find(item => item.id === id);
-                if (foundItem) {
-                    setUiMain(foundItem); 
-                    setAutoSubmit(true); 
-                    return; // Exit early if an item was found
+            // if (id && !isNaN(id)) {
+            //     const foundItem = data.tuning.find(item => item.id == id);
+            //     if (foundItem) {
+            //         setUiMain(foundItem); 
+            //         setAutoSubmit(true); 
+            //         return; // Exit early if an item was found
+            //     }
+            // }
+
+            if (id && id.trim() !== "") {
+                if (!isNaN(id)) {
+                  const foundItem = data.tuning.find(item => item.id === Number(id));
+                  if (foundItem) {
+                    setUiMain(foundItem);
+                    setAutoSubmit(true);
+                    console.log(foundItem)
+                    return
+                  } else {
+                    console.error('Item with the given ID not found');
+                  }
+                } else {
+                  
+                  console.error('ID is not a number, redirecting to Page404');
+                  navigate("/Page404");
                 }
-            }
+              } else {
+                
+                console.log('No ID provided, nothing to do.');
+              }
 
             // If no suitable startItem is found, find the first item with type "start"
             startItem = data.tuning.find(item => item.type === "start" && item.langstart && item.langstart === 'auto' && item.lang === language);
@@ -88,7 +116,7 @@ function LandingPage() {
                 return [...prevState, updatedUiMain];
             });
         }
-    }, [fieldState, uiMain, setUiMain, setUiState, language, id]);
+    }, [fieldState, uiMain, setUiMain, setUiState, language, id, navigate]);
 
     useEffect(() => {
         const fetchData = async () => {

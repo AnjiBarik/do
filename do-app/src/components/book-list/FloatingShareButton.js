@@ -13,9 +13,10 @@ const FloatingShareButton = () => {
 
   // Generate the share link
   const getShareLink = () => {
-    let shareLink = `${window.location.origin}${window.location.pathname}`;
+    let shareLink = `${window.location.href}`;
     if (uiMain && uiMain.id) {
       shareLink += shareLink.endsWith('/') ? `${uiMain.id}` : `/${uiMain.id}`;
+      console.log(shareLink)
     }
     return shareLink;
   };
