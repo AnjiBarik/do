@@ -56,6 +56,8 @@ import passwordIcon from '../assets/iconimg/password.png';
 import infoIcon from '../assets/iconimg/info.png';
 import zoomoutIcon from '../assets/iconimg/zoomout.png';
 import zoominIcon from '../assets/iconimg/zoomin.png';
+import viberIcon from '../assets/iconimg/viber.png';
+import shareIcon from '../assets/iconimg/share.png';
 
 export const initialIcons = {
   lang: langIcon,
@@ -115,4 +117,6 @@ export const initialIcons = {
   info: infoIcon,
   zoomout: zoomoutIcon,
   zoomin: zoominIcon,
+  viber: viberIcon,
+  share: shareIcon
 };

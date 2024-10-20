@@ -1,13 +1,13 @@
 import { BooksContext } from '../../BooksContext';
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import LoadingAnimation from '../utils/LoadingAnimation';
 import ClearAll from '../functional/ClearAll'; 
 import { useAlertModal } from '../hooks/useAlertModal';
 import { hasAuthData, getAuthData, loginRequest } from '../functional/authFunctions'; 
-import { useGoogleScriptAPI } from '../hooks/useGoogleScriptAPI'; // Импортируем хук
+import { useGoogleScriptAPI } from '../hooks/useGoogleScriptAPI'; // Importing the hook
 
-export default function Form() {
+export default function Form({ autoSubmit = false }) {
   const { 
     setBooks, 
     setFieldState, 
@@ -30,14 +30,13 @@ export default function Form() {
   const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
   const { showAlert, AlertModalComponent } = useAlertModal();  
- 
   const { getAggregatedData } = useGoogleScriptAPI();
   
   const clearAll = ClearAll({ 
      clearLogin: loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform === selectUiState.Urregform    
   });
   
-  async function attemptAutoLogin() {   
+  const attemptAutoLogin = useCallback(async () => {   
     const hasAutologinData = await hasAuthData(uiMain.Urregform); 
 
     if (hasAutologinData) {
@@ -70,87 +69,72 @@ export default function Form() {
       console.log("No auto-login data found.");     
       clearAll.resetStates();
     }
-  }
+  }, [uiMain.Urregform, clearAll, setMessage, setPromo, setOrder, setVerificationCode, setSavedLogin, setLoggedIn]);
 
-  async function Submit(e) {
-    e.preventDefault();
+  const Submit = useCallback(async (e) => {
+    if (e) e.preventDefault(); // Prevent default form submission
     setLoading(true);
 
     const formEle = document.querySelector("form");
-    const formDatab = new FormData(formEle);
     
-    // const apiUrl = uiMain.Urprice;
-    // fetch(apiUrl, { method: "POST", body: formDatab })
-    //   .then((res) => res.json())
-    //   .then(async (data) => {
-    //     const lastIndex = data.length - 1;
-    //     const lastItem = data[lastIndex];
-    //     const otherItems = data.slice(0, lastIndex);
+    // Check if the form element exists before creating FormData
+    if (!formEle) {
+      console.error('Form element not found');
+      setLoading(false);
+      return; // Exit early if formEle is null
+    }
 
-    //     setBooks(otherItems);
-    //     setFieldState(lastItem);
-    //     setIdLoudPrice(uiMain.id);
+    const formDatab = new FormData(formEle);
+    formDatab.append('isReviews', 10);
 
+    const URLAPI = uiMain.Urprice;
 
-formDatab.append('isReviews', 10);
+    try {
+      const response = await fetch(URLAPI, { method: "POST", body: formDatab });
+      const data = await response.json();
 
-const URLAPI = uiMain.Urprice;
+      if (!data.success) {
+        throw new Error(data.message || 'Error fetching combined data');
+      }
+      
+      const { sheet1Data, sheet2Data } = data.data;
+      setBooks(sheet1Data);
+      setFieldState(sheet2Data[0]);
+      setIdLoudPrice(uiMain.id);    
 
-try {
-  const response = await fetch(URLAPI, { method: "POST", body: formDatab });
-  const data = await response.json();
-
-  if (!data.success) {
-    throw new Error(data.message || 'Error fetching combined data');
-  }
-  
-  const { sheet1Data, sheet2Data } = data.data;
-  //console.log(sheet1Data,sheet2Data[0])
-  setBooks(sheet1Data);
-  
-  setFieldState(sheet2Data[0]);
-  
-  setIdLoudPrice(uiMain.id);    
+      if (uiMain.Review) {  
+        const aggregatedData = await getAggregatedData(URLAPI, sheet2Data[0].idprice);
         
+        if (aggregatedData && aggregatedData.length > 0) {
+          setRatingData(aggregatedData);
+        } else {
+          console.log('⚠️ No reviews found.');
+        }
+      }
 
-        if (uiMain.Review) {  
-          const aggregatedData = await getAggregatedData(URLAPI, sheet2Data[0].idprice);
+      if (!loggedIn) {
+        await attemptAutoLogin();
+      } else if (loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform !== selectUiState.Urregform) {
+        const formDataToLogout = new FormData();
+        formDataToLogout.append("isVerification", 5);
+        formDataToLogout.append('registrationCode', verificationCode);
+        formDataToLogout.append('Name', savedLogin);
         
-          if (aggregatedData && aggregatedData.length > 0) {
-            //console.log('Received aggregated data:', aggregatedData);
-            setRatingData(aggregatedData);
-          } else {
-            console.log('⚠️ No reviews found.'); // Сообщение, если отзывы отсутствуют
-            //showAlert('⚠️ No reviews found.'); // Отображаем алерт
+        try {
+          const response = await fetch(selectUiState.Urregform, { method: "POST", body: formDataToLogout });
+          const data = await response.text();
+          
+          if (data === 'Incorrect username or password.') {
+            console.log('⚠️ Incorrect username or password.');
+          } else if (data.includes('Logout successful.')) {              
+            clearAll.resetStates();
           }
-        }
-        
-
-        if (!loggedIn) {
-          await attemptAutoLogin();
-        } else if(loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform !== selectUiState.Urregform) {
-          const formDataToLogout = new FormData();
-          formDataToLogout.append("isVerification", 5);
-          formDataToLogout.append('registrationCode', verificationCode);
-          formDataToLogout.append('Name', savedLogin);
-          try {
-            const response = await fetch(selectUiState.Urregform, { method: "POST", body: formDataToLogout });
-            const data = await response.text(); // Await here to get the response text properly
-            
-            if (data === 'Incorrect username or password.') {
-              console.log('⚠️ Incorrect username or password.');
-            } else if (data.includes('Logout successful.')) {              
-              clearAll.resetStates();
-            }
-          } catch (error) {
-            showAlert('⚠️Error: ' + error.message);
-          }           
-        } else if(loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform === selectUiState.Urregform) {          
-          clearAll.resetStates();
-        }
-      
-
-      
+        } catch (error) {
+          showAlert('⚠️Error: ' + error.message);
+        }           
+      } else if (loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform === selectUiState.Urregform) {          
+        clearAll.resetStates();
+      }
     } catch (err) {
       console.error('Error fetching data:', err);
       showAlert('⚠️ Price did not load, try another one or later');
@@ -158,7 +142,13 @@ try {
       setLoading(false);
       navigate('/BookList');
     }
-  }
+  }, [uiMain, loggedIn, selectUiState, attemptAutoLogin, getAggregatedData, clearAll, setBooks, setFieldState, setIdLoudPrice, setRatingData, showAlert, navigate, savedLogin, verificationCode]);
+
+  useEffect(() => {
+    if (autoSubmit && document.querySelector("form")) {
+      Submit();
+    }
+  }, [autoSubmit, Submit]);
 
   return (
     <>

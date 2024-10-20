@@ -10,7 +10,7 @@ import RegistrationForm from "./components/cart/RegistrationForm"
 import LandingPage from "./components/landingPage/LandingPage";
 import AdminPanel from "./components/admincomponent/AdminPanel";
 
-function App() {
+function App() {  
 
 return (
   <Routes>
@@ -21,7 +21,7 @@ return (
       <Route path="specificbook" element={<SpecificBook />} />     
       <Route path="RegistrationForm" element={<RegistrationForm />} />
       <Route path="OrderForm" element={<OrderForm />} />
-      <Route path="AdminPanel" element={<AdminPanel />} />
+      <Route path="AdminPanel" element={<AdminPanel />} />     
       <Route path="*" element={<Page404 />} />
     </Route>
   </Routes>
@@ -30,4 +30,3 @@ return (
 }
 
 export default App;
-

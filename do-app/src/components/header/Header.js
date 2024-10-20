@@ -16,6 +16,7 @@ export default function Header() {
     inst,
     face,
     telegram,
+    viber,
     fone,
     tik,
     you,    
@@ -92,7 +93,8 @@ export default function Header() {
             (uiMain.you && uiMain.you !== "") ||
             (uiMain.card && uiMain.card !== "") ||
             (uiMain.location && uiMain.location !== "") ||
-            (uiMain.about && uiMain.about !== "")) && (
+            (uiMain.about && uiMain.about !== "") ||
+            (uiMain.viber && uiMain.viber !== "")) && (
               <>
                 {uiMain.fone && uiMain.fone !== "" && (
                   <div>                    
@@ -131,6 +133,16 @@ export default function Header() {
                       <a href={`https://t.me/${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
                       </a>
+                    )}
+                  </div>
+                )}
+                {uiMain.viber && uiMain.viber !== "" && (
+                  <div>
+                     <img src={viber} className="back-button select" onClick={() => handleButtonClick(uiMain.viber, 7)} alt={uiMain.viber} />
+                    {currentButtonIndex === 7 && (
+                     <a href={`viber://chat?number=${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
+                       {currentLink}
+                     </a>
                     )}
                   </div>
                 )}

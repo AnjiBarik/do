@@ -9,7 +9,9 @@ import SliderSection from '../utils/SliderSection';
 import BookSearch from './BookSearch';
 import { FilterSection } from './FilterSection';
 import PriceFilter from './SortPrice';
+import FloatingShareButton from './FloatingShareButton';
 const PromoBookSlider = lazy(() => import('../utils/PromoBookSlider'));
+
 
 
 
@@ -570,7 +572,7 @@ export default function BookList() {
           </div>
         )}
   </section>
-  
+  <FloatingShareButton />
         <SortCart props={sortedBooks} componentName="Filter" />
       </section>
     </>

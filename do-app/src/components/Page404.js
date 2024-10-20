@@ -12,7 +12,7 @@ export default function Error404() {
             <img 
                 src="https://media.giphy.com/media/14uQ3cOFteDaU/giphy.gif" 
                 alt="Confused Travolta" 
-                style={{ margin: '10px', width: '300px' }} 
+                style={{ margin: '10px', width: '300px', borderRadius: '10px' }} 
             />
             
             <p style={{ fontSize: '18px', marginBottom: '10px' }}>

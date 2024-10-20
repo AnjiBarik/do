@@ -8,6 +8,9 @@ const PriceFilter = ({ prompt }) => {
   const [maxPrice, setMaxPrice] = useState(0);
   const [range, setRange] = useState([0, 0]);
 
+  const [tempMin, setTempMin] = useState('0'); 
+  const [tempMax, setTempMax] = useState('0'); 
+
   useEffect(() => {
     if (prompt.length > 0) {
       const prices = prompt.map(book => book.price);
@@ -18,35 +21,83 @@ const PriceFilter = ({ prompt }) => {
 
       if (rangePrice && rangePrice.length > 0) {
         setRange(rangePrice);
+        setTempMin(String(rangePrice[0]));
+        setTempMax(String(rangePrice[1]));
       } else {
         setRange([min, max]);
+        setTempMin(String(min));
+        setTempMax(String(max));
       }
     }
   }, [prompt, rangePrice]);
- 
+  
+  const validateInput = (value) => {
+    return value === '' || /^[0-9]*\.?[0-9]*$/.test(value); // Numbers and period
+  };
+  
   const handleMinChange = (e) => {
-    const min = Number(e.target.value);
-    if (min <= range[1]) {
-      setRange([min, range[1]]);
+    const value = e.target.value;
+    if (validateInput(value)) {
+      setTempMin(value); 
     }
   };
   
   const handleMaxChange = (e) => {
-    const max = Number(e.target.value);
-    if (max >= range[0]) {
-      setRange([range[0], max]);
+    const value = e.target.value;
+    if (validateInput(value)) {
+      setTempMax(value); 
     }
+  };
+ 
+  const handleMinBlur = () => {
+    const parsedValue = parseFloat(tempMin); 
+    if (isNaN(parsedValue) || parsedValue < minPrice) {
+      setRange([minPrice, range[1]]); 
+      setTempMin(String(minPrice));   
+    } else if (parsedValue > range[1]) {
+      setRange([range[1], range[1]]); 
+      setTempMin(String(range[1]));
+    } else {
+      setRange([parsedValue, range[1]]);
+    }
+  };
+  
+  const handleMaxBlur = () => {
+    const parsedValue = parseFloat(tempMax); 
+    if (isNaN(parsedValue) || parsedValue > maxPrice) {
+      setRange([range[0], maxPrice]); 
+      setTempMax(String(maxPrice));   
+    } else if (parsedValue < range[0]) {
+      setRange([range[0], range[0]]); 
+      setTempMax(String(range[0]));
+    } else {
+      setRange([range[0], parsedValue]);
+    }
+  };
+ 
+  const handleRangeMinChange = (value) => {
+    setRange([value, range[1]]);
+    setTempMin(String(value)); 
+  };
+
+  const handleRangeMaxChange = (value) => {
+    setRange([range[0], value]);
+    setTempMax(String(value)); 
   };
 
   const handleApply = () => {
     setRangePrice(range);
-    setMinPrice(range[0]);
-    setMaxPrice(range[1]);
   };
 
   const handleReset = () => {
     setRangePrice([]);
     setRange([minPrice, maxPrice]);
+    setTempMin(String(minPrice));
+    setTempMax(String(maxPrice));
+  };
+ 
+  const arraysEqual = (arr1, arr2) => {
+    return JSON.stringify(arr1) === JSON.stringify(arr2);
   };
 
   return (
@@ -58,7 +109,7 @@ const PriceFilter = ({ prompt }) => {
           min={minPrice}
           max={maxPrice}
           value={range[0]}
-          onChange={handleMinChange}
+          onChange={(e) => handleRangeMinChange(Number(e.target.value))} 
           className="slider"
         />
         <input
@@ -66,64 +117,47 @@ const PriceFilter = ({ prompt }) => {
           min={minPrice}
           max={maxPrice}
           value={range[1]}
-          onChange={handleMaxChange}
+          onChange={(e) => handleRangeMaxChange(Number(e.target.value))} 
           className="slider"
         />
-        {/* <div className="range-values">
-        <span translate="no">Min:{fieldState.payment ? fieldState.payment : ""}{range[0]}</span>
-        <span translate="no">Max:{fieldState.payment ? fieldState.payment : ""}{range[1]}</span>
-        </div> */}
-       <div className="range-values">
-    <span translate="no">Min: {fieldState.payment ? fieldState.payment : ""}
-        <input 
-            type="number" 
-            className='form-input'
-            value={range[0]} 
-            onChange={(e) => {
-                const newMin = +e.target.value;
-                if (newMin <= range[1]) {
-                    setRange([newMin, range[1]]);
-                }
-            }} 
-            min={minPrice}
-            max={maxPrice}
-        />
-    </span>
-    <span translate="no">Max: {fieldState.payment ? fieldState.payment : ""}
-        <input 
-            type="number" 
-            className='form-input'
-            value={range[1]} 
-            onChange={(e) => {
-                const newMax = +e.target.value;
-                if (newMax >= range[0]) {
-                    setRange([range[0], newMax]);
-                }
-            }} 
-            min={minPrice}
-            max={maxPrice}
-        />
-    </span>
-</div>
 
+        <div className="range-values">
+          <span translate="no">Min: {fieldState.payment ? fieldState.payment : ""}
+            <input
+              type="text" 
+              className='form-input'
+              value={tempMin}
+              onChange={handleMinChange} 
+              onBlur={handleMinBlur}     
+            />
+          </span>
+          <span translate="no">Max: {fieldState.payment ? fieldState.payment : ""}
+            <input
+              type="text" 
+              className='form-input'
+              value={tempMax}
+              onChange={handleMaxChange} 
+              onBlur={handleMaxBlur}     
+            />
+          </span>
+        </div>
+      </div>
 
-      </div>      
       <button
-         className={`form-input ${range === rangePrice ? 'disabled' : 'active-border'}`}
-         onClick={handleApply}
-         disabled={range === rangePrice}
+        className={`form-input ${arraysEqual(range, rangePrice) ? 'disabled' : 'active-border'}`}
+        onClick={handleApply}
+        disabled={arraysEqual(range, rangePrice)} 
       >
         Apply
       </button>
       
       <button
-        className={`form-input ${range !== rangePrice ? 'disabled' : 'active-border'}`}
+        className={`form-input ${!arraysEqual(range, rangePrice) ? 'disabled' : 'active-border'}`}
         onClick={handleReset}
-        disabled={range !== rangePrice}
+        disabled={!arraysEqual(range, rangePrice)} 
       >
         Reset
       </button>
-
     </div>
   );
 };

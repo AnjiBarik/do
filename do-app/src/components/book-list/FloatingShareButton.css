@@ -1,0 +1,55 @@
+.floating-share-button {
+  display: inline-block;
+    position: fixed;
+    bottom: 150px;
+    right: 1px;
+    z-index: 100;
+}
+
+.share-main-button {  
+  border: 1px solid #dcdcdc;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;  
+  transition: background-color 0.3s ease;
+}
+
+.share-main-button:hover {
+  background-color: #e0e0e0;
+}
+
+.share-options {
+  position: absolute;
+  bottom: 150px;
+  right: 1px;  
+  border: 1px solid; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.dark .share-options {
+  color: rgba(202, 198, 191, 0.87);
+  background-color: rgb(27, 29, 30);    
+ }
+
+.light .share-options {
+  background-color: #f0f0f0;
+  color: #333;    
+ }
+
+.option-button {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+
