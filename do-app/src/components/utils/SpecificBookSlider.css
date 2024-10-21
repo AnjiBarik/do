@@ -15,6 +15,14 @@
 
     white-space: nowrap;
   }
+
+  .slider-title {
+    position: absolute;
+    top: -5px; 
+    left: 50%;
+    transform: translateX(-50%);  
+    z-index: 1; 
+  }
   
   .book-card-specific {
     flex: 0 0 auto;

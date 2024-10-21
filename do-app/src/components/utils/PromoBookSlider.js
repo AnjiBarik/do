@@ -131,6 +131,7 @@ const PromoBookSlider = ({ prompt }) => {
 
   return (
     <div className={`slider-wrapper ${theme}`}>
+       <div className="slider-title">Top Products</div>
       {showLeftButton && <button className="scroll-button-specific left" onClick={() => handleScroll('left')}>{'<'}</button>}
       <div className="slider-container-specific" ref={scrollRef}>
         {bookIdsToDisplay.map(bookId => {

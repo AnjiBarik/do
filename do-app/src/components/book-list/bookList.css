@@ -45,7 +45,13 @@ body {
     flex-wrap: wrap;   
     display: flex;    
     padding: 10px 10px 5px 10px;
+    /* padding: var(--padding, 10px 10px 5px 10px); */
     align-items: center;
+    transition: padding 0.3s ease;
+}
+
+.filters:hover{
+  padding: var(--padding, 10px 10px 5px 10px);
 }
 
 #sortPrice{
@@ -217,6 +223,7 @@ body {
     color: black;
     /* opacity: 0.8; */
     display: flex;
+    flex-wrap: wrap;
   }
   
   .color-size{
@@ -237,11 +244,12 @@ body {
     outline: none;
   }
 
-  .sort-button:hover {    
+  .sort-button:hover { 
+    --padding: 8px 10px 7px 8px;   
     border: 1px solid;
     border-radius: 7px;
     box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.3);
-    padding: 5px;
+    /* padding: 5px; */
     font-size: larger;
     font-weight: bold;  
     margin: 3px;

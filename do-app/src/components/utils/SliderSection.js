@@ -63,8 +63,8 @@ const SliderSection = () => {
     setSelectedSubsection(subsection);
   };
 
-  return (
-    <div className="slider-container-section">
+  return ( 
+    <div className="slider-container-section">         
       {showLeftScroll && <button className="scroll-button" onClick={scrollLeft}>{'<'}</button>}
       <div className="slider-section-subsection" ref={scrollRef}>
         {uniqueSections.map((section, index) => (        

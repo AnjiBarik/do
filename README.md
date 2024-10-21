@@ -1,3 +1,4 @@
+# 🏷️ Super Deals and Discounts: Shop Smart and Save Big on Top Products!
 # Getting Started with Create React App
 This project was bootstrapped with [Create React App]
 # eMarc

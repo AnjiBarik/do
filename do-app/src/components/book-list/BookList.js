@@ -282,18 +282,20 @@ export default function BookList() {
         {/* Render PromoBookSlider for BookList */}
         <Suspense fallback={<div>Loading...</div>}>
           <PromoBookSlider prompt="BookList" />
-        </Suspense>
+        </Suspense>        
         <SliderSection />
   
         <section className="filters betwin">
           <button className='sort-button'>
             {!showSections.BookList ? (
+              <div onClick={() => toggleSections("BookList")}>
               <img
                 className="back-button select"
                 src={burger}
-                onClick={() => toggleSections("BookList")}
+                // onClick={() => toggleSections("BookList")}
                 alt="Product sections"
-              />
+              />Catalog
+              </div>
             ) : (
               <div onClick={() => toggleSections("BookList")}>
                 <img className="back-button select active-border" src={burger} alt="Product sections" />
@@ -303,12 +305,14 @@ export default function BookList() {
           </button>
           <button className='sort-button'>
             {!showSections.Filter ? (
+              <div onClick={() => toggleSections("Filter")}>Filters
               <img
                 className="back-button select"
                 src={filter}
-                onClick={() => toggleSections("Filter")}
+                // onClick={() => toggleSections("Filter")}
                 alt='filter'
               />
+              </div>
             ) : (
               <div onClick={() => toggleSections("Filter")}>
                 <img className="back-button select active-border" src={filter} alt="Filter" />

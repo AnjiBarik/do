@@ -1,12 +1,22 @@
 .floating-share-button {
   display: inline-block;
     position: fixed;
-    bottom: 150px;
+    bottom: 120px;
     right: 1px;
-    z-index: 100;
+    z-index: 1;
 }
 
-.share-main-button {  
+.dark .floating-share-button {
+  color: rgba(202, 198, 191, 0.87);
+  background-color: rgb(27, 29, 30);    
+ }
+
+.light .floating-share-button {
+  background-color: #f0f0f0;
+  color: #333;    
+ }
+
+/* .share-main-button {  
   border: 1px solid #dcdcdc;
   padding: 10px 20px;
   font-size: 14px;
@@ -17,11 +27,11 @@
 
 .share-main-button:hover {
   background-color: #e0e0e0;
-}
+} */
 
 .share-options {
   position: absolute;
-  bottom: 150px;
+  bottom: 60px;
   right: 1px;  
   border: 1px solid; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -30,7 +40,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 100;
+  z-index: 1;
 }
 
 .dark .share-options {
@@ -46,6 +56,7 @@
 .option-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 5px;
   border: none;
   background-color: transparent;
