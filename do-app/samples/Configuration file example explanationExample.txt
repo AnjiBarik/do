@@ -25,7 +25,8 @@
         "orderform": "FirstName,MiddleName,LastName,Email,Phone,Address,Message", // if present, list of displayed customer contact fields; all except Message are mandatory, all are displayed if absent
         // "regform": "test", //used for testing purposes without two-factor authentication or "twofactor" used for both registration and login with two-factor authentication / none by default typically used for registration with two-factor authentication and login without it 
         "regformGoogleClientID":"..Google client ID.apps.googleusercontent.com", //if present, adds a button to log in via Google
-        "Review": "true" // if present, displays and processes product reviews
+        "Review": "true", // if present, displays and processes product reviews
+        "share": "https://repository.github.io/do/#/BestShoeStore/1"  // link to share (last digit ID) if there is, it will be shared otherwise automatically from the browser URL string + ID
       }		
 	]
 }
