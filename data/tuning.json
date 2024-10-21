@@ -10,7 +10,7 @@
 			"location":"You adress",
 			"email":"example@gmail.com",
 			"logo": "https://lh3.googleusercontent.com/pw/AP1GczPPaIlhNtuxnkh_nk-0PteuYFitkPBOnhtbI3epsd1eWNhh1r-iplXKR6LMJTgFsX1AeEFQqctU8l4dooSWDZ_Pu_kLgmJ8BtubxcLq922n_r5U5A=w2400",
-			"title": "Programming books",
+			"title": "Best Shoe Store",
 			"UrFrame": "https://AnjiBarik.github.io",
 			"Urprice": "https://script.google.com/macros/s/AKfycbxFZwSOjMbKYn6J81HYdcK0Y8MM2YH4tYjBjRha_sLgPrmpjEOpjUYccq5zAJQVt1RD/exec",
 			"Urregform": "https://script.google.com/macros/s/AKfycbyZttItQ_MNUj6AtOcNeaD-zACUxXErH2fz-Y5NuiOWfldbJuzQq33f-omhSZhOCxltsg/exec",
@@ -19,7 +19,8 @@
 			"regform": "twofactor",		
 			"logopablic":"lang.jpg",
 			"langstart": "auto",
-			"Review": "true"
+			"Review": "true",
+			"share": "https://localhost:3000/do/#/BestShoeStore/1"
 		},
 		{
 			"id": 2,
