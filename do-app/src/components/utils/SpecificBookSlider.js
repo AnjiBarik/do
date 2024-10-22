@@ -100,7 +100,9 @@ const SpecificBookSlider = () => {
 
   return (
     <div className={`slider-wrapper ${theme}`}>
-      <div className="slider-title">Also of Interest</div>
+      {sortedBooks && sortedBooks.length > 0 && (
+         <div className="slider-title">Also of Interest</div>
+      )}
       {showLeftButton && <button className="scroll-button-specific left" onClick={() => handleScroll('left')}>{'<'}</button>}
       <div className="slider-container-specific" ref={scrollRef}>
         {sortedBooks.map(book => (

@@ -475,3 +475,10 @@ body {
   border-right: none;
   border-radius:  5px 0 0 5px;
 }
+
+.filters-slider-text{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: lighter;
+}

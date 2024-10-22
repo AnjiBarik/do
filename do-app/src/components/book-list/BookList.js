@@ -288,13 +288,13 @@ export default function BookList() {
         <section className="filters betwin">
           <button className='sort-button'>
             {!showSections.BookList ? (
-              <div onClick={() => toggleSections("BookList")}>
+              <div className='filters-slider-text' onClick={() => toggleSections("BookList")}>
               <img
                 className="back-button select"
                 src={burger}
                 // onClick={() => toggleSections("BookList")}
                 alt="Product sections"
-              />Catalog
+              /><p>Catalog</p>
               </div>
             ) : (
               <div onClick={() => toggleSections("BookList")}>
@@ -305,7 +305,8 @@ export default function BookList() {
           </button>
           <button className='sort-button'>
             {!showSections.Filter ? (
-              <div onClick={() => toggleSections("Filter")}>Filters
+              <div className='filters-slider-text' onClick={() => toggleSections("Filter")}>
+                <p>Filters</p>
               <img
                 className="back-button select"
                 src={filter}

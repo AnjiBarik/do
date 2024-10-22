@@ -26,10 +26,10 @@ function LandingPage() {
     const segments = hasHash ? window.location.hash.replace('#/', '').split('/') : window.location.pathname.split('/');
     const id = segments[segments.length - 1];
     
-console.log(fullUrl)
-console.log(hasHash)
-console.log(segments)
-console.log("id",id)
+//console.log(fullUrl)
+//console.log(hasHash)
+//console.log(segments)
+//console.log("id",id)
 
     useEffect(() => {
         const browserLanguage = navigator.language || navigator.languages[0];
