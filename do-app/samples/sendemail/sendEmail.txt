@@ -1,0 +1,143 @@
+function sendEmails() {
+  // Open the spreadsheet by URL and get the sheet by name
+  const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/.../edit?gid=0#gid=0");
+  const sheet = sheets.getSheetByName("Page1");
+
+  // Get all data from the sheet
+  const data = sheet.getDataRange().getValues();
+
+  // Loop through each row, skipping the header (start from index 1)
+  for (let i = 1; i < data.length; i++) {
+    const emailAddress = String(data[i][0]);  // Convert Recipient Email to string
+    const product1Name = String(data[i][1]);  // Convert Product 1 Name to string
+    const product1Price = String(data[i][2]); // Convert Product 1 Price to string
+    const product1Image = String(data[i][3]); // Convert Product 1 Image URL to string
+    const product2Name = String(data[i][4]);  // Convert Product 2 Name to string
+    const product2Price = String(data[i][5]); // Convert Product 2 Price to string
+    const product2Image = String(data[i][6]); // Convert Product 2 Image URL to string
+    const orderButtonText = String(data[i][7]); // Convert Order Button Text to string
+    const orderButtonUrl = String(data[i][8]);  // Convert Order Button URL to string
+
+    // HTML template for the email
+    const htmlBody = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Product Email</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #1b1d1e;
+            color: #cac6bfde;
+            margin: 0;
+            padding: 0;
+          }
+          .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #1b1d1e;
+            padding: 20px;
+            border: 1px solid #444;
+            border-radius: 15px;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .header a {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+          }
+          table {
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-top: 20px;
+          }
+          td {
+            padding: 20px;
+            text-align: center;
+            vertical-align: top;
+            width: 50%;
+          }
+          img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform .3s ease;
+            border-radius: 10px;
+          }
+          h2 {
+            font-size: 18px;
+            color: #cac6bfde;
+            margin: 10px 0;
+            word-wrap: break-word;
+          }
+          .price {
+            font-size: 22px;
+            color: #ff5733;
+            margin-bottom: 10px;
+          }
+          @media only screen and (max-width: 600px) {
+            .email-container {
+              max-width: 100%;
+              padding: 15px;
+            }
+            td {
+              padding: 15px;
+            }
+            h2 {
+              font-size: 16px;
+            }
+            .price {
+              font-size: 20px;
+            }
+            img {
+              max-width: 100%;
+              max-height: 240px;
+            }
+            .header a {
+              padding: 10px 20px;
+              font-size: 14px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="email-container">
+          <div class="header">
+            <a href="${orderButtonUrl}">${orderButtonText}</a>
+          </div>
+          <table>
+            <tr>
+              <td>
+                <img src="${product1Image}" alt="${product1Name}">
+                <h2>${product1Name}</h2>
+                <div class="price">${product1Price}</div>
+              </td>
+              <td>
+                <img src="${product2Image}" alt="${product2Name}">
+                <h2>${product2Name}</h2>
+                <div class="price">${product2Price}</div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // Send the email
+    MailApp.sendEmail({
+      to: emailAddress,
+      subject: 'Product Offers',
+      htmlBody: htmlBody
+    });
+  }
+}

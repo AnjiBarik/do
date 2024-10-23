@@ -5,41 +5,31 @@ const RedirectHandler = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        try {
-            // Получаем полную ссылку и сегменты
+        try {            
             const fullUrl = window.location.href;
             const hasHash = window.location.hash;
             const segments = hasHash ? window.location.hash.replace('#/', '').split('/') : window.location.pathname.split('/');
-            const id = segments[segments.length - 1];
+            const id = segments[segments.length - 1];            
 
-            console.log('Полная ссылка:', fullUrl);
-            console.log('Хэш присутствует:', hasHash);
-            console.log('Сегменты:', segments);
-            console.log('ID:', id);
-
-            // Проверяем, есть ли id и если да, является ли оно целым числом и в диапазоне от 1 до 20
+            // We check if there is an id and if so, if it is an integer and in the range from 1 to 20
             if (id && id.trim() !== '') {
                 const idNumber = parseInt(id, 10);
 
-                if (!isNaN(idNumber) && idNumber >= 1 && idNumber <= 20) {
-                    // Если всё корректно, перенаправляем на LandingPage и передаем id
+                if (!isNaN(idNumber) && idNumber >= 1 && idNumber <= 20) {                    
                     navigate(`/LandingPage/${idNumber}`, { state: { id: idNumber } });
-                } else {
-                    // Если id не целое число или вне диапазона, переходим на 404
+                } else {                    
                     navigate('/Page404');
                 }
             } else {
-                // Если id отсутствует, переходим на LandingPage без параметров
-                navigate('/landing');
+                // If there is no id, go to LandingPage without parameters
+                navigate('/LandingPage');
             }
-        } catch (error) {
-            // В случае ошибки, переходим на 404
-            console.error('Ошибка при обработке URL:', error);
+        } catch (error) {               
             navigate('/Page404');
         }
     }, [navigate]);
 
-    return null; // Компонент не рендерит ничего, только обрабатывает редирект
+    return null; 
 };
 
 export default RedirectHandler;

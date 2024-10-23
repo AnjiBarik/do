@@ -10,9 +10,7 @@ import tuning from '../assets/data/tuning.json';
 
 function LandingPage() {    
 
-    const { id } = useParams(); // Получаем id из URL
-    //const location = useLocation(); // Получаем переданные данные через navigate
-
+    const { id } = useParams(); // Getting ID from URL
 
     const { theme, uiMain, fieldState, setUiState, setUiMain } = React.useContext(BooksContext);
     const navigate = useNavigate();
@@ -24,17 +22,7 @@ function LandingPage() {
 
     // Get Browser language
     const [language, setLanguage] = useState('');
-    const [autoSubmit, setAutoSubmit] = useState(false); // New state for auto-submit
-
-    // const fullUrl = window.location.href;
-    // const hasHash = window.location.hash;
-    // const segments = hasHash ? window.location.hash.replace('#/', '').split('/') : window.location.pathname.split('/');
-    // const idd = segments[segments.length - 1];
-    
-//console.log(fullUrl)
-//console.log(hasHash)
-//console.log(segments)
-//console.log("id",id)
+    const [autoSubmit, setAutoSubmit] = useState(false); // New state for auto-submit  
 
     useEffect(() => {
         const browserLanguage = navigator.language || navigator.languages[0];
@@ -45,60 +33,23 @@ function LandingPage() {
         setUiState(data.tuning);
 
         if (uiMain.length < 1) {
-            let startItem = null;
-
-            // Find item by ID if it exists
-            // if (id && !isNaN(id)) {
-            //     const foundItem = data.tuning.find(item => item.id == id);
-            //     if (foundItem) {
-            //         setUiMain(foundItem); 
-            //         setAutoSubmit(true); 
-            //         return; // Exit early if an item was found
-            //     }
-            // }
-
-            // if (id && id.trim() !== "") {
-            //     if (!isNaN(id)) {
-            //       const foundItem = data.tuning.find(item => item.id === Number(id));
-            //       if (foundItem) {
-            //         setUiMain(foundItem);
-            //         setAutoSubmit(true);
-            //         //console.log(foundItem)
-            //         return
-            //       } else {
-            //         console.error('Item with the given ID not found');
-            //       }
-            //     } else {
-                  
-            //       console.error('ID is not a number, redirecting to Page404');
-            //       navigate("/Page404");
-            //     }
-            //   } else {
-                
-            //     console.log('No ID provided, nothing to do.');
-            //   }
+            let startItem = null;            
 
             if (id && id.trim() !== "") {
                 if (!isNaN(id)) {
                   const foundItem = data.tuning.find(item => item.id === Number(id));
                   if (foundItem) {
                     setUiMain(foundItem);
-                    setAutoSubmit(true);
-                    console.log(foundItem)
+                    setAutoSubmit(true);                    
                     return
                   } else {
                     console.error('Item with the given ID not found');
                   }
-                } else {
-                  
+                } else {                  
                   console.error('ID is not a number, redirecting to Page404');
                   navigate("/Page404");
                 }
-              } else {
-                
-                console.log('No ID provided, nothing to do.');
-              }
-
+            } 
 
             // If no suitable startItem is found, find the first item with type "start"
             startItem = data.tuning.find(item => item.type === "start" && item.langstart && item.langstart === 'auto' && item.lang === language);
