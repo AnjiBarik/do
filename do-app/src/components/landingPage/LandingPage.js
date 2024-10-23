@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Slider from './Slider';
 import './LandingPage.css';
 import Submit from './LoadForm';
@@ -9,6 +9,11 @@ import getPublicUrl from '../functional/getPublicUrl';
 import tuning from '../assets/data/tuning.json';
 
 function LandingPage() {    
+
+    const { id } = useParams(); // Получаем id из URL
+    //const location = useLocation(); // Получаем переданные данные через navigate
+
+
     const { theme, uiMain, fieldState, setUiState, setUiMain } = React.useContext(BooksContext);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -21,10 +26,10 @@ function LandingPage() {
     const [language, setLanguage] = useState('');
     const [autoSubmit, setAutoSubmit] = useState(false); // New state for auto-submit
 
-    const fullUrl = window.location.href;
-    const hasHash = window.location.hash;
-    const segments = hasHash ? window.location.hash.replace('#/', '').split('/') : window.location.pathname.split('/');
-    const id = segments[segments.length - 1];
+    // const fullUrl = window.location.href;
+    // const hasHash = window.location.hash;
+    // const segments = hasHash ? window.location.hash.replace('#/', '').split('/') : window.location.pathname.split('/');
+    // const idd = segments[segments.length - 1];
     
 //console.log(fullUrl)
 //console.log(hasHash)
@@ -52,6 +57,27 @@ function LandingPage() {
             //     }
             // }
 
+            // if (id && id.trim() !== "") {
+            //     if (!isNaN(id)) {
+            //       const foundItem = data.tuning.find(item => item.id === Number(id));
+            //       if (foundItem) {
+            //         setUiMain(foundItem);
+            //         setAutoSubmit(true);
+            //         //console.log(foundItem)
+            //         return
+            //       } else {
+            //         console.error('Item with the given ID not found');
+            //       }
+            //     } else {
+                  
+            //       console.error('ID is not a number, redirecting to Page404');
+            //       navigate("/Page404");
+            //     }
+            //   } else {
+                
+            //     console.log('No ID provided, nothing to do.');
+            //   }
+
             if (id && id.trim() !== "") {
                 if (!isNaN(id)) {
                   const foundItem = data.tuning.find(item => item.id === Number(id));
@@ -72,6 +98,7 @@ function LandingPage() {
                 
                 console.log('No ID provided, nothing to do.');
               }
+
 
             // If no suitable startItem is found, find the first item with type "start"
             startItem = data.tuning.find(item => item.type === "start" && item.langstart && item.langstart === 'auto' && item.lang === language);
