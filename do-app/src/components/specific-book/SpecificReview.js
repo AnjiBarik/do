@@ -8,7 +8,7 @@ import RatingDisplay from '../book-list/RatingDisplay';
 
 export default function SpecificReview({ productId }) {
   const { getProductReviews, handleReview, getAggregatedData, loading: apiLoading } = useGoogleScriptAPI();
-  const { savedLogin, fieldState, setRatingData, ratingData, verificationCode, loggedIn, uiMain, setShowRegistrationForm } = useContext(BooksContext);
+  const { savedLogin, fieldState, setRatingData, ratingData, verificationCode, loggedIn, uiMain, setShowRegistrationForm, productReviews, setProductReviews } = useContext(BooksContext);
   const { showAlert, AlertModalComponent } = useAlertModal(); 
   const { showConfirm, ConfirmModalComponent } = useConfirmModal(); 
   const [reviews, setReviews] = useState([]);
@@ -24,17 +24,26 @@ export default function SpecificReview({ productId }) {
   const URLAPI = uiMain.Urprice;
 
   // Validation pattern for textarea input
-  const validationPatterns = useMemo(() => /^[^=+"'<>]{2,256}$/, []); 
-  
-  const updateData = useCallback(async () => {
+  const validationPatterns = useMemo(() => /^[^=+"'<>]{2,256}$/, []);  
+
+  const messageKey = `${savedLogin}_${idPrice}_${productId}`;
+
+const updateData = useCallback(async () => {
+  if (!productReviews[messageKey]) {
+    setLoading(true);
     const fetchedReviews = await getProductReviews(URLAPI, idPrice, productId);
-    if (fetchedReviews.length > 0) {
-      setReviews(fetchedReviews);
-    } else {
-      setReviews([]);
-    }
+    setReviews(fetchedReviews);
+    setProductReviews(prev => ({
+      ...prev,
+      [messageKey]: fetchedReviews || [],
+    }));
     setLoading(false);
-  }, [idPrice, productId, getProductReviews, URLAPI]);
+  } else {
+    setReviews(productReviews[messageKey]);
+    setLoading(false);
+  }
+}, [productReviews, messageKey, idPrice, productId, getProductReviews, URLAPI, setProductReviews]);
+
 
   const updateAggregatedData = useCallback(async () => {
     const aggregated = await getAggregatedData(URLAPI, idPrice);
@@ -74,6 +83,10 @@ export default function SpecificReview({ productId }) {
       setNewReview('');
       setRating(5);
       setAddingReview(false);
+      setProductReviews(prev => ({
+        ...prev,
+        [messageKey]: undefined,  // clear cached reviews
+      }));
       await updateData();
       await updateAggregatedData();
       setSubmitDisabled(false); 
@@ -101,10 +114,14 @@ export default function SpecificReview({ productId }) {
         const success = await handleReview(URLAPI, reviewData);
         if (success) {
           showAlert("✅ Review deleted successfully!");
+          setProductReviews(prev => ({
+            ...prev,
+            [messageKey]: undefined,  // clear cached reviews
+          }));
           await updateData();
           await updateAggregatedData();
         } else {
-          showAlert("❌ Failed to delete the review. Please try again.");
+          showAlert("⚠️ Failed to delete the review. Please try again.");
         }
       }
     }
@@ -193,32 +210,44 @@ export default function SpecificReview({ productId }) {
               </div>
             ))
           ) : (
-            <>
-              {loading || apiLoading ? (
-                <div
-                  style={{
-                    display: 'inline-block',
-                    animation: 'spin 1s linear infinite',
-                    fontSize: '2rem',
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                >
-                  <span className='star filled'>★★★★★</span>
-                  <style>
-                    {`
-                      @keyframes spin {
-                        from { transform: rotate(0deg); }
-                        to { transform: rotate(360deg); }
-                      }
-                    `}
-                  </style>
-                </div>
-              ) : (
-                <p>No reviews available. Be the first to add a review!</p>
-              )}
+            <>   
+{loading || apiLoading ? (
+  <div style={{ 
+    width: '100%', 
+    height: '50px', 
+    position: 'relative',     
+    borderRadius: '25px', 
+    overflow: 'hidden',
+    marginTop: '20px'
+  }}>
+    <div className="progress" style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: '100%',
+      width: '0%',       
+      borderRadius: '25px',
+      textAlign: 'center',     
+      lineHeight: '50px',
+      color: '#ffd700',
+      fontSize: '1.5rem',
+      animation: 'fill 2s linear forwards'
+    }}>
+      ★★★★★ 
+    </div>
+    <style>
+      {`
+        @keyframes fill {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+      `}
+    </style>
+  </div>
+) : (
+  <p>No reviews available. Be the first to add a review!</p>
+)}
+
             </>
           )}
         </div>

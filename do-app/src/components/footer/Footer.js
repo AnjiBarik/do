@@ -133,7 +133,7 @@ export default function Footer() {
             {showRegistrationForm && <RegistrationForm />}
           </section>
         </section>
-      )}
-    </>
+      )} 
+    </> 
   );
 }

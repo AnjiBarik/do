@@ -34,7 +34,7 @@ export const useGoogleScriptAPI = () => {
   // Function for receiving product reviews
   const getProductReviews = useCallback(async (googleScriptUrl, idPrice, idProduct) => {
     const formData = new FormData();
-    formData.append('isReviews', 2); // указываем case 2
+    formData.append('isReviews', 2); 
     formData.append('idPrice', idPrice);
     formData.append('idProduct', idProduct);
 

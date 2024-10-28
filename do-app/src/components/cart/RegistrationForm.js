@@ -132,30 +132,35 @@ export default function RegistrationForm() {
       }
     }; 
 
-  useEffect(() => {
-    let newIsVerification;
-    let newShowEmail = showRegistrationFormLokal;
-  
-    if (uiMain.regform === "test") {
-      // This is typically used for testing purposes without two-factor authentication
-      newIsVerification = showRegistrationFormLokal ? 1 : 2;
-      newShowEmail = false
-    } else if (uiMain.regform === "twofactor") {
-      // This is used for both registration and login with two-factor authentication
-      newIsVerification = showRegistrationFormLokal ? 11 : 12;
-      newShowEmail = showRegistrationFormLokal;
-    } else {
-      // This is typically used for registration with two-factor authentication and login without it      
-      newIsVerification = showRegistrationFormLokal ? 11 : 2;
-      newShowEmail = showRegistrationFormLokal;
-    }
-    if (isVerification !== 16) {
-      setIsVerification(newIsVerification);
-      setShowEmail(newShowEmail);
+useEffect(() => {
+  let newIsVerification;
+  let newShowEmail = showRegistrationFormLokal;
+
+  if (uiMain.regform === "test") {
+    // This is typically used for testing purposes without two-factor authentication
+    newIsVerification = showRegistrationFormLokal ? 1 : 2;
+    newShowEmail = false;
+  } else if (uiMain.regform === "twofactor") {
+    // This is used for both registration and login with two-factor authentication
+    newIsVerification = showRegistrationFormLokal ? 11 : 12;
+    newShowEmail = showRegistrationFormLokal;
+  } else {
+    // This is typically used for registration with two-factor authentication and login without it
+    newIsVerification = showRegistrationFormLokal ? 11 : 2;
+    newShowEmail = showRegistrationFormLokal;
   }
-   // setIsVerification(newIsVerification);
-   // setShowEmail(newShowEmail);
-  }, [showRegistrationFormLokal, uiMain.regform, isVerification]);  
+
+  if (![16, 12, 4].includes(isVerification)) {
+    setIsVerification(newIsVerification);
+    setShowEmail(newShowEmail);
+  } else if (isVerification === 12 && showVerificationCode) {
+    setIsVerification(4);
+    setShowEmail(newShowEmail);
+  }
+
+ // console.log(isVerification);
+}, [showRegistrationFormLokal, uiMain.regform, showVerificationCode]);
+
 
   let logoutTimerRef = useRef(null); 
 

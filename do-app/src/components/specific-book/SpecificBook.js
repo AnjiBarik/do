@@ -349,7 +349,7 @@ export default function SpecificBook() {
       <span>{selectedBook.description}</span>
     </p>
   )}
-  {uiMain.Review && (<SpecificReview productId={selectedBook.id} />)}
+  {uiMain.Review && (<SpecificReview productId={selectedBook.id} />)} 
 </section>        
 
           {selectedBook.Tip !== undefined && selectedBook.Tip !== "" && (
