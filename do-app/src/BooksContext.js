@@ -10,8 +10,8 @@ const BooksProvider = ({ children }) => {
   const [selectUiState, setSelectUiState] = useState([]);//
   const [uiMain, setUiMain] = useState([]);
   const [idLoudPrice, setIdLoudPrice] = useState(0);
-  const [cartItems, setCartItems] = useState([]);
-  const [theme, setTheme] = useState('light');
+  const [cartItems, setCartItems] = useState([]); 
+  const [theme, setTheme] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [message, setMessage] = useState('');
