@@ -366,8 +366,8 @@ body {
   }
   
   .section-list button{
-    border-radius: 17px;
-    padding: 2px 7px 1px;
+    border-radius: 50%;
+    padding: 2px 5px;
     display: flex;
     justify-content: center;
     align-items: normal;

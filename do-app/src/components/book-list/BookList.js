@@ -130,7 +130,6 @@ export default function BookList() {
     setSortedBooks(filteredBooks);
   }, [ books, input, selectedSizes, selectedColor, selectedAuthors, selectedTags1, selectedTags2, selectedTags3, selectedTags4, selectedSection, selectedSubsection, rangePrice]);
 
-
   const findUniqueValues = useCallback(() => {
     const uniqueTags1Set = new Set();
     const uniqueTags2Set = new Set();
@@ -139,40 +138,29 @@ export default function BookList() {
     const uniqueSizesSet = new Set();
     const uniqueColorSet = new Set();
     const uniqueAuthorsSet = new Set();  
-   
-    let filteredBooks = applyFilters(books, {
-      selectedSection,
-      selectedSubsection,
-      selectedTags1,
-      selectedTags2,
-      selectedTags3,
-      selectedTags4,
-      selectedSizes,
-      selectedColor,
-      selectedAuthors,
-      input,
-      rangePrice
-    });  
     
-    books.forEach(book => {
-      uniqueTags1Set.add(book.tags1);
-      uniqueTags2Set.add(book.tags2);
-      uniqueTags3Set.add(book.tags3);
-      uniqueTags4Set.add(book.tags4);
-      uniqueSizesSet.add(book.size);
-      uniqueColorSet.add(book.color);
-      uniqueAuthorsSet.add(book.author);
-    });  
+    const filteredBooks = books.filter((book) => book.Visibility !== '0');  
     
-    setUniqueTags1(selectedTags1.length > 0 ? Array.from(uniqueTags1Set) : Array.from(new Set(filteredBooks.map(b => b.tags1))));
-    setUniqueTags2(selectedTags2.length > 0 ? Array.from(uniqueTags2Set) : Array.from(new Set(filteredBooks.map(b => b.tags2))));
-    setUniqueTags3(selectedTags3.length > 0 ? Array.from(uniqueTags3Set) : Array.from(new Set(filteredBooks.map(b => b.tags3))));
-    setUniqueTags4(selectedTags4.length > 0 ? Array.from(uniqueTags4Set) : Array.from(new Set(filteredBooks.map(b => b.tags4))));
-    setUniqueSizes(selectedSizes.length > 0 ? Array.from(uniqueSizesSet) : Array.from(new Set(filteredBooks.map(b => b.size))));
-    setUniqueColor(selectedColor.length > 0 ? Array.from(uniqueColorSet) : Array.from(new Set(filteredBooks.map(b => b.color))));
-    setUniqueAuthors(selectedAuthors.length > 0 ? Array.from(uniqueAuthorsSet) : Array.from(new Set(filteredBooks.map(b => b.author))));
-  }, [input, books, selectedSection, selectedSubsection, selectedTags1, selectedTags2, selectedTags3, selectedTags4, selectedSizes, selectedColor, selectedAuthors, rangePrice]);  
-
+    const getFilteredArray = (set, key, selectedValues) => {
+      filteredBooks.forEach((book) => {
+        if (book[key] !== null && book[key] !== undefined && book[key].toString().trim() !== '') {
+          set.add(book[key]);
+        }
+      });  
+     
+      return selectedValues.length > 0 ? Array.from(set) : Array.from(set);
+    };
+  
+    setUniqueTags1(getFilteredArray(uniqueTags1Set, 'tags1', selectedTags1));
+    setUniqueTags2(getFilteredArray(uniqueTags2Set, 'tags2', selectedTags2));
+    setUniqueTags3(getFilteredArray(uniqueTags3Set, 'tags3', selectedTags3));
+    setUniqueTags4(getFilteredArray(uniqueTags4Set, 'tags4', selectedTags4));
+    setUniqueSizes(getFilteredArray(uniqueSizesSet, 'size', selectedSizes));
+    setUniqueColor(getFilteredArray(uniqueColorSet, 'color', selectedColor));
+    setUniqueAuthors(getFilteredArray(uniqueAuthorsSet, 'author', selectedAuthors));
+  
+  }, [books, selectedTags1, selectedTags2, selectedTags3, selectedTags4, selectedSizes, selectedColor, selectedAuthors]);   
+  
 
   useEffect(() => {
     findBook();
