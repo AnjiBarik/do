@@ -360,20 +360,12 @@ body {
   }
   
   .section-list h3{
-    display: flex;  
+    display: flex;
     align-items: center;
     cursor: pointer;
-  }
-
-  .section-list button {
-    align-items: normal;
-    border: 2px solid;
-    border-radius: 5px;  
-    display: flex;
-    font-weight: 700;
-    justify-content: center;
-    padding: 2px 5px;
-  }
+    justify-content: space-between;
+    width: 350px;
+  }  
   
   p.book-text {
     margin: 5px 1px;
@@ -530,4 +522,27 @@ section.sectionGrup {
 
 label.filters {
   cursor: pointer;
+}
+
+.social-icon {
+  font-size: 0.9em;
+  color: #333;
+  text-decoration: none;
+  width: 30px;
+  height: 30px;
+  transition: all 0.3s ease;
+}
+
+.toggle-icon {
+  transform: rotate(180deg);
+}
+
+.toggle-icon.rotated {
+  transform: rotate(360deg); 
+}
+
+.no-found {
+  padding: 10px;
+  font-size: larger;
+  font-weight: bold;
 }

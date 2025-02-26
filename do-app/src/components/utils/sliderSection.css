@@ -43,8 +43,7 @@
     transition: transform 0.3s ease-in-out;
   
   &:hover {   
-    outline: none; 
-    border: 1px solid; 
+    outline: none;      
     transition: transform 0.3s ease-in-out;
     box-shadow: 0 0 5px rgba(202, 198, 191, 0.87);
   }

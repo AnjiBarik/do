@@ -1,11 +1,27 @@
-export const FilterSection = ({ title, uniqueItems, selectedItems, field, visibilityKey, toggleVisibility, handleSelection, setSelectedItems }) => (
+import { useIcons } from '../../IconContext';
+
+export const FilterSection = ({
+  title,
+  uniqueItems,
+  selectedItems,
+  field,
+  visibilityKey,
+  toggleVisibility,
+  handleSelection,
+  setSelectedItems
+}) => {
+  const { upmenu } = useIcons();
+  
+  return (
     uniqueItems.length > 0 && (
       <div className="section-list">
         <h3 onClick={() => toggleVisibility(title)}>
-          <button className="selected-button active-border" >
-            {visibilityKey || selectedItems.length > 0 ? '>' : '+'}
-          </button>
-          {field && field !== "" ? field : `${title}:`}
+        {field && field !== "" ? field : `${title}:`}
+          <img
+            className={`toggle-icon social-icon ${visibilityKey || selectedItems.length > 0 ? 'rotated' : ''}`}
+            src={upmenu}
+            alt="Toggle Filter"
+          />         
         </h3>
         {(visibilityKey || selectedItems.length > 0) && (
           <ul className="no-markers filters">
@@ -27,4 +43,4 @@ export const FilterSection = ({ title, uniqueItems, selectedItems, field, visibi
       </div>
     )
   );
-  
+};

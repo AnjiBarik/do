@@ -47,7 +47,7 @@ export default function BookList() {
   } = useContext(BooksContext);
 
   const {    
-    burger,
+    category,
     cancel,
     upmenu,
     filter,   
@@ -248,7 +248,7 @@ export default function BookList() {
    <button className="selected-button active" key={value} onClick={onClick}>
       {
     label === "Section" || label === "Subsection" ? (
-    <img className="cancel-button select" src={burger} alt="Product sections" />
+    <img className="cancel-button select" src={category} alt="Product sections" />
     ) : (
     <img className="cancel-button select" src={filter} alt="Filter" />
     )
@@ -277,14 +277,14 @@ export default function BookList() {
               <div className='filters-slider-text' onClick={() => toggleSections("BookList")}>
               <img
                 className="back-button select"
-                src={burger}
+                src={category}
                 // onClick={() => toggleSections("BookList")}
                 alt="Product sections"
               /><p>Catalog</p>
               </div>
             ) : (
               <div onClick={() => toggleSections("BookList")}>
-                <img className="back-button select active-border" src={burger} alt="Product sections" />
+                <img className="back-button select active-border" src={category} alt="Product sections" />
                 <img className="cancel-button select" src={upmenu} alt="Cancel Product sections" />
               </div>
             )}
