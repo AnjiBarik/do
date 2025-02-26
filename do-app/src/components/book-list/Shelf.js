@@ -69,7 +69,7 @@ export default function Shelf(props) {
                     {fieldState.size && fieldState.size !== '' ? fieldState.size : 'Size'}
                     {el.sizeblock && el.sizeblock !== '' ? 
                      <>
-                     <div className='sizecolor noborderleft'><b>&nbsp;{el.size}</b></div>
+                     <div className='sizecolor noborderleft'><b>{el.size}</b></div>
                      <div className='sizecolor noborderright'>&nbsp;</div>
                      </>
                       : <b>&nbsp;{el.size}</b>
@@ -85,9 +85,8 @@ export default function Shelf(props) {
                     {fieldState.color && fieldState.color !== '' ? fieldState.color : 'Color '}
                     {el.colorblock && el.colorblock !== '' ? (
                       <>
-                      <div className='sizecolor noborderleft'>
-                        {/* <b>{'<'}{el.color}{'>'}</b> */}
-                        <b>&nbsp;{el.color}</b>
+                      <div className='sizecolor noborderleft'>                        
+                        <b>{el.color}</b>
                         {colorRGB[el.color.trim()] && (
                            <span
                            className='circle' 

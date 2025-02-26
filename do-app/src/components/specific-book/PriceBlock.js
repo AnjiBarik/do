@@ -74,7 +74,7 @@ export default function PriceBlock({ id, showPrice }) {
                 <span>{fieldState.price && fieldState.price !== "" ? fieldState.price : "Price:"}</span>
                 <span id="price">
                 {selectedBook.saleprice && (<del className="Linkcart rotate">{selectedBook.saleprice}</del>)} 
-                  {selectedBook.price || 0}{fieldState.payment ? fieldState.payment : ""}
+                {'\u00A0'}{selectedBook.price || 0}{fieldState.payment ? fieldState.payment : ""}
                 </span>
               </div>
             )}

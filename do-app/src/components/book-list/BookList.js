@@ -130,6 +130,7 @@ export default function BookList() {
     setSortedBooks(filteredBooks);
   }, [ books, input, selectedSizes, selectedColor, selectedAuthors, selectedTags1, selectedTags2, selectedTags3, selectedTags4, selectedSection, selectedSubsection, rangePrice]);
 
+
   const findUniqueValues = useCallback(() => {
     const uniqueTags1Set = new Set();
     const uniqueTags2Set = new Set();
@@ -137,9 +138,9 @@ export default function BookList() {
     const uniqueTags4Set = new Set();
     const uniqueSizesSet = new Set();
     const uniqueColorSet = new Set();
-    const uniqueAuthorsSet = new Set();
-
-    const filters = {
+    const uniqueAuthorsSet = new Set();  
+   
+    let filteredBooks = applyFilters(books, {
       selectedSection,
       selectedSubsection,
       selectedTags1,
@@ -148,14 +149,12 @@ export default function BookList() {
       selectedTags4,
       selectedSizes,
       selectedColor,
-      selectedAuthors,      
+      selectedAuthors,
       input,
       rangePrice
-    };
-
-    let filteredBooks = applyFilters(books, filters);
-
-    filteredBooks.forEach(book => {
+    });  
+    
+    books.forEach(book => {
       uniqueTags1Set.add(book.tags1);
       uniqueTags2Set.add(book.tags2);
       uniqueTags3Set.add(book.tags3);
@@ -163,18 +162,17 @@ export default function BookList() {
       uniqueSizesSet.add(book.size);
       uniqueColorSet.add(book.color);
       uniqueAuthorsSet.add(book.author);
-    });
+    });  
+    
+    setUniqueTags1(selectedTags1.length > 0 ? Array.from(uniqueTags1Set) : Array.from(new Set(filteredBooks.map(b => b.tags1))));
+    setUniqueTags2(selectedTags2.length > 0 ? Array.from(uniqueTags2Set) : Array.from(new Set(filteredBooks.map(b => b.tags2))));
+    setUniqueTags3(selectedTags3.length > 0 ? Array.from(uniqueTags3Set) : Array.from(new Set(filteredBooks.map(b => b.tags3))));
+    setUniqueTags4(selectedTags4.length > 0 ? Array.from(uniqueTags4Set) : Array.from(new Set(filteredBooks.map(b => b.tags4))));
+    setUniqueSizes(selectedSizes.length > 0 ? Array.from(uniqueSizesSet) : Array.from(new Set(filteredBooks.map(b => b.size))));
+    setUniqueColor(selectedColor.length > 0 ? Array.from(uniqueColorSet) : Array.from(new Set(filteredBooks.map(b => b.color))));
+    setUniqueAuthors(selectedAuthors.length > 0 ? Array.from(uniqueAuthorsSet) : Array.from(new Set(filteredBooks.map(b => b.author))));
+  }, [input, books, selectedSection, selectedSubsection, selectedTags1, selectedTags2, selectedTags3, selectedTags4, selectedSizes, selectedColor, selectedAuthors, rangePrice]);  
 
-    setUniqueTags1(Array.from(uniqueTags1Set).filter(tag => (typeof tag === 'string' || typeof tag === 'number') && tag.toString().trim() !== ''));
-    setUniqueTags2(Array.from(uniqueTags2Set).filter(tag => (typeof tag === 'string' || typeof tag === 'number') && tag.toString().trim() !== ''));
-    setUniqueTags3(Array.from(uniqueTags3Set).filter(tag => (typeof tag === 'string' || typeof tag === 'number') && tag.toString().trim() !== ''));
-    setUniqueTags4(Array.from(uniqueTags4Set).filter(tag => (typeof tag === 'string' || typeof tag === 'number') && tag.toString().trim() !== ''));
-    setUniqueSizes(Array.from(uniqueSizesSet).filter(size => (typeof size === 'string' || typeof size === 'number') && size.toString().trim() !== ''));
-    setUniqueColor(Array.from(uniqueColorSet).filter(color => (typeof color === 'string' || typeof color === 'number') && color.toString().trim() !== ''));
-    setUniqueAuthors(Array.from(uniqueAuthorsSet).filter(author => (typeof author === 'string' || typeof author === 'number') && author.toString().trim() !== ''));
-  }, [ input, books, selectedSection, selectedSubsection, selectedTags1, selectedTags2, selectedTags3, selectedTags4, selectedSizes, selectedColor, selectedAuthors, rangePrice]);
-
-  
 
   useEffect(() => {
     findBook();
@@ -187,7 +185,7 @@ export default function BookList() {
       setShowSections(prevState => ({ ...prevState, Filter: false }));
     }
     if (showSections.BookList === null) {
-      setShowSections(prevState => ({ ...prevState, BookList: true }));
+      setShowSections(prevState => ({ ...prevState, BookList: false }));
     }
   }, [showSections, setShowSections]);
 
@@ -417,11 +415,11 @@ export default function BookList() {
             )}
           </div>
         </section>
-  
+  <section className='container'>
         {/* Sections and subsections list */}
         <section className='sectionGrup'>
           {showSections.BookList && (
-          <div>
+          <div className='container-section'>
           <div className='sectionBookList'>
             <div className="section-list">
               <ul className="no-markers">
@@ -433,7 +431,7 @@ export default function BookList() {
                   >
                     {section === 'Show all' ? section : (
                       <>
-                        {section} {subsections[section] && subsections[section].size > 0 && <span style={{ marginLeft: '4px' }}>+</span>}
+                        {section} {subsections[section] && subsections[section].size > 0 && <span style={{ marginLeft: '4px' }}> &gt; </span>}
                       </>
                     )}
                   </li>
@@ -576,11 +574,13 @@ export default function BookList() {
           </section>
           </div>
         )}
-  </section>
-  <FloatingShareButton />
+        </section>  
+       <sections className="container-book">
         <SortCart props={sortedBooks} componentName="Filter" />
-      </section>
-    </>
-  );
-  
+        </sections>
+  </section>  
+  <FloatingShareButton />
+    </section>
+    </>    
+  );  
 }  

@@ -91,11 +91,11 @@ body {
     flex-wrap: wrap;
     flex-direction: row;    
   } 
-  .back-button{
+  /* .back-button{
     height: 50px;
     margin: 5px;
     cursor: pointer;    
-  }
+  } */
   
   .rotate {
     animation: rotateRight 1s infinite alternate;

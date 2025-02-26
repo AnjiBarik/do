@@ -44,10 +44,6 @@ input:focus {
     border: 3px solid;
 }
 
-.active-border{
-    border: 1px solid;
-}
-
 .form-label{
     justify-content: center;
 }

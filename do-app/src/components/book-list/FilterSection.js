@@ -3,7 +3,7 @@ export const FilterSection = ({ title, uniqueItems, selectedItems, field, visibi
       <div className="section-list">
         <h3 onClick={() => toggleVisibility(title)}>
           <button className="selected-button active-border" >
-            {visibilityKey || selectedItems.length > 0 ? '-' : '+'}
+            {visibilityKey || selectedItems.length > 0 ? '>' : '+'}
           </button>
           {field && field !== "" ? field : `${title}:`}
         </h3>

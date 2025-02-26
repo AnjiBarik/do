@@ -120,10 +120,10 @@ figure{
     transition: transform 0.3s ease;
   }
 
-  .art:hover{
+  /* .art:hover{
     object-fit: contain;
     transform: scale(1.2);
-  } 
+  }  */
   
   .artwidth {
     width: 320px;
@@ -132,11 +132,11 @@ figure{
     object-fit: fill;
   }
 
-  .artwidth:hover{
+  /* .artwidth:hover{
     object-fit: contain;
 
     transform: scale(1.2);
-  }
+  } */
 
   .zoom-button {
     position: absolute;

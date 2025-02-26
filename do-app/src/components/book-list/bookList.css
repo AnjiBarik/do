@@ -41,19 +41,6 @@ body {
     margin: 2px;
 }
 
-.filters{
-    flex-wrap: wrap;   
-    display: flex;    
-    padding: 10px 10px 5px 10px;
-    /* padding: var(--padding, 10px 10px 5px 10px); */
-    align-items: center;
-    transition: padding 0.3s ease;
-}
-
-.filters:hover{
-  padding: var(--padding, 10px 10px 5px 10px);
-}
-
 #sortPrice{
     border-radius: 5px;
     border: 1px solid gray;
@@ -98,7 +85,6 @@ body {
     transform-origin: top;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     z-index: -1; 
-
 } 
 
   .cart-icon {
@@ -210,6 +196,7 @@ body {
     color: black;
     display: flex;
     opacity: 0.8;
+    border-radius: 5px;
   }
   .book-id{
     position:absolute;   
@@ -220,41 +207,20 @@ body {
     justify-content: center;
     align-items: center;
     margin: 5px;
-    color: black;
-    /* opacity: 0.8; */
+    color: black;    
     display: flex;
     flex-wrap: wrap;
+    border-radius: 5px;
   }
   
   .color-size{
     bottom: 10px;
     right: 1px;
-  }
-
-  
-  .sort-button{
-    border: 0px; 
-    cursor: pointer;
-    border-radius: 7px;
-    overflow: hidden;
-    margin: 5px;
-  }
+  } 
 
   .sort-button:focus {    
     outline: none;
   }
-
-  .sort-button:hover { 
-    --padding: 8px 10px 7px 8px;   
-    border: 1px solid;
-    border-radius: 7px;
-    box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.3);
-    /* padding: 5px; */
-    font-size: larger;
-    font-weight: bold;  
-    margin: 3px;
-  }
-
   
   .selected-button{   
     margin: 2px 5px 2px 5px;
@@ -284,22 +250,6 @@ body {
   .dark .cancel-button .select{
     border-radius:20px;
   }
-
-
-  .light .select  {    
-    border-radius: 10px;
-    padding: 1px 5px;   
-  }
-
-  .dark .select {
-    background-color: #f0f0f0;
-    opacity: 0.6;
-    border-radius: 10px;   
-    border: 2px solid;
-    padding: 1px 2px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
-    box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.3);  
-  } 
 
   .cancel-button{
     height: 30px;
@@ -412,12 +362,17 @@ body {
   .section-list h3{
     display: flex;  
     align-items: center;
+    cursor: pointer;
   }
-
-  /* !!!!? */
+  
   .section-list button{
-    border-radius: 30%;
+    border-radius: 17px;
     padding: 2px 7px 1px;
+    display: flex;
+    justify-content: center;
+    align-items: normal;
+    border: 2px solid;
+    font-weight: bold;
   }
 
   p.book-text {
@@ -430,6 +385,7 @@ body {
 
   span#price, span#totalPrice {
     font-weight: bold;
+    color: #b29c18;
 }
 
 .betwin{
@@ -442,28 +398,13 @@ body {
   padding: 10px 10px 5px 10px;
 }
 
-.sectionBookList{
-  flex-wrap: wrap;
-    display: flex;    
-    max-width: min-content;
-    min-width: 400px;
-}
-
-.sectionFilter{    
-    align-items: center;
-    max-width: 50vw;
-}
-
 .sizecolor{
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 1px 0 3px;  
   border-radius: 5px; 
-  border: 1px solid;
-  box-shadow: black; 
-  box-shadow: 1px 0 10px rgb(128 128 128 / 81%);
-  border-color: rgb(128 128 128 / 80%);
+  border: 2px solid;  
 }
 
 .noborderleft{
@@ -481,4 +422,112 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: lighter;
+}
+
+/* new */
+button{
+  border: none;
+  cursor: pointer;
+}
+
+section.container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+/* Adaptability */
+@media (max-width: 800px) {
+  section.container {
+    flex-wrap: wrap;
+  }
+}
+
+section.sectionGrup {
+  flex-direction: column;
+  flex-wrap: wrap;
+  display: flex;
+  padding: 10px;  
+  border-radius: 7px;
+  overflow-y: auto;
+  height: fit-content;
+  width: max-content;
+  min-width: fit-content;
+}
+
+.sectionBookList {
+  flex-wrap: wrap;
+  display: flex;  
+}
+
+.sectionBookList li{
+  margin: 12px 5px;
+    padding: 5px 10px;
+    font-size: large;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.sectionFilter {
+  max-width: 380px;
+}
+
+
+.filters{
+  flex-wrap: wrap;   
+  display: flex;    
+  padding: 10px ;  
+  align-items: center;
+  transition: padding 0.3s ease;
+}
+
+.active {
+  border: 2px solid;
+  border-radius: 17px;
+  box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.3);
+  padding: 5px;
+  font-size: larger;
+  font-weight: bold;  
+}
+
+.active-border {
+  border: 2px solid;
+  border-radius: 7px;
+}
+
+.container-section { 
+  width: 380px; 
+  border-bottom: 2px solid;  
+}
+
+.dark .select { 
+  opacity: 0.6;  
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
+  box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.3);
+  filter: invert(1);  
+} 
+
+.back-button {
+  height: 50px;
+  margin: 5px;
+  cursor: pointer;  
+}
+
+.artmini {
+  height: 70px;
+  width: 70px;
+  object-fit: cover;
+}
+
+.highlighted {
+  border: 2px solid ;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  overflow: hidden;
+  height: 70px;  
+  margin: 5px;  
+}
+
+label.filters {
+  cursor: pointer;
 }

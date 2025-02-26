@@ -3,8 +3,8 @@
   align-items: center;
   margin-bottom: 10px;
   font-size: 14px;    
-  border: 1px solid ;
-  border-radius: 10px;  
+  border: 2px solid ;
+  border-radius: 17px;  
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -68,6 +68,7 @@
   display: flex;
   flex-wrap: wrap;    
   padding: 10px 2px;
+  justify-content: center;
 }
 
 .search-results-content .book-list {   
