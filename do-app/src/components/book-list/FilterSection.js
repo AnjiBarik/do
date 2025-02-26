@@ -18,7 +18,7 @@ export const FilterSection = ({
         <h3 onClick={() => toggleVisibility(title)}>
         {field && field !== "" ? field : `${title}:`}
           <img
-            className={`toggle-icon social-icon ${visibilityKey || selectedItems.length > 0 ? 'rotated' : ''}`}
+            className={`toggle-icon social-icon select ${visibilityKey || selectedItems.length > 0 ? 'rotated' : ''}`}
             src={upmenu}
             alt="Toggle Filter"
           />         
