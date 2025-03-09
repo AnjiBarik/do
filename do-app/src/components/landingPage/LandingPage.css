@@ -52,8 +52,10 @@ header {
 
 .loadPrice{
     position: fixed;
-    right:  5%;
+    right: 0;
     bottom: 70px;
+    /* background: var(--background); */
+    border-radius: 17px 0 0 17px;
 }
 
 .loading{
@@ -69,7 +71,7 @@ header {
 .container-submit{
     display: flex;
     justify-content: space-around;
-    padding: 20px;    
+    padding: 2px;    
 }
 
 .loading-submit{
@@ -79,7 +81,7 @@ header {
     padding: 10px;
     border: 2px solid ;
     background-color: #f0f0f0;
-    border-radius: 10px;
+    border-radius: 17px;
     cursor: pointer;
 }
 

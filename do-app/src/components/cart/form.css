@@ -2,7 +2,6 @@
     display: flex;
 }
 
-
 .form-input{    
     font-size: 14px;
     padding: 8px;
@@ -64,13 +63,13 @@ input:focus {
   }
 
   .dark .registration-form{
-    color: rgba(202, 198, 191, 0.87);
-    background-color: rgb(27, 29, 30);    
+    background-color: var(--dark-background);
+    color: var(--dark-text);   
    }
 
   .light .registration-form{
-    background-color: #f0f0f0;
-    color: #333;    
+    background-color: var(--modal-bg);
+    color: var(--text);  
    }
 
   .order-tab {
@@ -99,12 +98,12 @@ tfoot{
 .section-form{   
     position: fixed;
     bottom: 70px;    
-    width: 100%;
-    height: 100%;
+    width: 100%;    
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2;
+    top: 110px;
 }
 
 .main-form{
@@ -194,4 +193,10 @@ tfoot{
   
   .simulate-payment-button:active {
     background-color: #e0a806; 
+  }
+
+  .form-input.active {
+    background: #3ac73a;
+    box-shadow: var(--box-shadow);
+    color:var(--text);
   }

@@ -222,8 +222,7 @@ export default function OrderForm() {
 
   const clearCart = () => {
     if (!id && !title && !count && !price) {
-      setCartItems([]);
-      //setTotalPrice(0);
+      setCartItems([]);      
       setTotalCount(0);
     }
   }
@@ -445,9 +444,11 @@ export default function OrderForm() {
                   </tr>
                 </tfoot>
               </table>
-              <button type="submit" className="form-input active"  disabled={isSubmitDisabled()||submitting} style={{ cursor: isSubmitDisabled()||submitting ? 'not-allowed' : 'pointer' }}>
+              <div className="filters">
+               <button type="submit" className="loading-submit color-transition"  disabled={isSubmitDisabled()||submitting} style={{ cursor: isSubmitDisabled()||submitting ? 'not-allowed' : 'pointer' }}>
                 Submit Order
-              </button>
+               </button>
+              </div>
             </form>
           </>
         )}
@@ -458,7 +459,7 @@ export default function OrderForm() {
             <p>Your order number is:<b> {orderNumber}</b></p>
           </div>
           <div className="filters">
-            <PaymentSimulator
+      <PaymentSimulator
         clientId={fieldState.clientId}
         totalPrice={totalPrice}
         orderNumber = {orderNumber+fieldState.idprice}

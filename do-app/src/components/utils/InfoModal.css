@@ -6,14 +6,14 @@
 }
 
 .dark .modal{
-    color: rgba(202, 198, 191, 0.87);
-    background-color: rgb(27, 29, 30);
+    background-color: var(--dark-background);
+    color: var(--dark-text);
     opacity: 0.9;
 }
 
 .light .modal{
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--background);
+    color: var(--text);
     opacity: 0.9;
 }
 

@@ -51,7 +51,8 @@ export default function BookList() {
     cancel,
     upmenu,
     filter,   
-    filterremove,  } = useIcons();
+    filterremove,
+    burger  } = useIcons();
   
   const [uniqueTags1, setUniqueTags1] = useState([]);
   const [uniqueTags2, setUniqueTags2] = useState([]);
@@ -257,8 +258,7 @@ export default function BookList() {
       {field && field !== "" ? `${field} ${value}` : `${label}: ${value}`}
       <img className="cancel-button select" src={cancel} alt="cancel" />
    </button>
-  );
-
+  );  
 
   return (
     <>
@@ -277,8 +277,7 @@ export default function BookList() {
               <div className='filters-slider-text' onClick={() => toggleSections("BookList")}>
               <img
                 className="back-button select"
-                src={category}
-                // onClick={() => toggleSections("BookList")}
+                src={category}                
                 alt="Product sections"
               /><p>Catalog</p>
               </div>
@@ -295,8 +294,7 @@ export default function BookList() {
                 <p>Filters</p>
               <img
                 className="back-button select"
-                src={filter}
-                // onClick={() => toggleSections("Filter")}
+                src={filter}                
                 alt='filter'
               />
               </div>
@@ -406,54 +404,80 @@ export default function BookList() {
   <section className='container'>
         {/* Sections and subsections list */}
         <section className='sectionGrup'>
-          {showSections.BookList && (
-          <div className='container-section'>
-          <div className='sectionBookList'>
-            <div className="section-list">
-              <ul className="no-markers">
-                {sections.map((section, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleSectionClick(section)}
-                    className={selectedSection === section ? 'active' : ''}
-                  >
-                    {section === 'Show all' ? section : (
-                      <>
-                        {section} {subsections[section] && subsections[section].size > 0 && <span style={{ marginLeft: '4px' }}> &gt; </span>}
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-         
-           {showSections.BookList && selectedSection && selectedSection !== 'Show all' && (
-            <div className="subsection-list">
-              <ul className="no-markers">
-                {Array.from(subsections[selectedSection] || []).map((subsection, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleSubsectionClick(subsection)}
-                    className={selectedSubsection === subsection ? 'active' : ''}
-                  >
-                    {subsection}
-                  </li>
-                ))}
-              </ul>
-          </div>
-          )}            
-          </div>
+        {showSections.BookList && (
+  <div id="container-section" className='container-section'>
+    <div className="filters">
+      <img className="social-icon select" src={category} alt="catalog" />
+      <h2>Categories</h2>
+    </div>
 
-          <section className="filters">
-            <button className='sort-button' onClick={() => toggleSections("BookList")}>
-              <img className="back-button select" src={upmenu} alt="Cancel" />
-            </button>
-          </section>
-          </div>
-           )}    
+    <div className="sections-wrapper">
+      <ul id="section-list" className="section-list no-markers">        
+        <div 
+          className={`section-sections ${selectedSection === "Show all" ? "active-border" : ""}`}
+          onClick={() => handleSectionClick("Show all")}
+        >
+          <h3>Show all</h3>
+        </div>
+       
+        {sections.map((section, index) => (
+          section !== "Show all" && subsections[section] && subsections[section].size > 0 && (
+            <div key={index} className="section-container">
+              <div
+                onClick={() => handleSectionClick(section)}
+                className={`section-sections ${selectedSection === section ? "active-border" : ""}`}
+              >
+                <h3>
+                  <img 
+                    className="cancel-button select" 
+                    src={fieldState[`section:${section}`] || burger} 
+                    alt="Section Icon" 
+                    onError={(e) => e.target.src = burger} 
+                  />
+                  {section}
+                  <img
+                    className={`toggle-icon social-icon select ${selectedSection === section ? "rotated" : ""}`}
+                    src={upmenu}
+                    alt="Toggle Filter"
+                  />
+                </h3>
+              </div>
+
+              {selectedSection === section && (
+                <div className="partition-list-container">
+                  <ul className="partition-list no-markers">
+                    {Array.from(subsections[selectedSection] || []).map((subsection, subIndex) => (
+                      <li
+                        key={subIndex}
+                        onClick={() => handleSubsectionClick(subsection)}
+                        className={selectedSubsection === subsection ? "active" : ""}
+                      >
+                        {subsection}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )
+        ))}
+      </ul>
+    </div>
+
+    <section className="filters">
+      <button className='sort-button' onClick={() => toggleSections("BookList")}>
+        <img className="back-button select" src={upmenu} alt="Cancel" />
+      </button>
+    </section>   
+  </div>
+)}
   
         {showSections.Filter && (
-          <div className='sectionFilter'>
+          <div id="sectionFilter" className='sectionFilter'>
+        <div className="filters">
+      <img className="social-icon select" src={filter} alt="Filters" />
+      <h2>Filters</h2>
+    </div>
             
   <PriceFilter prompt={sortedBooks} />
   
@@ -563,9 +587,9 @@ export default function BookList() {
           </div>
         )}
         </section>  
-       <sections className="container-book">
+       <section className="container-book">
         <SortCart props={sortedBooks} componentName="Filter" />
-        </sections>
+        </section>
   </section>  
   <FloatingShareButton />
     </section>

@@ -3,6 +3,7 @@ import './footer.css';
 import { Link, useLocation } from "react-router-dom";
 import { BooksContext } from '../../BooksContext';
 import { useIcons } from '../../IconContext';
+import useDebounce from '../hooks/useDebounce';
 import RegistrationForm from '../cart/RegistrationForm';
 
 export default function Footer() {
@@ -18,6 +19,7 @@ export default function Footer() {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [imgError, setImgError] = useState(false);
+   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const location = useLocation();
 
@@ -54,9 +56,24 @@ export default function Footer() {
     }
   };
 
+const debouncedWidth = useDebounce(windowWidth, 300);
+
+useEffect(() => {
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+
+useEffect(() => {
+  setWindowWidth(debouncedWidth);
+}, [debouncedWidth]);
+
   return (
     <>
-      {idLoudPrice === uiMain.id && (
+      {idLoudPrice === uiMain.id && windowWidth < 1200 && (
         <section className={theme}>
           <section className="foot">
             <section className="footer">
@@ -91,7 +108,8 @@ export default function Footer() {
                   <div className='bay'>
                     <img src={buynow} className=" back-button-footer  bay-button" alt="Proceed to checkout" />                   
                     </div> 
-                  </Link>                 
+                  </Link>  
+                  <span className="button-label">Checkout</span>               
                   </>
                 )}
                 

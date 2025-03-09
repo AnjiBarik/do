@@ -103,6 +103,7 @@ const BookSearch = () => {
           searchInputRef.current.focus();
         }} src={search} alt="search" />
         <input
+          id="search-input"
           className='search-input'          
           type="text"
           value={glsearch}

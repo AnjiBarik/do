@@ -37,7 +37,7 @@
 .border-img{
     width: 200px;
     height: 200px;
-    border-radius: 7px;
+    border-radius: 17px;
     overflow: hidden;
 }
 
@@ -67,7 +67,7 @@
     text-align: center;
     padding: 5px 0;
     backface-visibility: hidden;
-    border-radius: 7px;
+    border-radius: 17px;
 }
 
 .slide .back {

@@ -100,8 +100,7 @@ export default function Form({ autoSubmit = false }) {
       const { sheet1Data, sheet2Data } = data.data;
       setBooks(sheet1Data);
       setFieldState(sheet2Data[0]);
-      setIdLoudPrice(uiMain.id);    
-
+      setIdLoudPrice(uiMain.id);  
       if (uiMain.Review) {  
         const aggregatedData = await getAggregatedData(URLAPI, sheet2Data[0].idprice);
         

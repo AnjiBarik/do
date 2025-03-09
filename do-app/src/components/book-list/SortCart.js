@@ -190,7 +190,7 @@ export default function SortCart({ props, componentName }) {
       {sortBooks.length === 0 && (
         <div className='no-found'> Oops found 0 try again </div>
       )}
-      <ScrollToTopButton />
+      <ScrollToTopButton componentName={componentName}  />
       <Shelf book={paginatedBooks} widhtblock={widthBlock} nopriceblock={priceblock} />
 
       {totalPages > 1 && (

@@ -357,7 +357,7 @@ if (verificationCodeToSend) {
   };
 
   const handleLogout = useCallback(async () => {
-    const formDataToLogout = new FormData();
+  const formDataToLogout = new FormData();
     formDataToLogout.append("isVerification", 5);
     formDataToLogout.append('registrationCode', verificationCode);
     formDataToLogout.append('Name', savedLogin);
@@ -506,6 +506,7 @@ if (verificationCodeToSend) {
                 <div className='filter'>
                   <button onClick={handleLogout} className='sort-button' tabIndex={-1} title="Logout">
                     <img className="back-button select" src={logout} alt="logout" />
+                    <b>Log Out</b>
                   </button>
                  
   <label className='sort-button'>
@@ -679,7 +680,7 @@ if (verificationCodeToSend) {
                     </tbody>
                   </table>                
                   <div className='filter'>
-                  <button 
+<button 
   type='submit' 
   className='sort-button' 
   disabled={submitting} 
@@ -691,9 +692,11 @@ if (verificationCodeToSend) {
     src={showRegistrationFormLokal ? useradd : enter} 
     alt={showRegistrationFormLokal ? "useradd" : "enter"} 
   />
+ {showRegistrationFormLokal ? <b>Create Account</b> : <b>Log in</b>}
+
 </button>
 
-                    {!showRegistrationFormLokal  ? (
+{!showRegistrationFormLokal  ? (
   <button 
     className='sort-button' 
     disabled={!formData.Name} 

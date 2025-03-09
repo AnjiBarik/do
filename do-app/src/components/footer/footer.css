@@ -38,8 +38,7 @@ a {
 
   .foot{    
     position: fixed;
-    bottom: 0px;
-    /* width: 100%; */
+    bottom: 0px;    
     width: 100vw;
     height: 70px;
     display: flex;    
@@ -69,14 +68,14 @@ a {
   }
 
   .dark .footer{
-    color: rgba(202, 198, 191, 0.87);
-    background-color: rgb(27, 29, 30);
+    background-color: var(--dark-background);
+    color: var(--dark-text);
     opacity: 0.9;
 }
 
 .light .footer{
-    background-color: #f0f0f0;
-    color: #333;
+  background-color: var(--modal-bg);
+  color: var(--text);
     opacity: 0.9;
 }
     
@@ -89,6 +88,7 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
   }
 
   .button-label {

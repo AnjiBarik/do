@@ -55,18 +55,6 @@ body {
     justify-content: center;
 }
 
-
-.light {
-    background-color: #f0f0f0;
-    color: #333;
-  }
-  
-.dark {   
-    color: rgba(202, 198, 191, 0.87);
-    background-color: rgb(27, 29, 30);
-
-}
-
 .button { 
   border-radius: 25px; 
   cursor: pointer;  
@@ -102,23 +90,7 @@ body {
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-  }
-
-  .light-theme{
-    background-color:#36f4e4;
-    color: white;
-    border-radius: 50%;
-    border: 5px solid #36f4e4;   
-    margin:3px 10px ;
-  }
-  
-  .dark-theme{
-    background-color: white;
-    color: black;
-    border-radius: 50%;
-    border: 5px solid gray;   
-    margin:3px 10px ;
-  }
+  }  
 
   .reset-button{
     color: black;
@@ -191,31 +163,30 @@ body {
     border-color: #333;
     padding: 1px 0 1px 3px;
     justify-content: center;
-    align-items: center;
-    margin: 1px;
+    align-items: center;    
     color: black;
     display: flex;
     opacity: 0.8;
-    border-radius: 5px;
+    border-radius: 5px 0 0 5px;
   }
   .book-id{
     position:absolute;   
-    left:  1px;
+    left:  0;
     background-color: #f0f0f0;   
     border-color: #333;
     padding: 5px;
     justify-content: center;
     align-items: center;
-    margin: 5px;
+    margin: 5px 0;
     color: black;    
     display: flex;
     flex-wrap: wrap;
-    border-radius: 5px;
+    border-radius: 0 5px 5px 0;
   }
   
   .color-size{
     bottom: 10px;
-    right: 1px;
+    right: 0;
   } 
 
   .sort-button:focus {    
@@ -254,8 +225,11 @@ body {
   .cancel-button{
     height: 30px;
     width: 30px;
-    padding: 1px;
-    margin: 1px 5px;
+    padding: 1px;    
+    cursor: pointer;
+  }
+
+  .sort-button {
     cursor: pointer;
   }
 
@@ -390,6 +364,14 @@ body {
   padding: 10px 10px 5px 10px;
 }
 
+.light .sectionGrup{
+  background-color: var(--modal-bg);  
+}
+
+.dark .sectionGrup{
+  background-color: var(--dark-background);  
+}
+
 .sizecolor{
   display: flex;
   justify-content: center;
@@ -400,8 +382,10 @@ body {
 }
 
 .noborderleft{
-  border-left: none;  
-  border-radius: 5px;
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+  margin: 1px;
+  padding: 1px 5px;
 }
 
 .noborderright{
@@ -451,15 +435,6 @@ section.sectionGrup {
   display: flex;  
 }
 
-.sectionBookList li{
-  margin: 12px 5px;
-    padding: 5px 10px;
-    font-size: large;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-}
-
 .sectionFilter {
   max-width: 380px;
 }
@@ -495,7 +470,7 @@ section.sectionGrup {
 .dark .select { 
   opacity: 0.6;  
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
-  box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.3);
+  /* box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.3); */
   filter: invert(1);  
 } 
 
@@ -545,4 +520,67 @@ label.filters {
   padding: 10px;
   font-size: larger;
   font-weight: bold;
+}
+
+.partition-list li {
+  padding: 7px 25px;
+}
+
+.section-sections h3 {
+  padding: 5px;
+  margin: 5px 15px;
+  width: auto;
+}
+
+
+
+/* Basic Styles */
+:root {  
+  --header-bg: #c2dcb242;
+  --background: #edf1e4e3;
+  --text: #333333;
+  --button-bg: #008cba;
+  --button-text: #ffffff;  
+  --modal-bg: #e2eade;
+  --modal-text: #333333;   
+  --button-background-size: cover; 
+  --button-background-position: center;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --main-circle-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  --gradient: linear-gradient(to bottom, #323272, #4444c3, #a8a8dc, #5151cd);
+
+  --dark-header-bg: #333333;
+  --dark-background: #121212;
+  --dark-text: rgba(202, 198, 191, 0.87);
+  --dark-button-bg: #444444;
+  --dark-button-text: #f5f5f5;
+  --dark-modal-bg: #333333; 
+  --dark-modal-text: rgba(202, 198, 191, 0.87);
+  --dark-box-shadow: 0 4px 8px rgba(15, 233, 171, 0.6);
+}
+
+.light-theme {
+  background-color: var(--background);
+  color: var(--text);
+  border-radius: 50%;
+  border: 5px solid var(--background);
+  margin: 3px 10px;
+}
+
+.dark-theme {
+  background-color: var(--dark-background);
+  color: var(--dark-text);
+  border-radius: 50%;
+  border: 5px solid var(--dark-background);
+  margin: 3px 10px;
+}
+
+.light {
+  background-color: var(--background);
+  color: var(--text);
+}
+
+.dark {
+  background-color: var(--dark-background);
+  color: var(--dark-text);
 }

@@ -52,7 +52,7 @@ const CartMemo = () => {
       const updatedCartItems = [...cartItems];
       itemsToAdd.forEach(item => {
         const book = books.find(book => book.id === item.id);
-        if (book && book.Visibility !== 0) {
+        if (book && book.Visibility !== 0  && book.Visibility !== "0") {          
           const existingItemIndex = updatedCartItems.findIndex(cartItem => cartItem.id === item.id);
           const maxCount = book.maxcount && book.maxcount !== "" ? parseInt(book.maxcount) : 1;
           if (existingItemIndex !== -1) {

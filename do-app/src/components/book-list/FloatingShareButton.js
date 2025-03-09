@@ -87,8 +87,7 @@ const FloatingShareButton = () => {
   return (
     <div className="floating-share-button">
       <button onClick={toggleOptions} className="share-main-button">
-        <img className="cancel-button select" src={share} alt="Share" />
-        Share
+        <img className="cancel-button select" src={share} alt="Share" />       
       </button>
       {isOpen && renderShareOptions()}
       <AlertModalComponent />

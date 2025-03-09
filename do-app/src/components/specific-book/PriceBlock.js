@@ -66,15 +66,15 @@ export default function PriceBlock({ id, showPrice }) {
 
           <section className="price-block Price">
           {specificBookIndex !== -1 && (
-            <img src={cartupl} alt='remove from Cart' className="cancel-button select" 
+            <img src={cartupl} alt='remove from Cart' className="cancel-button" 
             onClick={() => removeBookFromCart(id)} tabIndex={-1} />
           )}
             {showPrice && (
               <div className="price-block-row">
-                <span>{fieldState.price && fieldState.price !== "" ? fieldState.price : "Price:"}</span>
+                <span>{fieldState.price && fieldState.price !== "" ? fieldState.price : "Price:"}{fieldState.payment ? fieldState.payment : ""}</span>
                 <span id="price">
                 {selectedBook.saleprice && (<del className="Linkcart rotate">{selectedBook.saleprice}</del>)} 
-                {'\u00A0'}{selectedBook.price || 0}{fieldState.payment ? fieldState.payment : ""}
+                {'\u00A0'}{selectedBook.price || 0}
                 </span>
               </div>
             )}
@@ -88,7 +88,7 @@ export default function PriceBlock({ id, showPrice }) {
                     disabled={count < 2}
                     onClick={decrementCount}
                   >
-                   -
+                  <b>-</b>
                   </button>
                   <output>{count}</output>
                   <button
@@ -97,16 +97,16 @@ export default function PriceBlock({ id, showPrice }) {
                     disabled={count === selectedBook.maxcount}
                     onClick={incrementCount}
                   >
-                    +
+                   <b>+</b>
                   </button>
                 </div>
               </div>
             )}
             {count>1&&(
             <div className="price-block-row totalPrice">
-              <span>{fieldState.totalPrice && fieldState.totalPrice !== "" ? fieldState.totalPrice : "Total:"}</span>
+              <span>{fieldState.totalPrice && fieldState.totalPrice !== "" ? fieldState.totalPrice : "Total:"}{fieldState.payment ? fieldState.payment : ""}</span>
               <span id="totalPrice">
-                {(count * (selectedBook.price || 0)).toFixed(2)}{fieldState.payment ? fieldState.payment : ""}
+                {(count * (selectedBook.price || 0)).toFixed(2)}
               </span>
             </div>
             )}           

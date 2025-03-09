@@ -18,6 +18,7 @@ const InfoModal = ({ infotext, iconName, showCopyButton = false, copyTemplate = 
     const [showModal, setShowModal] = useState(false);
     const [modalStyle, setModalStyle] = useState({});
     const buttonRef = useRef(null);
+    const fixedHeaderHeight = 85; //fixed header height
 
     const toggleModal = () => {
         if (showModal) {
@@ -37,7 +38,7 @@ const InfoModal = ({ infotext, iconName, showCopyButton = false, copyTemplate = 
                 let calculatedLeft = left + buttonRect.width / 2 - modalWidth / 2;
 
                 // Checking that the modal window does not extend beyond the screen
-                if (calculatedTop < padding) {
+                if (calculatedTop < padding + fixedHeaderHeight) {
                     calculatedTop = top + buttonRect.height + padding;
                 }
                 if (calculatedLeft < padding) {

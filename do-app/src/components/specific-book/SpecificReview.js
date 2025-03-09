@@ -166,7 +166,7 @@ const updateData = useCallback(async () => {
         <RatingDisplay idPrice={fieldState.idprice} idProduct={productId} ratingData={ratingData} />
       </span>      
       <div className="review-text">
-        {reviews.length > 0 && (
+        {reviews.length > 1 && (
           <>
             <button
               className={`selected-button ${activeSort === 'first' ? 'active-border' : ''}`}
