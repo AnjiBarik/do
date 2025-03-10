@@ -24,7 +24,7 @@
     overflow-x: auto;
     scroll-behavior: smooth;
     flex-grow: 1;
-    justify-content: center;
+    /* justify-content: center; */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
   }
