@@ -130,4 +130,5 @@ body {
     border: 2px solid;
     border-radius: 17px;
     box-shadow: var(--dark-box-shadow);
+    min-height: 60px;
 }

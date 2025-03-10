@@ -67,7 +67,7 @@
     text-align: center;
     padding: 5px 0;
     backface-visibility: hidden;
-    border-radius: 17px;
+    border-radius: 7px 7px 17px 17px;
 }
 
 .slide .back {
