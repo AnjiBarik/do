@@ -7,6 +7,7 @@ import { applyFilters } from '../functional/applyFilters';
 import SortCart from './SortCart';
 import SliderSection from '../utils/SliderSection';
 import BookSearch from './BookSearch';
+import Slider from './Slider';
 import { FilterSection } from './FilterSection';
 import PriceFilter from './SortPrice';
 import FloatingShareButton from './FloatingShareButton';
@@ -260,11 +261,18 @@ export default function BookList() {
    </button>
   );  
 
+  
+  const hasBanners = fieldState && Object.keys(fieldState).some(key => key.startsWith("baner"));
+
   return (
     <>
       <section className={theme}>
         <BookSearch />
-  
+        {hasBanners && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <Slider />
+        </Suspense>
+      )}
         {/* Render PromoBookSlider for BookList */}
         <Suspense fallback={<div>Loading...</div>}>
           <PromoBookSlider prompt="BookList" />

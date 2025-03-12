@@ -11,7 +11,8 @@ export default function PriceBlock({ id, showPrice }) {
   const {   
     cartadd,
     cartupl,
-    buynow,} = useIcons();
+    buynow,
+    carticon} = useIcons();
 
   const booksInCart = useMemo(() => cartItems || [], [cartItems]);
   const specificBookIndex = useMemo(() => booksInCart.findIndex((el) => el.id === id), [booksInCart, id]);
@@ -66,9 +67,14 @@ export default function PriceBlock({ id, showPrice }) {
 
           <section className="price-block Price">
           {specificBookIndex !== -1 && (
-            <img src={cartupl} alt='remove from Cart' className="cancel-button" 
+            <img src={cartupl} alt='remove from Cart' className="price-mini-button select" 
             onClick={() => removeBookFromCart(id)} tabIndex={-1} />
           )}
+          {specificBookIndex !== -1 && (
+                    <Link to="/cart">
+                     <img src={carticon} alt='Cart' className="ccart-icon rotate select"  />
+                    </Link>
+                  )}
             {showPrice && (
               <div className="price-block-row">
                 <span>{fieldState.price && fieldState.price !== "" ? fieldState.price : "Price:"}{fieldState.payment ? fieldState.payment : ""}</span>
@@ -91,6 +97,7 @@ export default function PriceBlock({ id, showPrice }) {
                   <b>-</b>
                   </button>
                   <output>{count}</output>
+                  
                   <button
                     className="increment"
                     type="button"

@@ -139,17 +139,17 @@ useEffect(() => {
             )}
           </div>
           {(idLoudPrice === uiMain.id && windowWidth >= 1200) && (
-             <div className='header-container'>
-          <section className={`cart ${selectedImage === 'category' ? 'sel' : ''}`}>
+             <div className='header-category-container'>
+          <section  onClick={() => handleImageClick('category')} className={`cart ${selectedImage === 'category' ? 'sel' : ''}`}>
                              <Link  to="/BookList">
                                <img
-                                 className="back-button-footer select"
-                                 onClick={() => handleImageClick('category')}
+                                 className="back-button-footer select"                                
                                  src={category}
                                  alt="category"
-                               />                 
-                             </Link>
+                               />    
+                             
                              {fieldState.category && <span className="button-label">{fieldState.category}</span>}
+                             </Link>
           </section>
           </div>
            )}
@@ -257,7 +257,7 @@ useEffect(() => {
           {uiMain && idLoudPrice === uiMain.id && windowWidth >= 1200 && (
               <div className='header-container'>
             
-              <section className= 'cart' >
+              <section id="heder-cart" className= 'cart' >
                              {selectedImage === 'cart' && totalCount > 0 &&(
                                <>
                                 <Link to="/OrderForm"  >
@@ -270,7 +270,7 @@ useEffect(() => {
                              )}
                              
                              {(selectedImage !== 'cart'||  !totalCount > 0) && (
-                               <>
+                               <section className={`cart ${selectedImage === 'cart' ? 'sel' : ''}`}>
                              <Link to="/cart">
                                <img
                                  className="back-button-footer select"
@@ -283,7 +283,7 @@ useEffect(() => {
                                )}                  
                              </Link>
                              {fieldState.carticon && <span className="button-label">{fieldState.carticon}</span>}
-                             </>
+                             </section>
                               )}
                            </section>
                            <section onClick={() => handleImageClick('avatar')} 

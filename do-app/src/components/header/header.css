@@ -132,3 +132,41 @@ body {
     box-shadow: var(--dark-box-shadow);
     min-height: 60px;
 }
+
+#heder-cart::after {
+    content: "";
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    right: 0;
+    width: 1px;   
+}
+
+.dark #heder-cart::after {    
+    background: var(--dark-text);
+}
+
+.light #heder-cart::after {    
+    background: var(--text);
+}
+
+.header-category-container{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    padding: 0 10px;
+    border: 2px solid;
+    border-radius: 17px;
+    box-shadow: var(--dark-box-shadow);
+    min-height: 60px;
+}
+
+.header-category-container a{
+    text-decoration: none;  
+}
+
+.header-category-container .cart {
+    flex-direction: row;
+}
+  

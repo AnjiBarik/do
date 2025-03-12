@@ -75,7 +75,7 @@ export default function Cart() {
            </div> 
           )}
         {cartItems.length !== 0 && totalPrice !== 0 && (
-          <p id="total"><b className="sort-button">Total Price : <strong>{totalPrice}</strong>{fieldState.payment ? fieldState.payment : ""}</b></p>
+          <p id="total"><b className="sort-button">Total Price : <strong>{totalPrice}</strong> {fieldState.payment ? fieldState.payment : ""}</b></p>
         )}
       </section>
       {cartItems.length !== 0 && (
