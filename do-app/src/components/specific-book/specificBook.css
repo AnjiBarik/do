@@ -11,7 +11,7 @@ body{
     padding: 30px 30px 70px 30px;
     display: flex;
     flex-wrap: wrap;    
-    min-height: 90vh;
+    min-height: 100vh;
 }
 
 .book-buttons{

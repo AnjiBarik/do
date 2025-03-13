@@ -55,11 +55,16 @@ body {
 } 
 
 #total{
-    margin-left: auto;
-    bottom: 150px;
-    right: 50px;
-    font-weight: 600;
-    color: #b29c18;
+  top: 90px;
+  color: #b29c18;
+  font-weight: 600;
+  margin-left: auto;
+  right: 20px;
+  position: fixed;
+  border-bottom: 2px solid;
+  border-radius: 0 0 7px;
+  padding: 2px 7px;
+  box-shadow: var(--dark-box-shadow);
 }
 
 .cart-text{

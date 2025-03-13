@@ -12,7 +12,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;   
-    min-height: 90vh;
+    min-height: 100vh;
     padding-bottom: 70px;
 }
 

@@ -68,8 +68,27 @@
   border-radius: 50%;
   border: solid grey;
   padding: 2px 3px;
-  background-color: green;
-  z-index: 100;
+  background-color: green; 
+}
+
+.widhtblock .ccart-icon {
+  left: 150px;
+}
+
+.widhtblock1 .ccart-icon {
+  left: 250px;
+}
+
+.about .ccart-icon {
+  left: 280px;
+}
+
+.about .price-block Price {
+  left: 280px;
+}
+
+.about .price-block {
+  margin-top: 30px;
 }
   
   .price-block-row-input{
