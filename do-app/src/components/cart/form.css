@@ -21,6 +21,19 @@ button{
     background-color: inherit;    
  }
 
+ input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {  
+  -webkit-text-fill-color: inherit;
+  -webkit-box-shadow: inherit;
+  color: inherit;
+  background-color: inherit; 
+}
+
+
  
  option{
     background-color: rgb(27, 29, 30);

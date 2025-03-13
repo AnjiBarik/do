@@ -1,15 +1,21 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect, useCallback, useLayoutEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { BooksContext } from '../../BooksContext';
-import SortCart from './SortCart';
+import LazyImage from '../utils/LazyImage';
+import getPublicUrl from '../functional/getPublicUrl';
+import "../utils/SpecificBookSlider.css";
 import "./Slider.css";
 
 const Slider = () => {
-  const { books, fieldState } = useContext(BooksContext);
+  const { books, fieldState, setSpecificBook, theme } = useContext(BooksContext);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [filteredResults, setFilteredResults] = useState([]);
+  const [selectedBannerBooks, setSelectedBannerBooks] = useState([]);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [banners, setBanners] = useState([]);
-  const [isImageError, setIsImageError] = useState(false); 
+  const [isImageError, setIsImageError] = useState(false);
+  const scrollRef = useRef(null);
+  const [showLeftButton, setShowLeftButton] = useState(false);
+  const [showRightButton, setShowRightButton] = useState(false);
 
   useEffect(() => {
     if (!fieldState) return;
@@ -19,36 +25,74 @@ const Slider = () => {
     setBanners(loadedBanners);
   }, [fieldState]);
 
-  const nextSlide = useCallback(() => {
-    if (banners.length > 0) {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
-      setIsImageError(false); 
+  useEffect(() => {
+    if (isAutoPlay && banners.length > 0) {
+      const slideInterval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
+        setIsImageError(false);
+      }, 5000);
+      return () => clearInterval(slideInterval);
     }
-  }, [banners]);
+  }, [isAutoPlay, banners]); 
 
   const handleBannerClick = () => {
     if (banners.length === 0) return;
     setIsAutoPlay(false);
     const bannerKey = banners[currentIndex].key.replace("baner", "");
-    const filtered = books.filter(book =>
+
+    const filteredBooks = books.filter(book =>
       book.Tip.split(',')
         .map(tip => tip.trim())
         .includes(`baner${bannerKey}`)
     );
-    setFilteredResults(filtered);
+    setSelectedBannerBooks(filteredBooks);
   };
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
     setIsAutoPlay(false);
-    setIsImageError(false); 
+    setIsImageError(false);
   };
 
-  useEffect(() => {
-    if (!isAutoPlay) return;
-    const slideInterval = setInterval(nextSlide, 5000);
-    return () => clearInterval(slideInterval);
-  }, [nextSlide, isAutoPlay]);
+  const handleBookClick = (bookId) => {
+    setSpecificBook({ id: bookId });
+  };
+
+  const getImageSource = (book) => {
+    const folder = 'img';
+    const imagesPublic = book.imageblockpublic
+      ? book.imageblockpublic.split(',').map(img => getPublicUrl({ folder, filename: img }))
+      : book.imageblock.split(',');
+
+    return book.imagepublic
+      ? getPublicUrl({ folder, filename: book.imagepublic })
+      : book.image || imagesPublic[0];
+  };
+
+  const updateScrollButtonsVisibility = useCallback(() => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeftButton(scrollLeft > 0);
+      setShowRightButton(scrollLeft < scrollWidth - clientWidth);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    const currentScrollRef = scrollRef.current;
+    updateScrollButtonsVisibility();
+    window.addEventListener('resize', updateScrollButtonsVisibility);
+
+    if (currentScrollRef) {
+      currentScrollRef.addEventListener('scroll', updateScrollButtonsVisibility);
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateScrollButtonsVisibility);
+      if (currentScrollRef) {
+        currentScrollRef.removeEventListener('scroll', updateScrollButtonsVisibility);
+      }
+    };
+  }, [updateScrollButtonsVisibility, selectedBannerBooks]);
 
   return (
     <div className="banner-slider-container">
@@ -66,7 +110,7 @@ const Slider = () => {
                 src={banners[currentIndex]?.value} 
                 alt={`Banner ${banners[currentIndex]?.key}`} 
                 className="banner-slider-image" 
-                onError={() => setIsImageError(true)} 
+                onError={() => setIsImageError(true)}
               />
             )}
           </div>
@@ -82,10 +126,40 @@ const Slider = () => {
           </div>
         </>
       )}
-
-      {filteredResults.length > 0 && (
-        <div className="search-results-content">
-          <SortCart props={filteredResults} componentName="Search" />
+     
+      {selectedBannerBooks.length > 0 && (
+        <div className={`slider-wrapper ${theme}`}>
+          <div className="slider-title">{`Banner ${banners[currentIndex]?.key}`}</div>
+          {showLeftButton && (
+            <button className="scroll-button-specific left" onClick={() => scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' })}>
+              {'<'}
+            </button>
+          )}
+          <div className="slider-container-specific" ref={scrollRef}>
+            {selectedBannerBooks.map(book => (
+              <Link 
+                className="book-card-specific" 
+                to="/specificbook" 
+                key={book.id} 
+                onClick={() => handleBookClick(book.id)}
+              >
+                <LazyImage
+                  src={getImageSource(book)}
+                  alt={book.title}
+                  className={'artmini-specific'}
+                />
+                {book.price && <b className='book-size'>{book.price}{fieldState.payment ? fieldState.payment : ""}</b>}
+                <div>
+                  {book.title && (book.title.length >= 12 ? book.title.slice(0, 9) + '...' : book.title)}
+                </div>
+              </Link>
+            ))}
+          </div>
+          {showRightButton && (
+            <button className="scroll-button-specific right" onClick={() => scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' })}>
+              {'>'}
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -93,98 +167,3 @@ const Slider = () => {
 };
 
 export default Slider;
-
-
-
-// import React, { useContext, useState, useEffect, useCallback } from "react";
-// import { BooksContext } from '../../BooksContext';
-// import { useIcons } from '../../IconContext';
-// import SortCart from './SortCart';
-// import "./Slider.css";
-
-// const Slider = () => {
-//   const { books, fieldState } = useContext(BooksContext);
-//   const { notFound } = useIcons(); 
-//   const [currentIndex, setCurrentIndex] = useState(0);
-//   const [filteredResults, setFilteredResults] = useState([]);
-//   const [isAutoPlay, setIsAutoPlay] = useState(true);
-//   const [banners, setBanners] = useState([]); 
-
- 
-//   useEffect(() => {
-//     if (!fieldState) return;
-
-//     const loadedBanners = Object.entries(fieldState)
-//       .filter(([key]) => key.startsWith("baner"))
-//       .map(([key, value]) => ({ key, value }));
-
-//     setBanners(loadedBanners);
-//   }, [fieldState]); 
- 
-//   const nextSlide = useCallback(() => {
-//     if (banners.length > 0) {
-//       setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
-//     }
-//   }, [banners]);
-  
-//   const handleBannerClick = () => {
-//     if (banners.length === 0) return;
-//     setIsAutoPlay(false);
-
-//     const bannerKey = banners[currentIndex].key.replace("baner", "");
-//     const filtered = books.filter(book =>
-//       book.Tip.split(',')
-//         .map(tip => tip.trim())
-//         .includes(`baner${bannerKey}`)
-//     );
-//     setFilteredResults(filtered);
-//   };
-  
-//   const handleDotClick = (index) => {
-//     setCurrentIndex(index);
-//     setIsAutoPlay(false);
-//   };
-  
-//   useEffect(() => {
-//     if (!isAutoPlay) return;
-//     const slideInterval = setInterval(nextSlide, 5000);
-//     return () => clearInterval(slideInterval);
-//   }, [nextSlide, isAutoPlay]);
-
-//   return (
-//     <div className="banner-slider-container">
-//       {banners.length === 0 ? (
-//         <div>No banners available</div>
-//       ) : (
-//         <>
-//           <div className="banner-slider-content" onClick={handleBannerClick}>
-//             <img 
-//               src={banners[currentIndex]?.value} 
-//               alt={`Banner ${banners[currentIndex]?.key}`} 
-//               className="banner-slider-image" 
-//               onError={(e) => e.target.src = notFound} 
-//             />
-//           </div>
-
-//           <div className="dots-container">
-//             {banners.map((_, index) => (
-//               <div
-//                 key={index}
-//                 className={`dot ${index === currentIndex ? 'active' : ''}`}
-//                 onClick={() => handleDotClick(index)}
-//               />
-//             ))}
-//           </div>
-//         </>
-//       )}
-
-//       {filteredResults.length > 0 && (
-//         <div className="search-results-content">
-//           <SortCart props={filteredResults} componentName="Search" />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Slider;

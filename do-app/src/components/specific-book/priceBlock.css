@@ -4,9 +4,9 @@
 }
 
 .book-price{
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;   
+  justify-content: center;    */
   cursor: pointer;
 }
 
@@ -59,12 +59,17 @@
 }
 .ccart-icon{
   bottom: 25px;
-  right: 45%;
+  right: 0;
   width: 30px;
   height: 30px; 
   cursor: pointer;
   margin: 5px; 
   position: absolute;
+  border-radius: 50%;
+  border: solid grey;
+  padding: 2px 3px;
+  background-color: green;
+  z-index: 100;
 }
   
   .price-block-row-input{

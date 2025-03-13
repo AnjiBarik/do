@@ -59,12 +59,7 @@ export default function PriceBlock({ id, showPrice }) {
 
   return (
     <section className={theme}>
-      <section className="contener">       
-        {/* <section  className="price-block Price"> */}
-        
-        
-         
-
+      <section className="contener"> 
           <section className="price-block Price">
           {specificBookIndex !== -1 && (
             <img src={cartupl} alt='remove from Cart' className="price-mini-button select" 
@@ -72,7 +67,7 @@ export default function PriceBlock({ id, showPrice }) {
           )}
           {specificBookIndex !== -1 && (
                     <Link to="/cart">
-                     <img src={carticon} alt='Cart' className="ccart-icon rotate select"  />
+                     <img src={carticon} alt='Cart' className="ccart-icon rotate"  />
                     </Link>
                   )}
             {showPrice && (
