@@ -41,7 +41,7 @@
   
   .banner-slider-button {
     position: absolute;
-    top: 50%;
+    top: 20px;
     transform: translateY(-50%);
     background: rgba(0, 0, 0, 0.5);
     color: white;
@@ -56,13 +56,13 @@
     background: rgba(0, 0, 0, 0.8);
   }
   
-  .banner-slider-button.left {
-    left: 10px;
+  .banner-slider-button.top-left {
+    right: 50px;
   }
   
-  .banner-slider-button.right {
+  .banner-slider-button.top-right {
     right: 10px;
-  }  
+  }
   
   .dots-container {
     display: flex;
