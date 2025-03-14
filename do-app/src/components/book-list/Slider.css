@@ -67,7 +67,7 @@
   .dots-container {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    margin: 10px;
     align-items: center;
   }
   

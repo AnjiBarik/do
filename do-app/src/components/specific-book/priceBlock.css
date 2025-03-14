@@ -72,11 +72,12 @@
 }
 
 .widhtblock .ccart-icon {
-  left: 150px;
+  left: 190px;
 }
 
 .widhtblock1 .ccart-icon {
-  left: 250px;
+  left: 150px;
+  bottom: 350px;
 }
 
 .about .ccart-icon {

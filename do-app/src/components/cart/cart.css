@@ -55,16 +55,24 @@ body {
 } 
 
 #total{
-  bottom: 60px;
+  border-bottom: 2px solid;
+  border-radius: 0 0 7px 5px;
+  bottom: 55px;
+  box-shadow: var(--dark-box-shadow);
   color: #b29c18;
   font-weight: 600;
   margin-left: auto;
-  right: 20px;
-  position: fixed;
-  border-bottom: 2px solid;
-  border-radius: 0 0 7px;
   padding: 2px 7px;
-  box-shadow: var(--dark-box-shadow);
+  position: fixed;
+  right: 20px;
+}
+
+.light #total {
+  background: var(--background);
+}
+
+.dark #total {
+  background: var(--dark-background);
 }
 
 .cart-text{
