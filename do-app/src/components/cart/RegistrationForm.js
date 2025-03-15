@@ -681,7 +681,7 @@ if (verificationCodeToSend) {
                     </tbody>
                   </table>                
                   <div className='filter'>
-<div 
+<button 
   type='submit' 
   className='form-sort-button' 
   disabled={submitting} 
@@ -695,7 +695,7 @@ if (verificationCodeToSend) {
   />
  {showRegistrationFormLokal ? <b>Create Account</b> : <b>Log in</b>}
 
-</div>
+</button>
 
 {!showRegistrationFormLokal  ? (
   <button 
