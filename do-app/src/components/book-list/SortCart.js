@@ -143,7 +143,7 @@ export default function SortCart({ props, componentName }) {
     setSelectedWidth('comfy');
     setCurrentPage(1); // Reset to first page
     updateSortStates({ view: 'comfy' });
-  };
+  }; 
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -152,6 +152,7 @@ export default function SortCart({ props, componentName }) {
       shelfSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
+  
 
   const paginatedBooks = sortBooks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
