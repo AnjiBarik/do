@@ -147,6 +147,10 @@ export default function SortCart({ props, componentName }) {
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+    const shelfSection = document.getElementById('shelf-book-list');
+    if (shelfSection) {
+      shelfSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const paginatedBooks = sortBooks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);

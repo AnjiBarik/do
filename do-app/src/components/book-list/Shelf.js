@@ -203,5 +203,5 @@ export default function Shelf(props) {
     setSpecificBook({id});   
   };
 
-  return <section className='book-list'>{shelf}</section>;
+  return <section id='shelf-book-list' className='book-list'>{shelf}</section>;
 }

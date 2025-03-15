@@ -504,10 +504,10 @@ if (verificationCodeToSend) {
                 <p>{message !== '#' && message !== '' && `Your message: ${message}`}</p>
                 <hr />
                 <div className='filter'>
-                  <button onClick={handleLogout} className='sort-button' tabIndex={-1} title="Logout">
+                  <div onClick={handleLogout} className='form-sort-button' tabIndex={-1} title="Logout">
                     <img className="back-button select" src={logout} alt="logout" />
                     <b>Log Out</b>
-                  </button>
+                  </div>
                  
   <label className='sort-button'>
     <input
@@ -519,15 +519,16 @@ if (verificationCodeToSend) {
   </label>
 
 
-  <button 
+  <div 
       onClick={toggleSections} 
-      className='sort-button'       
+      className='form-sort-button'       
       tabIndex={1}
       autoFocus
       onKeyDown={(e) => { if (e.key === 'Enter') toggleSections(); }}
     >
                     <img src={cancel} alt='cancel' className="back-button select" />
-                  </button>
+                    <b>Close</b>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -537,7 +538,7 @@ if (verificationCodeToSend) {
         className={`tab-item ${showRegistrationFormLokal ? 'active-tab' : ''}`}
         onClick={handleToggleForm}
     >
-        Log In
+        <b>Log In</b>
     </div>
     <div
         className={`tab-item ${!showRegistrationFormLokal ? 'active-tab' : ''}`}
@@ -554,7 +555,7 @@ if (verificationCodeToSend) {
                         <td>
                           <img className="form-icon select" src={nickname} alt="nickname" />
                         </td>
-                        <td>
+                        <td>                        
                           <input
                             className='form-input' autoFocus
                             type="text"
@@ -566,7 +567,7 @@ if (verificationCodeToSend) {
                             onChange={handleInputChange}
                             autoComplete="username"
                             required
-                          />
+                          />                           
                         </td>
                       </tr>
                       {showEmail && (
@@ -680,9 +681,9 @@ if (verificationCodeToSend) {
                     </tbody>
                   </table>                
                   <div className='filter'>
-<button 
+<div 
   type='submit' 
-  className='sort-button' 
+  className='form-sort-button' 
   disabled={submitting} 
   tabIndex={-1}
   title={showRegistrationFormLokal ? "Add User" : "Enter"} // Title attribute for tooltip
@@ -694,7 +695,7 @@ if (verificationCodeToSend) {
   />
  {showRegistrationFormLokal ? <b>Create Account</b> : <b>Log in</b>}
 
-</button>
+</div>
 
 {!showRegistrationFormLokal  ? (
   <button 
@@ -717,9 +718,11 @@ if (verificationCodeToSend) {
  
 )}
 
-                    <button onClick={toggleSections} className='sort-button' disabled={submitting} tabIndex={0}>
-                      <img src={cancel} alt='cancel' className="back-button select" />
-                    </button>
+                    <div onClick={toggleSections} className='form-sort-button' disabled={submitting} tabIndex={0}>
+                      
+                      <img src={cancel} alt='cancel' className="back-button select" /> 
+                      <b>Close</b>                     
+                    </div>
                   </div>
                 </form>
               </>
