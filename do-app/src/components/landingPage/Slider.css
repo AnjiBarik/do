@@ -104,10 +104,6 @@
     filter: invert(1);
 }
 
-.back-button-slider:hover{
-    background: green;
-}
-
 .slide-info span {    
     align-content: center;
 }
