@@ -62,7 +62,9 @@ export default function ClearAll({ clearLogin }) {
       Filter: []
     });
 
-    if (!clearLogin) {
+    //!!!Attention!for demo only return for work! 
+    // if (!clearLogin) {
+      if (clearLogin) {
       setLoggedIn(false);
       setSavedLogin('');
       setSavedPassword('');

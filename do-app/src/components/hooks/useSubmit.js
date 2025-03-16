@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useGoogleScriptAPI } from "../hooks/useGoogleScriptAPI";
 import { useAlertModal } from "../hooks/useAlertModal";
 import { hasAuthData, getAuthData, loginRequest } from "../functional/authFunctions";
+import ClearAll from "../functional/ClearAll";
 
 export function useSubmit() {
     const {
         setBooks, setFieldState, setIdLoudPrice, setRatingData, 
-        setMessage, setPromo, setOrder, setVerificationCode, 
-        setSavedLogin, setLoggedIn, loggedIn, uiMain
+        setMessage, setPromo, setOrder, setVerificationCode, verificationCode, savedLogin,
+        setSavedLogin, setLoggedIn, loggedIn, uiMain, selectUiState
     } = useContext(BooksContext);
     
     const { getAggregatedData } = useGoogleScriptAPI();
@@ -17,6 +18,10 @@ export function useSubmit() {
     const navigate = useNavigate();
     
     const [loading, setLoading] = useState(false);
+    
+    const clearAll = ClearAll({
+        clearLogin: loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform !== selectUiState.Urregform
+    });
 
     const attemptAutoLogin = useCallback(async () => {   
         const hasAutologinData = await hasAuthData(uiMain.Urregform); 
@@ -28,6 +33,7 @@ export function useSubmit() {
                 const response = await loginRequest(uiMain.Urregform, login, authCode);
 
                 if (response.success) {
+                    clearAll.resetStates();
                     const { message, promo, order, verificationCode, name } = response;
                     setMessage(message || "");
                     setPromo(promo || "");
@@ -39,13 +45,15 @@ export function useSubmit() {
             } catch (error) {
                 console.error("Error during auto-login:", error);
             }
+        } else {
+            clearAll.resetStates();
         }
-    }, [uiMain.Urregform, setMessage, setPromo, setOrder, setVerificationCode, setSavedLogin, setLoggedIn]);
+    }, [uiMain.Urregform, clearAll, setMessage, setPromo, setOrder, setVerificationCode, setSavedLogin, setLoggedIn]);
 
     const Submit = useCallback(async (param) => {
         if (param?.preventDefault) param.preventDefault();
-
         setLoading(true);
+        
         let formDatab;
         let URLAPI;
 
@@ -84,6 +92,23 @@ export function useSubmit() {
 
             if (!loggedIn) {
                 await attemptAutoLogin();
+            } else if (loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform !== selectUiState.Urregform) {
+                const formDataToLogout = new FormData();
+                formDataToLogout.append("isVerification", 5);
+                formDataToLogout.append('registrationCode', verificationCode);
+                formDataToLogout.append('Name', savedLogin);
+
+                try {
+                    const response = await fetch(selectUiState.Urregform, { method: "POST", body: formDataToLogout });
+                    const data = await response.text();
+                    if (data.includes('Logout successful.')) {              
+                        clearAll.resetStates();
+                    }
+                } catch (error) {
+                    showAlert('⚠️Error: ' + error.message);
+                } 
+            } else if (loggedIn && uiMain.Urregform && selectUiState.Urregform && uiMain.Urregform === selectUiState.Urregform) {          
+                clearAll.resetStates();
             }
         } catch (err) {
             console.error('Error fetching data:', err);
@@ -92,7 +117,7 @@ export function useSubmit() {
             setLoading(false);
             navigate('/BookList');
         }
-    }, [uiMain, loggedIn, attemptAutoLogin, getAggregatedData, setBooks, setFieldState, setIdLoudPrice, setRatingData, showAlert, navigate]);
+    }, [uiMain, loggedIn, selectUiState, attemptAutoLogin, getAggregatedData, clearAll, setBooks, setFieldState, setIdLoudPrice, setRatingData, showAlert, navigate, savedLogin, verificationCode]);
 
     return { Submit, loading };
 }
