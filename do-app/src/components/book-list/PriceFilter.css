@@ -3,7 +3,7 @@
     border-radius: 8px;
     width: 300px;
     /* margin: auto; */
-    margin: 10px;
+    margin: 10px auto;
   }
   
   .range-slider {
@@ -26,6 +26,7 @@
     position: absolute;
     top: 0;
     color:#f0f0f0;
+    cursor: w-resize;
   }
   
   .slider::-webkit-slider-thumb {

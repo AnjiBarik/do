@@ -50,6 +50,7 @@
     cursor: pointer;
     transition: background 0.3s;
     border-radius: 50%;
+    box-shadow: var(--dark-box-shadow);
   }
   
   .banner-slider-button:hover {

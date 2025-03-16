@@ -194,7 +194,8 @@ body {
     cursor: pointer;
     border: 0px;
     display: flex;    
-    align-items: center
+    align-items: center;
+    box-shadow: var(--dark-box-shadow);
   }
 
   .selected {
