@@ -73,11 +73,11 @@
 }
 
 .active .slide-info {
-    background:#00800087;
+    background: var(--gradient);
 }
 
 .slide-info:hover{
-    background:#00800087;
+    background: var(--gradient);
 }
 
 .slide .back {

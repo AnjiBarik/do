@@ -38,6 +38,16 @@ function Slider() {
         return `slide-container ${uiMain.id === index + 1 ? 'active' : ''}`;
     };
 
+    const handleSlideInfoClick = (e, slideIndex) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (uiMain.id === slideIndex + 1) {  
+            Submit();
+        }
+    };
+    
+
     const uniqueAuthors = [...new Set(uiState.map(slide => slide.author))];
 
     return (
@@ -67,12 +77,9 @@ function Slider() {
                                     </div>
                                 )}
                                 <div 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();  
-                                    Submit();                                               
-                                }} 
-                                className="slide-info">
+                                  onClick={(e) => handleSlideInfoClick(e, slideIndex)}
+                                  className="slide-info"
+                                >
                                     <img src={buynow} className="back-button-slider" alt="Proceed to checkout" /> 
                                     {loading ? "🌀..." : <span>{slide.title}</span> }                      
                                     

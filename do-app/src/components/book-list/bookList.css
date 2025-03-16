@@ -542,7 +542,7 @@ label.filters {
   --button-background-position: center;
   --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   --main-circle-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  --gradient: linear-gradient(to bottom, #323272, #4444c3, #a8a8dc, #5151cd);
+  --gradient: linear-gradient(180deg,#66d5b5,#21b987,#23847f,#0f7d4e);
 
   --dark-header-bg: #333333;
   --dark-background: #121212;
