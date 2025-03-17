@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback, lazy, Suspense } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './bookList.css';
 import { BooksContext } from '../../BooksContext';
 import { useIcons } from '../../IconContext';
@@ -11,6 +11,7 @@ import Slider from './Slider';
 import { FilterSection } from './FilterSection';
 import PriceFilter from './SortPrice';
 import FloatingShareButton from './FloatingShareButton';
+import { useRatings } from "../hooks/useRatings";
 const PromoBookSlider = lazy(() => import('../utils/PromoBookSlider'));
 
 
@@ -54,6 +55,10 @@ export default function BookList() {
     filter,   
     filterremove,
     burger  } = useIcons();
+    
+    const location = useLocation();
+    const firstSubmit = location.state?.firstSubmit || false;  
+    const { loadingRatings } = useRatings(firstSubmit);
   
   const [uniqueTags1, setUniqueTags1] = useState([]);
   const [uniqueTags2, setUniqueTags2] = useState([]);
@@ -629,6 +634,7 @@ export default function BookList() {
         )}
         </section>  
        <section className="container-book">
+       {loadingRatings && <p>⭐⭐⭐</p>}
         <SortCart props={sortedBooks} componentName="Filter" />
        </section>
   </section>  

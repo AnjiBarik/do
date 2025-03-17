@@ -37,7 +37,7 @@ textarea:-webkit-autofill:focus {
  
  option{
     background-color: rgb(27, 29, 30);
-    color: rgba(202, 198, 191, 0.87);;
+    color: rgba(202, 198, 191, 0.87);
  }
  input, textarea{
     cursor: initial;

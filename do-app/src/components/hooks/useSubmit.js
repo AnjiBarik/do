@@ -1,19 +1,17 @@
 import { useCallback, useState, useContext } from "react";
 import { BooksContext } from "../../BooksContext";
 import { useNavigate } from "react-router-dom";
-import { useGoogleScriptAPI } from "../hooks/useGoogleScriptAPI";
 import { useAlertModal } from "../hooks/useAlertModal";
 import { hasAuthData, getAuthData, loginRequest } from "../functional/authFunctions";
 import ClearAll from "../functional/ClearAll";
 
 export function useSubmit() {
     const {
-        setBooks, setFieldState, setIdLoudPrice, setRatingData, 
+        setBooks, setFieldState, setIdLoudPrice,  
         setMessage, setPromo, setOrder, setVerificationCode, verificationCode, savedLogin,
         setSavedLogin, setLoggedIn, loggedIn, uiMain, selectUiState
-    } = useContext(BooksContext);
+    } = useContext(BooksContext);    
     
-    const { getAggregatedData } = useGoogleScriptAPI();
     const { showAlert } = useAlertModal();
     const navigate = useNavigate();
     
@@ -83,12 +81,7 @@ export function useSubmit() {
             const { sheet1Data, sheet2Data } = data.data;
             setBooks(sheet1Data);
             setFieldState(sheet2Data[0]);
-            setIdLoudPrice(param?.id || uiMain.id);
-
-            if (uiMain.Review) {
-                const aggregatedData = await getAggregatedData(URLAPI, sheet2Data[0].idprice);
-                setRatingData(aggregatedData || []);
-            }
+            setIdLoudPrice(param?.id || uiMain.id);            
 
             if (!loggedIn) {
                 await attemptAutoLogin();
@@ -114,10 +107,10 @@ export function useSubmit() {
             console.error('Error fetching data:', err);
             showAlert('⚠️ Price did not load, try another one or later');
         } finally {
-            setLoading(false);
-            navigate('/BookList');
+            setLoading(false);            
+            navigate('/BookList', { state: { firstSubmit: true } });
         }
-    }, [uiMain, loggedIn, selectUiState, attemptAutoLogin, getAggregatedData, clearAll, setBooks, setFieldState, setIdLoudPrice, setRatingData, showAlert, navigate, savedLogin, verificationCode]);
+    }, [uiMain, loggedIn, selectUiState, attemptAutoLogin, clearAll, setBooks, setFieldState, setIdLoudPrice, showAlert, navigate, savedLogin, verificationCode]);
 
     return { Submit, loading };
 }
