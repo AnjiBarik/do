@@ -46,9 +46,9 @@ textarea:-webkit-autofill:focus {
 button:disabled{
     border: none;
     color: initial;  
-    font-weight: initial; 
-    /* font-size: inherit; */
+    font-weight: initial;    
     cursor: not-allowed;
+    filter: opacity(0.3);
 }
 
 input:focus {

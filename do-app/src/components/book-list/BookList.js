@@ -261,6 +261,24 @@ export default function BookList() {
    </button>
   );  
 
+  const hasActiveFilters = (includeSections = false) => {
+    return (
+      (includeSections && selectedSection && selectedSection !== "Show all") ||
+      (includeSections && selectedSubsection) ||
+      rangePrice.length > 0 ||
+      input ||
+      selectedSizes.length > 0 ||
+      selectedColor.length > 0 ||
+      selectedAuthors.length > 0 ||
+      selectedTags1.length > 0 ||
+      selectedTags2.length > 0 ||
+      selectedTags3.length > 0 ||
+      selectedTags4.length > 0
+    );
+  };
+  
+  
+
   
   const hasBanners = fieldState && Object.keys(fieldState).some(key => key.startsWith("baner"));
 
@@ -318,6 +336,18 @@ export default function BookList() {
         <section className="filters" key={`${selectedSection}-${selectedSubsection}`}>
           <div className="selected-tags">
             <span className="selected-button">
+            {hasActiveFilters(true) && (
+              <img
+              className="social-icon select"
+              src={filterremove}
+              alt="filterremove"
+              onClick={() => {
+               handleSectionClick("Show all");
+               resetFilters();
+              }}
+              />
+            )}
+
               Found: <strong>{sortedBooks.length}</strong>
             </span>
   
@@ -483,12 +513,15 @@ export default function BookList() {
         {showSections.Filter && (
           <div id="sectionFilter" className='sectionFilter'>
            <div className="filters betwin">
+           <div className="filters">
             <img className="social-icon select" src={filter} alt="Filters" />
             <h2>Filters</h2>
-            <button className='sort-button' onClick={resetFilters}>
-              <img className='social-icon select' src={filterremove} alt='filterremove' />
-            </button>
            </div>
+           <button className='sort-button' onClick={resetFilters} disabled={!hasActiveFilters(false)}>
+             Reset
+            <img className='social-icon select' src={filterremove} alt='filterremove' />
+           </button>
+          </div>
             
   <PriceFilter prompt={sortedBooks} />
   
@@ -597,7 +630,7 @@ export default function BookList() {
         </section>  
        <section className="container-book">
         <SortCart props={sortedBooks} componentName="Filter" />
-        </section>
+       </section>
   </section>  
   <FloatingShareButton />
     </section>
