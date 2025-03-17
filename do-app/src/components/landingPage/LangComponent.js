@@ -50,7 +50,7 @@ const LangComponent = () => {
       <img className="back-button select" src={lang} onDoubleClick={handleDoubleClick} alt='Language Selection' />      
       {visibilityKeyGen   &&  
                <Link to="/AdminPanel" >
-                 <button className='back-button active'>
+                 <button className='sort-button active'>
                  AdminPanel
                  </button>
                </Link>

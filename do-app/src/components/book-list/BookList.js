@@ -482,10 +482,13 @@ export default function BookList() {
   
         {showSections.Filter && (
           <div id="sectionFilter" className='sectionFilter'>
-        <div className="filters">
-      <img className="social-icon select" src={filter} alt="Filters" />
-      <h2>Filters</h2>
-    </div>
+           <div className="filters betwin">
+            <img className="social-icon select" src={filter} alt="Filters" />
+            <h2>Filters</h2>
+            <button className='sort-button' onClick={resetFilters}>
+              <img className='social-icon select' src={filterremove} alt='filterremove' />
+            </button>
+           </div>
             
   <PriceFilter prompt={sortedBooks} />
   
@@ -497,10 +500,7 @@ export default function BookList() {
                 title="Filter by id name author"
                 placeholder="Filter by id name author..."
                 value={input}
-              />
-               <button className='sort-button' onClick={resetFilters}>
-                <img className='cancel-button select' src={filterremove} alt='filterremove' />
-              </button>
+              />             
             </section>
   
             <section className="filters">

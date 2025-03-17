@@ -78,7 +78,7 @@ const FloatingShareButton = () => {
         <img className="cancel-button select" src={share} alt="Share" />
         Share
       </button>
-      <button onClick={copyToClipboard} className="back-button slider-item">
+      <button onClick={copyToClipboard} className="slider-item">
       🔗 Copy link
       </button>
     </div>
