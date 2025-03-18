@@ -12,8 +12,7 @@
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-
+    /* -webkit-overflow-scrolling: touch; */
     white-space: nowrap;
   }
 
