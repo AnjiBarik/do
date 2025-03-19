@@ -56,8 +56,7 @@ export default function ClearAll({ clearLogin }) {
       Search: { type: '', direction: '', view: '' },
       Filter: { type: '', direction: '', view: '' }
     });
-    setPromoBookSlider({
-      BookList: [],
+    setPromoBookSlider({      
       Search: [],
       Filter: []
     });

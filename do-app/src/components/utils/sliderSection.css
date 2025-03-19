@@ -19,15 +19,25 @@
     box-shadow: inset 0 0 5px rgba(202, 198, 191, 0.87)
    }
   }
+  
   .slider-section-subsection {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
     flex-grow: 1;
-    /* justify-content: center; */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-  }
+   
+
+    /*  (WebKit: Chrome, Edge, Safari) */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    /*  Firefox */
+    scrollbar-width: none;
+
+    /*  IE  Edge */
+    -ms-overflow-style: none;
+}
 
   .slider-section-subsection::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */

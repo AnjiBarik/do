@@ -49,8 +49,7 @@ const [showSections, setShowSections] = useState({
   Filter: null,
 });
 
-const [promoBookSlider, setPromoBookSlider] = useState({
-  BookList: [],
+const [promoBookSlider, setPromoBookSlider] = useState({  
   Search: [],
   Filter: [],
 });

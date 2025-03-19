@@ -634,7 +634,7 @@ export default function BookList() {
         )}
         </section>  
        <section className="container-book">
-       {loadingRatings && <p>⭐⭐⭐</p>}
+       {loadingRatings && <p>⭐⭐⭐⭐⭐</p>}
         <SortCart props={sortedBooks} componentName="Filter" />
        </section>
   </section>  
