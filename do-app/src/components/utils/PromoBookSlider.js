@@ -63,10 +63,13 @@ const PromoBookSlider = () => {
 
   const getImageSource = (book) => {
     const folder = 'img';
-    if (book.imagepublic) return getPublicUrl({ folder, filename: book.imagepublic });
-    if (book.image) return book.image;
-    const imagespublic = book.imageblockpublic?.split(',').map(element => getPublicUrl({ folder, filename: element })) ?? [];
-    return imagespublic[0] || '';
+    const imagesPublic = book.imageblockpublic
+      ? book.imageblockpublic.split(',').map(img => getPublicUrl({ folder, filename: img }))
+      : book.imageblock.split(',');
+
+    return book.imagepublic
+      ? getPublicUrl({ folder, filename: book.imagepublic })
+      : book.image || imagesPublic[0];
   };
 
   const updateScrollButtonsVisibility = useCallback(() => {
