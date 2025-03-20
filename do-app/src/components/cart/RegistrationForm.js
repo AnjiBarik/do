@@ -71,6 +71,25 @@ export default function RegistrationForm() {
   const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
 
   useEffect(() => {
+    if (showRegistrationForm) {
+      window.history.pushState({ isRegistrationOpen: true }, ""); 
+    }
+  
+    const handlePopState = () => {
+      setShowRegistrationForm(false); 
+    };
+  
+    window.addEventListener("popstate", handlePopState);
+  
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      if (!showRegistrationForm) {      
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+    };
+  }, [showRegistrationForm, setShowRegistrationForm]);
+
+  useEffect(() => {
     if (uiMain.regformGoogleClientID) {
       setGoogleClientId(uiMain.regformGoogleClientID);
     }

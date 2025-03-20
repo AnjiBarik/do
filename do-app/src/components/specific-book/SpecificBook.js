@@ -100,11 +100,27 @@ export default function SpecificBook() {
 
   const openFullscreen = () => {
     setIsFullscreen(true);
+    window.history.pushState({ isFullscreen: true }, "");
   };
 
   const closeFullscreen = () => {
     setIsFullscreen(false);
+    window.history.back();
   };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+  
+    window.addEventListener("popstate", handlePopState);
+  
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isFullscreen]);
 
   useEffect(() => {
     const parseColorBlock = (colorblock) => {
