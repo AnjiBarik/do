@@ -128,7 +128,7 @@ body {
     flex-wrap: wrap;
     padding: 0 10px;
     border: 2px solid;
-    border-radius: 17px;
+    border-radius: 20px;
     box-shadow: var(--dark-box-shadow);
     min-height: 60px;
 }
@@ -157,7 +157,7 @@ body {
     flex-wrap: wrap;
     padding: 0 10px;
     border: 2px solid;
-    border-radius: 17px;
+    border-radius: 20px;
     box-shadow: var(--dark-box-shadow);
     min-height: 60px;
 }

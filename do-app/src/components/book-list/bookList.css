@@ -195,6 +195,10 @@ body {
     border: 0px;
     display: flex;    
     align-items: center;
+    /* box-shadow: var(--dark-box-shadow); */
+  }
+
+  .selected-button.active-border:hover {
     box-shadow: var(--dark-box-shadow);
   }
 

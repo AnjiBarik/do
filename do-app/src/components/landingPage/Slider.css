@@ -72,12 +72,14 @@
     display: flex;
 }
 
-.active .slide-info {
+.active .slide-info, .active .slide-info:hover {
     background: var(--gradient);
+    opacity: 1;
 }
 
 .slide-info:hover{
     background: var(--gradient);
+    opacity: 0.5;
 }
 
 .slide .back {
