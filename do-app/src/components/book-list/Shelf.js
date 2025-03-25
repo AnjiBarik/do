@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import LazyImage from '../utils/LazyImage';
 import PriceBlock from '../specific-book/PriceBlock';
 import getPublicUrl from '../functional/getPublicUrl';
@@ -13,6 +13,7 @@ export default function Shelf(props) {
     discont,
     newcart, 
     popular,  } = useIcons();
+    
   const currentImageIndex = 0
   
   const folder = 'img';
@@ -38,6 +39,10 @@ export default function Shelf(props) {
           .map(colorItem => colorItem.split(':'))
           .reduce((acc, [colorName, rgb]) => ({ ...acc, [colorName.trim()]: rgb.trim().slice(1, -1) }), {})
       : {};
+
+      
+
+
 
     return (
       <section key={el.id} className='shelf-element'>

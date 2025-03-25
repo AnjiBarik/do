@@ -25,7 +25,7 @@ export default function SpecificBook() {
     zoomin, } = useIcons();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const navigate = useNavigate(); 
-  const { id } = specificBook;  
+  const { id } = specificBook; 
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedBook, setSelectedBook] = useState(() => books.find(book => book.id === id));

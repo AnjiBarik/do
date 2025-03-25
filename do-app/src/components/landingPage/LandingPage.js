@@ -10,9 +10,9 @@ import tuning from '../assets/data/tuning.json';
 
 function LandingPage() {    
 
-    const { id } = useParams(); // Getting ID from URL
+    const { id, itemid } = useParams(); // Getting ID from URL
 
-    const { theme, setTheme, uiMain, fieldState, setUiState, setUiMain } = React.useContext(BooksContext);
+    const { theme, setTheme, uiMain, fieldState, setUiState, setUiMain, setItemId } = React.useContext(BooksContext);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const tuningUrl = getPublicUrl({ folder: 'data', filename: 'tuning.json' });
@@ -34,18 +34,30 @@ function LandingPage() {
         }
     }, [initialBrowserTheme, theme, setTheme]);
 
-    const initializeState = useCallback((data) => {
+    const initializeState = useCallback((data) => {       
+
+       if (!data || !data.tuning) {
+        console.error("Error: tuning data not received.");
+        return;
+    }
         setUiState(data.tuning);
 
         if (uiMain.length < 1) {
             let startItem = null;            
 
-            if (id && id.trim() !== "") {
+            if (id && id.trim() !== "" && id.length < 10) {
                 if (!isNaN(id)) {
                   const foundItem = data.tuning.find(item => item.id === Number(id));
                   if (foundItem) {
                     setUiMain(foundItem);
-                    setAutoSubmit(true);                    
+                    setAutoSubmit(true);  
+                    
+                    if (itemid) {                        
+                        if (/^[a-zA-Z0-9_-]+$/.test(itemid) && itemid.length < 50) {
+                            setItemId(itemid)
+                            console.log(itemid)
+                        }
+                    }
                     return
                   } else {
                     console.error('Item with the given ID not found');
@@ -99,14 +111,17 @@ function LandingPage() {
                 return [...prevState, updatedUiMain];
             });
         }
-    }, [fieldState, uiMain, setUiMain, setUiState, language, id, navigate]);
+    }, [fieldState, uiMain, setUiMain, setUiState, language, id, itemid, setItemId, navigate]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(tuningUrl);
                 const tuningData = await response.json();
-                initializeState(tuningData);
+                if (tuningData && tuningData.tuning) {
+                    initializeState(tuningData);
+                }
+                //initializeState(tuningData);
             } catch {
                 initializeState(tuning);
             }

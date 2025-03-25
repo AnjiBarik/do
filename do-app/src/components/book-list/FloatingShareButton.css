@@ -4,7 +4,7 @@
     bottom: 200px;
     right: 1px;
     border-radius: 10px;
-    z-index: 1;
+    /* z-index: 1; */
 }
 
 .dark .floating-share-button {
@@ -58,4 +58,18 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+.contener .share-options {
+  right: auto;
+  left: 1px;
+}
+.contener .floating-share-button { 
+  position: relative; 
+  bottom: 150px;
+}
+
+.about .floating-share-button {
+  position: relative;
+  bottom: auto;
 }

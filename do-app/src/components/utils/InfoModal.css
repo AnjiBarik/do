@@ -26,6 +26,8 @@
     padding-bottom: 30px;
     border: 1px solid;
     border-radius: 7px;
+    z-index: 100;
+    position: relative;
 }
 
 .close {   

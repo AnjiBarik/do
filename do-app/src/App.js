@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
-          <Route path="LandingPage/:id" element={<LandingPage />} />
+          <Route path="LandingPage/:id/:itemid?" element={<LandingPage />} />
           <Route path="BookList" element={<BookList />} />
           <Route path="cart" element={<Cart />} />
           <Route path="specificbook" element={<SpecificBook />} />

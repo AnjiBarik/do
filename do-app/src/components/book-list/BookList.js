@@ -45,7 +45,8 @@ export default function BookList() {
     showSections, 
     setShowSections,
     setPromoBookSlider,
-    rangePrice, setRangePrice 
+    rangePrice, setRangePrice,
+    itemId, setItemId, setSpecificBook 
   } = useContext(BooksContext);
 
   const {    
@@ -77,7 +78,22 @@ export default function BookList() {
   const [sections, setSections] = useState([]);
   const [subsections, setSubsections] = useState({});  
 
-  const navigate = useNavigate();   
+  const navigate = useNavigate();  
+  
+  if (!loadingRatings && books.length > 0) {
+      if (itemId) {        
+          const foundItem = books.find(item => item.id === itemId);
+          
+          if (foundItem) {               
+              setSpecificBook({id:itemId}); 
+              navigate(`/SpecificBook`); 
+          } else {                
+              setItemId(null); 
+              console.log('notfound ID')
+          }
+      }
+  }
+
 
   const [visibility, setVisibility] = useState({
     Size: false,
@@ -634,7 +650,41 @@ export default function BookList() {
         )}
         </section>  
        <section className="container-book">
-       {loadingRatings && <p>⭐⭐⭐⭐⭐</p>}
+       {loadingRatings && 
+      //  <p>⭐⭐⭐⭐⭐</p>
+       <div style={{ 
+        width: '100%', 
+        height: '50px', 
+        position: 'relative',     
+        borderRadius: '25px', 
+        overflow: 'hidden',
+        marginTop: '20px'
+      }}>
+        <div className="progress" style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '0%',       
+          borderRadius: '25px',
+          textAlign: 'center',     
+          lineHeight: '50px',
+          color: '#ffd700',
+          fontSize: '1.5rem',
+          animation: 'fill 2s linear forwards'
+        }}>
+          ★★★★★ 
+        </div>
+        <style>
+          {`
+            @keyframes fill {
+              0% { width: 0%; }
+              100% { width: 100%; }
+            }
+          `}
+        </style>
+      </div>
+       }
         <SortCart props={sortedBooks} componentName="Filter" />
        </section>
   </section>  

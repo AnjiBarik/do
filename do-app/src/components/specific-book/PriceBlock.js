@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './priceBlock.css';
 import { BooksContext } from '../../BooksContext';
 import { useIcons } from '../../IconContext';
-
+import FloatingShareButton from '../book-list/FloatingShareButton';
 
 export default function PriceBlock({ id, showPrice }) {
   const { setCartItems, books, cartItems, theme, fieldState } = useContext(BooksContext);
@@ -140,8 +140,9 @@ export default function PriceBlock({ id, showPrice }) {
               </>
         )}
         </section>
-
+        <FloatingShareButton itemId={id} />
       </section>
+     
     </section>
   );
 }
