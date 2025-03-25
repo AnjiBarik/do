@@ -11,7 +11,6 @@ import tuning from '../assets/data/tuning.json';
 function LandingPage() {    
 
     const { id, itemid } = useParams(); // Getting ID from URL
-console.log(id, itemid)
     const { theme, setTheme, uiMain, fieldState, setUiState, setUiMain, setItemId } = React.useContext(BooksContext);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);

@@ -15,7 +15,9 @@ const FloatingShareButton = ({ itemId }) => {
 
   useEffect(() => {
     const getShareLink = () => {
-      let updatedShareLink = uiMain && uiMain.share ? uiMain.share : `${window.location.origin}/#/LandingPage`; // Use LandingPage here
+      let baseUrl = window.location.href.split('#')[0]; // Extract base URL before hash
+      let updatedShareLink = uiMain && uiMain.share ? uiMain.share : `${baseUrl}#/LandingPage`;
+
       if (!uiMain.share && uiMain && uiMain.id) {
         updatedShareLink += updatedShareLink.endsWith('/') ? `${uiMain.id}` : `/${uiMain.id}`;
       }
@@ -27,7 +29,7 @@ const FloatingShareButton = ({ itemId }) => {
     };
 
     getShareLink();
-  }, [uiMain, itemId, location.pathname]); //Added location.pathname to the dependency array, so if you navigate this function will be re-run.
+  }, [uiMain, itemId, location.pathname]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareLink)
@@ -85,7 +87,7 @@ const FloatingShareButton = ({ itemId }) => {
         Share
       </button>
       <button onClick={copyToClipboard} className="slider-item">
-      🔗 Copy link
+      🔗 Copy
       </button>
     </div>
   );
