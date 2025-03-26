@@ -78,21 +78,23 @@ export default function BookList() {
   const [sections, setSections] = useState([]);
   const [subsections, setSubsections] = useState({});  
 
-  const navigate = useNavigate();  
-  
-  if (!loadingRatings && books.length > 0) {
-      if (itemId) {        
-          const foundItem = books.find(item => item.id === itemId);
-          
-          if (foundItem) {               
-              setSpecificBook({id:itemId}); 
-              navigate(`/SpecificBook`); 
-          } else {                
-              setItemId(null); 
-              console.log('notfound ID')
-          }
+  const navigate = useNavigate();    
+
+  useEffect(() => {
+    if (!loadingRatings && itemId && books.length > 0) {        
+      const foundItem = books.find(item => item.id === itemId);
+      
+      if (foundItem) { 
+        window.history.pushState({ from: location.pathname }, '', '/BookList');              
+        setSpecificBook({ id: itemId }); 
+        navigate(`/SpecificBook`, { replace: true });  
+      } else {                
+        console.log('notfound ID');
       }
-  }
+  
+      setItemId(null); 
+    }
+  }, [itemId, books, loadingRatings, setItemId, setSpecificBook, navigate]);
 
 
   const [visibility, setVisibility] = useState({

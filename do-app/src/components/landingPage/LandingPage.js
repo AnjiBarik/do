@@ -54,7 +54,7 @@ function LandingPage() {
                     if (itemid) {                        
                         if (/^[a-zA-Z0-9_-]+$/.test(itemid) && itemid.length < 50) {
                             setItemId(itemid)
-                            console.log(itemid)
+                            //console.log(itemid)
                         }
                     }
                     return

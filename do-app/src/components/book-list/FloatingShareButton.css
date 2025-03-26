@@ -1,10 +1,9 @@
 .floating-share-button {
-  display: inline-block;
+    display: inline-block;
     position: fixed;
     bottom: 200px;
-    right: 1px;
-    border-radius: 10px;
-    /* z-index: 1; */
+    right: 5px;
+    border-radius: 0 7px 7px 0;    
 }
 
 .dark .floating-share-button {
@@ -18,12 +17,11 @@
  }
 
 .share-main-button {   
-  border: 2px solid;
   border-radius: 17px;
-  padding: 5px;
-  cursor: pointer;
-  /* transition: transform 0.3sease-in-out; */
-  margin: 5px;
+  cursor: pointer;  
+  padding: 2px 0 0 0;
+  margin: 0;
+  border: none;
 }
 
 .share-options {
@@ -67,6 +65,7 @@
 .contener .floating-share-button { 
   position: relative; 
   bottom: 150px;
+  border-radius: 0 7px 7px 0;
 }
 
 .about .floating-share-button {

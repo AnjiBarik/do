@@ -87,7 +87,7 @@ const FloatingShareButton = ({ itemId }) => {
         Share
       </button>
       <button onClick={copyToClipboard} className="slider-item">
-      🔗 Copy
+      🔗 Copy Link
       </button>
     </div>
   );
