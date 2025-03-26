@@ -94,7 +94,7 @@ export default function BookList() {
   
       setItemId(null); 
     }
-  }, [itemId, books, loadingRatings, setItemId, setSpecificBook, navigate]);
+  }, [itemId, books, loadingRatings, setItemId, setSpecificBook, navigate, location.pathname ]);
 
 
   const [visibility, setVisibility] = useState({
