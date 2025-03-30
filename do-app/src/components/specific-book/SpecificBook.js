@@ -305,7 +305,7 @@ export default function SpecificBook() {
             <PriceBlock showPrice={true} id={selectedBook.id} />
           
            </section>
-          <section className="about">
+          <section className="about left">
             {selectedBook.author !== undefined && selectedBook.author !== "" && (
               <p>
                 <b>{fieldState.author && fieldState.author !== "" ? fieldState.author : "Author:"}</b>

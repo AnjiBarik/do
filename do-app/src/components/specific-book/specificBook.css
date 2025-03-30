@@ -25,8 +25,12 @@ figure, .about{
     align-items: center;
     flex-basis: 33.33%; 
     min-width: 320px; 
-    padding: 10px 10px 20px 10px;
+    padding: 0 10px 20px 10px;
     box-sizing: border-box; 
+}
+
+.about.left {
+  align-items: initial;
 }
 
 figure{

@@ -7,7 +7,7 @@ import { useSubmit } from '../hooks/useSubmit';
 import LoadingAnimation from "../utils/LoadingAnimation";
 
 function Slider() {
-    const { uiState, setUiMain, uiMain } = React.useContext(BooksContext);
+    const { uiState, setUiMain, uiMain, idLoudPrice } = React.useContext(BooksContext);
      const { buynow } = useIcons();
     const [imageError, setImageError] = useState(false); 
     const { Submit, loading } = useSubmit();  
@@ -46,6 +46,20 @@ function Slider() {
             Submit();
         }
     };
+
+    const loadedPrice = uiState[idLoudPrice - 1]; 
+
+    const visibleSlides = uiState.filter(slide =>  
+      (!slide.parentId) || 
+        (    
+      loadedPrice &&
+        (      
+      uiMain.id === loadedPrice.id ||      
+      uiMain.parentId === loadedPrice.id ||      
+      slide.id === uiMain.id
+        )
+       )
+    );
     
 
     const uniqueAuthors = [...new Set(uiState.map(slide => slide.author))];
@@ -56,8 +70,10 @@ function Slider() {
                 <LoadingAnimation />
             ) : (
                 uniqueAuthors.map(author => {
-                    const slidesByAuthor = uiState.filter(slide => slide.author === author);
+                    const slidesByAuthor = visibleSlides.filter(slide => slide.author === author);
+                    if (slidesByAuthor.length === 0) return null;
                     const slide = slidesByAuthor.find(slide => slide.lang === language || slide.lang === uiMain.lang) || slidesByAuthor[0];
+                    if (!slide) return null;
                     const slideIndex = uiState.indexOf(slide);
 
                     return (

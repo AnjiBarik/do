@@ -106,6 +106,7 @@ function LandingPage() {
                 updatedUiMain.author = fieldState.authorprice || (uiMain.author + (fieldState.idprice || "LOL"));
                 updatedUiMain.type = updatedUiMain.type === "start" ? "add" : updatedUiMain.type;
                 updatedUiMain.id = maxId + 1;
+                updatedUiMain.parentId = uiMain.id;//!
 
                 return [...prevState, updatedUiMain];
             });

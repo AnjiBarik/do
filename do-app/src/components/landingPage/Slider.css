@@ -70,6 +70,7 @@
     border-radius: 7px 7px 17px 17px;
     justify-content: space-evenly;
     display: flex;
+    align-items: center;
 }
 
 .active .slide-info, .active .slide-info:hover {
@@ -101,7 +102,7 @@
 .back-button-slider{
     height: 30px;
     width: 30px;
-    margin: 1px;
+    margin: 2px 5px;
     cursor: pointer;
     filter: invert(1);
 }
