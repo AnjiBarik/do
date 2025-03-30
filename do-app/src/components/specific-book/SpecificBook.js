@@ -344,7 +344,7 @@ export default function SpecificBook() {
               </p>
             )}
           {(selectedBook.tags5 || selectedBook.tags6 || selectedBook.tags7 || selectedBook.tags8) && (
-            <section className="about">
+            <section className="about left">
              <div className='size-buttons'>
               <b>{fieldState.additionalTags && fieldState.additionalTags !== "" ? fieldState.additionalTags : "Additional Tags:"}</b>
               {fieldState.additionalTagsinfo && fieldState.additionalTagsinfo !== "" && (<InfoModal infotext={fieldState.additionalTagsinfo} />)}

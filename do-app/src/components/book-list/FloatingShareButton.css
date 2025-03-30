@@ -69,6 +69,8 @@
 }
 
 .about .floating-share-button {
-  position: relative;
-  bottom: auto;
+  position: fixed;
+  left: 10px;  
+  right: auto;
+  z-index: 100;  
 }

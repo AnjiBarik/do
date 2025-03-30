@@ -93,6 +93,13 @@ body {
     padding: 10px;
 }
 
+.cart-icon-text{
+  font-size: 10px; 
+  position: relative;
+  right: 60px; 
+  top: 30px;
+}
+
 .cart-block{
     position: fixed;
 }

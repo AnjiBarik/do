@@ -33,6 +33,14 @@ figure, .about{
   align-items: initial;
 }
 
+.about p {
+  /* text-align: justify; */
+  text-indent: 7px;
+  font-weight: 400;  
+  letter-spacing: 0.04em;
+  padding: 0 5px;
+}
+
 figure{
     margin: 0;
 }

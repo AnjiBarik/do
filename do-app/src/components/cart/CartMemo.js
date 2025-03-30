@@ -130,15 +130,22 @@ const CartMemo = () => {
       {AlertModalComponent()}
       {ConfirmModalComponent()}
       {loggedIn && hasCurrentPriceInOrder && (
+        <>
         <img src={favorite} onClick={handleAdd} className="back-button select" alt="favorite cart" />
+        <p className="cart-icon-text">Add Favorite</p>
+        </>
       )}
       {loggedIn && cartItems && cartItems.length > 0 && fieldState.idprice && (
+        <>
         <img src={addfavorite} onClick={handleAddToFavorites} className="back-button select" alt="add favorite cart" />
+        <p className="cart-icon-text">Add to Favorite</p>
+        </>
       )}
       {loggedIn && hasCurrentPriceInOrder && (
-        <div onClick={handleClearFavorites}>
-          <img className="cancel-button select" src={cancel} alt="cancel" />
-        </div>
+          <>
+          <img className="back-button select" onClick={handleClearFavorites} src={cancel} alt="cancel" />
+          <p className="cart-icon-text">Delete Favorite</p>
+          </>       
       )}
     </>
   );
