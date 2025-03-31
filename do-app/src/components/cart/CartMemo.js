@@ -144,7 +144,7 @@ const CartMemo = () => {
       {loggedIn && hasCurrentPriceInOrder && (
           <>
           <img className="back-button select" onClick={handleClearFavorites} src={cancel} alt="cancel" />
-          <p className="cart-icon-text">Delete Favorite</p>
+          <p className="cart-icon-text">Clear Favorite</p>
           </>       
       )}
     </>

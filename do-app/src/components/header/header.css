@@ -15,7 +15,7 @@ body {
 }
 
 .light .header{
-    background-color: var(--modal-bg);
+    background-color: var(--header-bg);
     color: var(--text);
 }
 

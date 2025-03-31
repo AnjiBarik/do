@@ -94,10 +94,14 @@ body {
 }
 
 .cart-icon-text{
-  font-size: 10px; 
+  font-size: 9px; 
   position: relative;
   right: 60px; 
   top: 30px;
+  max-width: 70px; 
+  overflow: auto;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .cart-block{

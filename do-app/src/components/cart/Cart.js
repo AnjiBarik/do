@@ -79,7 +79,10 @@ export default function Cart() {
         )}
       </section>
       {cartItems.length !== 0 && (
+        <>
         <img src={upload} className="back-button select" onClick={clearCart} alt="Clear cart" />
+        <p className="cart-icon-text">Clear Cart</p>
+        </>
       )}
      {cartContent}
       <ScrollToTopButton />

@@ -536,12 +536,12 @@ label.filters {
 
 /* Basic Styles */
 :root {  
-  --header-bg: #c2dcb242;
-  --background: #edf1e4e3;
+  --header-bg: #8a9b8f;
+  --background: #ececec;
   --text: #333333;
   --button-bg: #008cba;
-  --button-text: #ffffff;  
-  --modal-bg: #e2eade;
+  --button-text: #ffffff;
+  --modal-bg: #e4e4e4;
   --modal-text: #333333;   
   --button-background-size: cover; 
   --button-background-position: center;

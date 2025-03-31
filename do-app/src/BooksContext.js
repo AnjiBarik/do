@@ -66,6 +66,7 @@ const [userImg, setUserImg] = useState('');
 const [ratingData, setRatingData] = useState([]);
 const [productReviews, setProductReviews] = useState({});
 const [itemId, setItemId] = useState(null);
+const [currentPageContext, setCurrentPageContext] = useState(1);
 
   const contextValue = {
     message, setMessage, promo, setPromo, order, setOrder, loggedIn, setLoggedIn, savedLogin, setSavedLogin, savedPassword, setSavedPassword,
@@ -76,7 +77,7 @@ const [itemId, setItemId] = useState(null);
     uiState, setUiState, uiMain, setUiMain, fieldState, setFieldState, idLoudPrice, setIdLoudPrice, selectedTags3, setSelectedTags3,
     selectedTags4, setSelectedTags4, showRegistrationForm, setShowRegistrationForm, selectUiState, setSelectUiState, sortStates, setSortStates,showSections, setShowSections,
     promoBookSlider, setPromoBookSlider,verificationCode, setVerificationCode, rangePrice, setRangePrice,userName, setUserName,userImg, setUserImg, ratingData, setRatingData,
-    productReviews, setProductReviews, itemId, setItemId
+    productReviews, setProductReviews, itemId, setItemId, currentPageContext, setCurrentPageContext
   };
 
   return (

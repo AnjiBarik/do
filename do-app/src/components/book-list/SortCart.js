@@ -10,7 +10,8 @@ export default function SortCart({ props, componentName }) {
     theme,
     uiMain,
     sortStates,
-    setSortStates
+    setSortStates,
+    currentPageContext, setCurrentPageContext
   } = useContext(BooksContext);
 
   const {
@@ -85,6 +86,12 @@ export default function SortCart({ props, componentName }) {
     }
   }, [sortStates, componentName, props]);
 
+  useEffect(() => {    
+    if (currentPageContext <= totalPages) {
+      setCurrentPage(currentPageContext);
+    }
+  }, [totalPages, currentPageContext]);
+
   const updateSortStates = (newState) => {
     setSortStates(prevStates => {
       const currentComponentState = prevStates[componentName];
@@ -147,6 +154,7 @@ export default function SortCart({ props, componentName }) {
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+    setCurrentPageContext(newPage);
     const shelfSection = document.getElementById('shelf-book-list');
     if (shelfSection) {
       shelfSection.scrollIntoView({ behavior: 'smooth' });

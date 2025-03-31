@@ -23,7 +23,8 @@ export default function ClearAll({ clearLogin }) {
     setSavedPassword,
     setSortStates,
     setPromoBookSlider,
-    setRangePrice  
+    setRangePrice,
+    setCurrentPageContext  
   } = useContext(BooksContext);
 
   const resetStates = () => {
@@ -60,6 +61,8 @@ export default function ClearAll({ clearLogin }) {
       Search: [],
       Filter: []
     });
+
+    setCurrentPageContext(1);
 
     //!!!Attention!for demo only return for work! 
     // if (!clearLogin) {
