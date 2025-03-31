@@ -78,12 +78,14 @@ export default function Cart() {
           <p id="total"><b className="sort-button">Total Price : <strong>{totalPrice}</strong> {fieldState.payment ? fieldState.payment : ""}</b></p>
         )}
       </section>
+      <section className="filters">
       {cartItems.length !== 0 && (
         <>
         <img src={upload} className="back-button select" onClick={clearCart} alt="Clear cart" />
         <p className="cart-icon-text">Clear Cart</p>
         </>
       )}
+      </section>
      {cartContent}
       <ScrollToTopButton />
     </section>

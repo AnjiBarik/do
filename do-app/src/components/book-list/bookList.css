@@ -363,7 +363,7 @@ body {
 } */
 
 .light .sectionGrup{
-  background-color: var(--modal-bg);  
+  background-color: var(--background);  
 }
 
 .dark .sectionGrup{
@@ -536,7 +536,7 @@ label.filters {
 
 /* Basic Styles */
 :root {  
-  --header-bg: #8a9b8f;
+  --header-bg: linear-gradient(90deg, #eaeaea 0%, #b3ffffd1 100%);
   --background: #ececec;
   --text: #333333;
   --button-bg: #008cba;

@@ -15,7 +15,7 @@ body {
 }
 
 .light .header{
-    background-color: var(--header-bg);
+    background: var(--header-bg);
     color: var(--text);
 }
 

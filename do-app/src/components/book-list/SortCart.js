@@ -86,12 +86,12 @@ export default function SortCart({ props, componentName }) {
     }
   }, [sortStates, componentName, props]);
 
-  useEffect(() => {    
+  useEffect(() => {      
     if (currentPageContext <= totalPages) {
       setCurrentPage(currentPageContext);
-    }
+    } else {setCurrentPage(1)}    
   }, [totalPages, currentPageContext]);
-
+  
   const updateSortStates = (newState) => {
     setSortStates(prevStates => {
       const currentComponentState = prevStates[componentName];
