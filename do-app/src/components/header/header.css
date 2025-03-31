@@ -34,12 +34,12 @@ body {
         border-radius: unset;
     }
     
-    .main.container {
+    main.container {
         padding-top: 83px;
     }
-    .container {
+    /* .container {
         padding-top: 83px;
-    }
+    } */
 }
 
 .header-right{

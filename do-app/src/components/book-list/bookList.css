@@ -536,7 +536,7 @@ label.filters {
 
 /* Basic Styles */
 :root {  
-  --header-bg: linear-gradient(90deg, #eaeaea 0%, #b3ffffd1 100%);
+  --header-bg: linear-gradient(90deg,#eaeaea,#77f0f0d1);
   --background: #ececec;
   --text: #333333;
   --button-bg: #008cba;
