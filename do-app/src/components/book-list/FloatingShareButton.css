@@ -3,7 +3,8 @@
     position: fixed;
     bottom: 200px;
     right: 5px;
-    border-radius: 0 7px 7px 0;    
+    border-radius: 0 7px 7px 0; 
+    z-index: 2;    
 }
 
 .dark .floating-share-button {
