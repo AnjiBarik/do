@@ -57,7 +57,7 @@ body {
 #total{
   border-bottom: 2px solid;
   border-radius: 0 0 7px 5px;
-  bottom: 55px;
+  bottom: 60px;
   box-shadow: var(--dark-box-shadow);
   color: #b29c18;
   font-weight: 600;

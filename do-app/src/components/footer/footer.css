@@ -43,7 +43,7 @@ a {
     height: 70px;
     display: flex;    
     justify-content: center;
-    z-index: 999;/* !!! */
+    z-index: 2999;/* !!! */
   }
   .footer{
     position: fixed;
