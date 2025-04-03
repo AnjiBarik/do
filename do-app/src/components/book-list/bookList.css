@@ -176,6 +176,20 @@ body {
     flex-wrap: wrap;
     border-radius: 0 5px 5px 0;
   }
+
+  .widhtblock .book-id {   
+    margin:0;
+    padding:1px;   
+    font-size: small;
+  }
+
+  .widhtblock .star.filled {
+    font-size: small;
+  }
+
+  .widhtblock .review-count {
+    font-size: small;
+  }
   
   .color-size{
     bottom: 10px;

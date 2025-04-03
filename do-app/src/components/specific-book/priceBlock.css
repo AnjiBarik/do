@@ -57,6 +57,11 @@
     justify-content: center;   
     align-items: center;     
 }
+
+.price-block.Price.Left {
+  justify-content: left;
+}
+
 .ccart-icon{
   bottom: 25px;
   right: 0;

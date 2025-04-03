@@ -54,17 +54,19 @@ body {
     align-items: center;
 } 
 
-#total{
-  border-bottom: 2px solid;
+#total{  
   border-radius: 0 0 7px 5px;
-  bottom: 60px;
-  box-shadow: var(--dark-box-shadow);
+  bottom: 60px;  
   color: #b29c18;
   font-weight: 600;
   margin-left: auto;
   padding: 2px 7px;
   position: fixed;
   right: 20px;
+}
+
+#total:hover{
+  box-shadow: var(--dark-box-shadow);
 }
 
 .light #total {

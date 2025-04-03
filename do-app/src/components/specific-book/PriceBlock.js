@@ -60,7 +60,7 @@ export default function PriceBlock({ id, showPrice }) {
   return (
     <section className={theme}>
       <section className="contener"> 
-          <section className="price-block Price">
+          <section className="price-block Price Left">
           {specificBookIndex !== -1 && (
             <img src={cartupl} alt='remove from Cart' className="price-mini-button select" 
             onClick={() => removeBookFromCart(id)} tabIndex={-1} />
