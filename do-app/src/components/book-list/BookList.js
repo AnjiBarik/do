@@ -267,22 +267,54 @@ export default function BookList() {
     setSelectedAuthors([]);
     setSortedBooks(books.filter((book) => book.Visibility !== '0'));
     setRangePrice([]); 
-  }; 
+  };   
 
-  const renderSelectedButton = (label, value, onClick, field) => (
-   <button className="selected-button active" key={value} onClick={onClick}>
-      {
-    label === "Section" || label === "Subsection" ? (
-    <img className="cancel-button select" src={category} alt="Product sections" />
-    ) : (
-    <img className="cancel-button select" src={filter} alt="Filter" />
-    )
-      }
-
-      {field && field !== "" ? `${field} ${value}` : `${label}: ${value}`}
-      <img className="cancel-button select" src={cancel} alt="cancel" />
-   </button>
-  );  
+  const renderSelectedButton = (label, value, onClick, field, colorBlock) => {    
+    const colorRGB = colorBlock
+      ? colorBlock
+          .split(';')
+          .map(colorItem => colorItem.split(':'))
+          .reduce(
+            (acc, [colorName, rgb]) => ({
+              ...acc,
+              [colorName.trim()]: rgb.trim().slice(1, -1),
+            }),
+            {}
+          )
+      : {};
+  
+    return (
+      <button className="selected-button active" key={value} onClick={onClick}>
+        {label === "Section" || label === "Subsection" ? (
+          <img className="cancel-button select" src={category} alt="Product sections" />
+        ) : (
+          <img className="cancel-button select" src={filter} alt="Filter" />
+        )}
+  
+        {field && field !== "" ? `${field} ` : `${label}: `}  
+        
+        {label === "Color" && colorRGB[value.trim()] && (
+          <span
+            className="circle"
+            style={{
+              backgroundColor: `rgb(${colorRGB[value.trim()]})`,
+              display: 'inline-block',
+              width: '12px',
+              height: '12px',
+              borderRadius: '50%',
+              marginRight: '5px',
+              verticalAlign: 'middle',
+              border: '1px solid #000',
+            }}
+          ></span>
+        )}
+  
+        {value}
+  
+        <img className="cancel-button select" src={cancel} alt="cancel" />
+      </button>
+    );
+  };  
 
   const hasActiveFilters = (includeSections = false) => {
     return (
@@ -412,7 +444,8 @@ export default function BookList() {
                 "Color",
                 color,
                 () => handleSelection(color, setSelectedColor),
-                fieldState.color
+                fieldState.color,
+                fieldState.colorblock || "" // Pass colorBlock only for color
               )
             )}
   
@@ -583,6 +616,7 @@ export default function BookList() {
                   toggleVisibility={toggleVisibility}
                   handleSelection={handleSelection}
                   setSelectedItems={setSelectedColor}
+                  colorBlock={fieldState.colorblock} // Передаем только сюда
                 />
   
                 <FilterSection
