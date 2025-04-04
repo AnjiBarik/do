@@ -190,6 +190,10 @@ body {
   .widhtblock .review-count {
     font-size: small;
   }
+
+  .widhtblock .book-size {
+    font-size: small;
+  }
   
   .color-size{
     bottom: 10px;
@@ -421,6 +425,7 @@ button{
 section.container {
   display: flex;
   flex-wrap: nowrap;
+  justify-content: center;
 }
 
 /* Adaptability */

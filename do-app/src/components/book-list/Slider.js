@@ -106,8 +106,7 @@ const Slider = () => {
 
   
   return (
-    <div className="banner-slider-container">
-      {/* Кнопки переключения банеров */}
+    <div className="banner-slider-container">      
       <button className="banner-slider-button top-left" onClick={prevSlide}>{'<'}</button>
       <button className="banner-slider-button top-right" onClick={nextSlide}>{'>'}</button>
 
@@ -121,12 +120,20 @@ const Slider = () => {
                 {`Banner ${banners[currentIndex]?.key}`}
               </div>
             ) : (
+             <>
+              <img 
+                src={banners[currentIndex]?.value} 
+                alt={`Banner ${banners[currentIndex]?.key}`} 
+                className="banner-slider-image-fon" 
+                onError={() => setIsImageError(true)}
+              />
               <img 
                 src={banners[currentIndex]?.value} 
                 alt={`Banner ${banners[currentIndex]?.key}`} 
                 className="banner-slider-image" 
                 onError={() => setIsImageError(true)}
               />
+             </>
             )}
           </div>
 
@@ -141,8 +148,7 @@ const Slider = () => {
           </div>
         </>
       )}
-
-      {/* Блок с книгами по баннеру */}
+      
       {filteredResults.length > 0 && (
         <div className={`slider-wrapper ${theme}`}>
           <div className="slider-title">Related Items</div>

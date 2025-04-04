@@ -51,18 +51,17 @@
     border-radius: 10px;
     padding: 5px 10px;
     cursor: pointer;    
-    transition: transform 0.3s ease-in-out;
-    box-shadow: var(--dark-box-shadow);
+    transition: transform 0.3s ease-in-out;    
   
   &:hover {   
     outline: none;      
     transition: transform 0.3s ease-in-out;
-    box-shadow: 0 0 5px rgba(202, 198, 191, 0.87);
+    box-shadow: var(--dark-box-shadow);
   }
  
   &:active,  &:focus  {
     border: 2px solid ; 
-    box-shadow: 0 0 5px rgba(202, 198, 191, 0.87); 
+    box-shadow: var(--dark-box-shadow);
   }
 }
 
