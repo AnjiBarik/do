@@ -239,7 +239,7 @@ export default function SpecificBook() {
                 )}
               </div>
             </div>
-            <div className="book-buttons">            
+            <div className="img-book-buttons">            
               {selectedBook.imageblock.split(',').length > 1 &&
                 selectedBook.imageblock.split(',').map((_, index) => (
                   <div className={`img-icon ${currentImageIndex === index ? 'selected-img-icon' : ''}`} key={index} onClick={() => handleImageClick(index)}>

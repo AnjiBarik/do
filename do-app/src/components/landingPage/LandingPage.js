@@ -6,6 +6,7 @@ import Submit from './LoadForm';
 import { BooksContext } from '../../BooksContext';
 import LangComponent from './LangComponent';
 import getPublicUrl from '../functional/getPublicUrl';
+import { validateItemId } from "../functional/validateItemId";
 import tuning from '../assets/data/tuning.json';
 
 function LandingPage() {    
@@ -51,11 +52,8 @@ function LandingPage() {
                     setUiMain(foundItem);
                     setAutoSubmit(true);  
                     
-                    if (itemid) {                        
-                        if (/^[a-zA-Z0-9_-]+$/.test(itemid) && itemid.length < 50) {
-                            setItemId(itemid)
-                            //console.log(itemid)
-                        }
+                    if (itemid && validateItemId(itemid)) {
+                        setItemId(itemid);
                     }
                     return
                   } else {

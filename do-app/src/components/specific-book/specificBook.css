@@ -19,6 +19,17 @@ body{
   flex-wrap: wrap;  
 }
 
+.img-book-buttons {
+  display: flex;
+  gap:5px;
+  /* margin-top: 10px; */
+  overflow-x: auto;
+  max-width: 320px;
+  /* scrollbar-width: none; */
+  /* scroll-behavior: unset; */
+  flex-wrap: nowrap;
+}
+
 figure, .about{   
     display: flex;
     flex-direction: column;
