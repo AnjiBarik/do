@@ -37,12 +37,11 @@
     width: 100%; 
     height: 100%;
     object-fit: cover; 
-    box-shadow: var(--dark-box-shadow);
-    border-radius: 5px;
-    opacity: 0.5;
-    -webkit-mask-image:linear-gradient(to right, rgba(0, 0, 0, 0.52) 0%, rgb(0, 0, 0) 100%);
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-    filter: blur(5px) brightness(80%);
+    box-shadow: var(--dark-box-shadow);    
+    opacity: 0.9;
+    -webkit-mask-image: linear-gradient(to right, rgba(1, 1, 1, 0.87) 0%, rgba(0, 0, 0, 0.5) 100%);   
+    mask-image: linear-gradient(to right, rgba(1, 1, 1, 0.87) 0%, rgba(0, 0, 0, 0.5) 100%);
+    filter: blur(2px) brightness(80%);
   }
 
   @media screen and (max-width: 1200px) {
@@ -72,7 +71,8 @@
   }
   
   .banner-slider-button:hover {
-    background: #bd9b9bcc;
+    /* background: #bd9b9bcc; */   
+    border:2px solid;
   }
   
   .banner-slider-button.top-left {

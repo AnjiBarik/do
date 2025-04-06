@@ -1,0 +1,51 @@
+/* Basic Styles */
+:root {  
+    --header-bg: linear-gradient(90deg,#eaeaea,#77f0f0d1);
+    --background: #ececec;
+    --text: #333333;
+    --button-bg: #008cba;
+    --button-text: #ffffff;
+    --modal-bg: #e4e4e4;
+    --modal-text: #333333;   
+    --button-background-size: cover; 
+    --button-background-position: center;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --main-circle-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    --gradient: linear-gradient(180deg,#66d5b5,#21b987,#23847f,#0f7d4e);
+  
+    --dark-header-bg: #333333;
+    --dark-background: #121212;
+    --dark-text: rgba(202, 198, 191, 0.87);
+    --dark-button-bg: #444444;
+    --dark-button-text: #f5f5f5;
+    --dark-modal-bg: #333333; 
+    --dark-modal-text: rgba(202, 198, 191, 0.87);
+    --dark-box-shadow: 0 4px 8px rgba(15, 233, 171, 0.6);
+  }
+  
+  .light-theme {
+    background-color: var(--background);
+    color: var(--text);
+    border-radius: 50%;
+    border: 5px solid var(--background);
+    margin: 3px 10px;
+  }
+  
+  .dark-theme {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+    border-radius: 50%;
+    border: 5px solid var(--dark-background);
+    margin: 3px 10px;
+  }
+  
+  .light {
+    background-color: var(--background);
+    color: var(--text);
+  }
+  
+  .dark {
+    background-color: var(--dark-background);
+    color: var(--dark-text);
+  }
+  
