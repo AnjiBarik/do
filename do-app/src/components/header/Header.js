@@ -121,6 +121,8 @@ useEffect(() => {
              </section>             
             </>
           )}
+          {(uiMain && 
+          <>
           <Link to="/" className='sort-button highlighted'>
             <div onClick={HandleLoad}>
               {logo ? (
@@ -138,6 +140,8 @@ useEffect(() => {
               <img className="back-button select" src={light} alt="light theme" />
             )}
           </div>
+          </>
+          )}
           {(idLoudPrice === uiMain.id && windowWidth >= 1200) && (
              <div className='header-category-container'>
           <section  onClick={() => handleImageClick('category')} className={`cart ${selectedImage === 'category' ? 'sel' : ''}`}>
@@ -170,7 +174,7 @@ useEffect(() => {
               <>
                 {uiMain.fone && uiMain.fone !== "" && (
                   <div>                    
-                      <img src={fone} className="back-button select" onClick={() => handleButtonClick(uiMain.fone, 0)} alt={uiMain.fone}/>                   
+                      <img src={fone} className="back-button select" onClick={() => handleButtonClick(uiMain.fone, 0)} alt={uiMain.fone} title="Fone" />                   
                     {currentButtonIndex === 0 && (
                       <a href={`tel:${currentLink}`} target="_blank" rel="noopener noreferrer">
                       <b> {currentLink} </b> 
@@ -181,7 +185,7 @@ useEffect(() => {
                 {uiMain.inst && uiMain.inst !== "" && (
                   <div>
                    <a href={`https://www.instagram.com/${uiMain.inst}`} target="_blank" rel="noopener noreferrer">
-                    <img src={inst} className="back-button select" alt={uiMain.inst} />
+                    <img src={inst} className="back-button select" alt={uiMain.inst} title="Instagram" />
                    </a>
                   </div>                  
                 )}
@@ -189,42 +193,42 @@ useEffect(() => {
 {uiMain.face && uiMain.face !== "" && (
   <div>
     <a href={`https://www.facebook.com/${uiMain.face}`} target="_blank" rel="noopener noreferrer">
-      <img src={face} className="back-button select" alt={uiMain.face} />
+      <img src={face} className="back-button select" alt={uiMain.face} title="Facebook" />
     </a>
   </div>
 )}
 {uiMain.telegram && uiMain.telegram !== "" && (
   <div>
     <a href={`https://t.me/${uiMain.telegram}`} target="_blank" rel="noopener noreferrer">
-      <img src={telegram} className="back-button select" alt={uiMain.telegram} />
+      <img src={telegram} className="back-button select" alt={uiMain.telegram} title="Telegram"/>
     </a>
   </div>
 )}
 {uiMain.viber && uiMain.viber !== "" && (
   <div>
     <a href={`viber://chat?number=${uiMain.viber}`} target="_blank" rel="noopener noreferrer">
-      <img src={viber} className="back-button select" alt={uiMain.viber} />
+      <img src={viber} className="back-button select" alt={uiMain.viber} title="Viber" />
     </a>
   </div>
 )}
 {uiMain.tik && uiMain.tik !== "" && (
   <div>
     <a href={`https://www.tiktok.com/${uiMain.tik}`} target="_blank" rel="noopener noreferrer">
-      <img src={tik} className="back-button select" alt={uiMain.tik} />
+      <img src={tik} className="back-button select" alt={uiMain.tik} title="Tiktok" />
     </a>
   </div>
 )}
 {uiMain.you && uiMain.you !== "" && (
   <div>
     <a href={`https://www.youtube.com/${uiMain.you}`} target="_blank" rel="noopener noreferrer">
-      <img src={you} className="back-button select" alt={uiMain.you} />
+      <img src={you} className="back-button select" alt={uiMain.you} title="youtube" />
     </a>
   </div>
 )}               
                 
                 {uiMain.email && uiMain.email !== "" && (
                   <div>                    
-                      <img src={email} className="back-button select" onClick={() => handleButtonClick(uiMain.email, 4)} alt={uiMain.email}/>                  
+                      <img src={email} className="back-button select" onClick={() => handleButtonClick(uiMain.email, 4)} alt={uiMain.email} title="Email" />                  
                     {currentButtonIndex === 4 && (
                       <a href={`mailto:${currentLink}`} target="_blank" rel="noopener noreferrer">
                         {currentLink}
@@ -239,7 +243,7 @@ useEffect(() => {
                 )}
                 {uiMain.location && uiMain.location !== "" && (
                   <div>                   
-                      <img src={location} className="back-button select" onClick={() => handleButtonClick(uiMain.location, 8)} alt={uiMain.location}/>                  
+                      <img src={location} className="back-button select" onClick={() => handleButtonClick(uiMain.location, 8)} alt={uiMain.location} title="Location" />                  
                     {currentButtonIndex === 8 && (
                       <a href={`https://maps.google.com/?q=${currentLink}`} target="_blank" rel="noopener noreferrer" className="link-container">
                         {currentLink}
