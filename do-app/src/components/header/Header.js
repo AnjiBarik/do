@@ -121,7 +121,7 @@ useEffect(() => {
              </section>             
             </>
           )}
-          {(uiMain && 
+          {(uiMain && title && title !=="" &&
           <>
           <Link to="/" className='sort-button highlighted'>
             <div onClick={HandleLoad}>
